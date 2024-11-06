@@ -1,29 +1,51 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.ChatGPTService;
-import com.javarush.telegram.DialogMode;
-import com.javarush.telegram.MultiSessionTelegramBot;
-import com.javarush.telegram.UserInfo;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TinderBoltApp extends MultiSessionTelegramBot {
-    public static final String TELEGRAM_BOT_NAME = "bot-name"; //TODO: додай ім'я бота в лапках
-    public static final String TELEGRAM_BOT_TOKEN = "bot-token"; //TODO: додай токен бота в лапках
-    public static final String OPEN_AI_TOKEN = "chat-gpt-token"; //TODO: додай токен ChatGPT у лапках
+public final class TinderBoltApp extends MultiSessionTelegramBot {
+
+    private final List<ResponseMessage> events = new ArrayList<>();
 
     public TinderBoltApp() {
-        super(TELEGRAM_BOT_NAME, TELEGRAM_BOT_TOKEN);
+        super(System.getenv("TELEGRAM_BOT_NAME"), System.getenv("TELEGRAM_BOT_TOKEN"));
+        configure();
+    }
+
+    private void configure() {
+        String token = System.getenv("OPEN_AI_TOKEN");
+        TelegramBotContext context = new TelegramBotContext(ChatGPTService.of(token));
+
+        this.events.addAll(
+                List.of(
+                        new StartDialogEvent(context),
+                        new OpenerDialogEvent(context),
+                        new ProfileDialogEvent(context),
+                        new MessageDialogEvent(context),
+                        new DateDialogEvent(context),
+                        new GptDialogEvent(context),
+                        new ProfileQuestionEvent(context),
+                        new MessageNextEvent(context),
+                        new MessageButtonPressedEvent(context),
+                        new CelebritySelectedEvent(context),
+                        new CelebritySendMessageEvent(context),
+                        new GptSendMessageEvent(context)
+                )
+        );
     }
 
     @Override
     public void onUpdateEventReceived(Update update) {
-        //TODO: основний функціонал бота будемо писати тут
-
+        for (ResponseMessage message : events) {
+            if (message.apply(this, update)) {
+                break;
+            }
+        }
     }
 
     public static void main(String[] args) throws TelegramApiException {

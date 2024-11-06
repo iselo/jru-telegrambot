@@ -2,43 +2,34 @@ package com.javarush.telegram;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.GetMe;
-import org.telegram.telegrambots.meta.api.methods.GetUserProfilePhotos;
-import org.telegram.telegrambots.meta.api.methods.commands.DeleteMyCommands;
-import org.telegram.telegrambots.meta.api.methods.commands.GetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
-import org.telegram.telegrambots.meta.api.methods.reactions.SetMessageReaction;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.*;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeAllPrivateChats;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeChat;
-import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonCommands;
-import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonDefault;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MultiSessionTelegramBot extends TelegramLongPollingBot {
+public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
-    private String name;
-    private String token;
+    private final String name;
+    private final String token;
 
-    private ThreadLocal<Update> updateEvent = new ThreadLocal<>();
+    private final ThreadLocal<Update> updateEvent = new ThreadLocal<>();
 
     public MultiSessionTelegramBot(String name, String token) {
         this.name = name;
         this.token = token;
+    }
+
+//    public <T extends Serializable, Method extends BotApiMethod<T>> T sendApiMethodAsync(Method method) {
+//        super.sendApiMethodAsync(method);
+//        return null;
+//    }
+
+    public <T extends Serializable, Method extends BotApiMethod<T>> T customSendApiMethod(Method message) {
+        try {
+            return super.sendApiMethod(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -61,13 +52,15 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    public void onUpdateEventReceived(Update updateEvent) throws Exception {
-        //do nothing
+    public abstract void onUpdateEventReceived(Update updateEvent) throws Exception;
+
+    public String getCallbackQueryButtonKey() {
+        return updateEvent.get().hasCallbackQuery() ? updateEvent.get().getCallbackQuery().getData() : "";
     }
 
-    /**
+    /*    *//**
      * Метод повертає ID поточного Telegram-чату
-     */
+     *//*
     public Long getCurrentChatId() {
         if (updateEvent.get().hasMessage()) {
             return updateEvent.get().getMessage().getFrom().getId();
@@ -80,57 +73,57 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         return null;
     }
 
-    /**
+    *//**
      * Метод вертає текст з останнього повідомлення Telegram-чату
-     */
+     *//*
     public String getMessageText() {
         return updateEvent.get().hasMessage() ? updateEvent.get().getMessage().getText() : "";
     }
 
-    public  boolean isMessageCommand() {
+    public boolean isMessageCommand() {
         return updateEvent.get().hasMessage() && updateEvent.get().getMessage().isCommand();
     }
 
-    /**
+    *//**
      * Метод повертає код натиснутої кнопки (buttonKey).
      * Мова йде про кнопки, які були додані до повідомлення.
-     */
+     *//*
     public String getCallbackQueryButtonKey() {
         return updateEvent.get().hasCallbackQuery() ? updateEvent.get().getCallbackQuery().getData() : "";
     }
 
-    /**
+    *//**
      * Метод надсилає в чат ТЕКСТ (текстове повідомлення).
      * Підтримується markdown-розмітка.
-     */
-    public Message sendTextMessage(String text)  {
+     *//*
+    public Message sendTextMessage(String text) {
         SendMessage command = createApiSendMessageCommand(text);
         return executeTelegramApiMethod(command);
     }
 
-    /**
+    *//**
      * Метод відправляє в чат ФОТО (Зображення).
      * Зображення задається ключем – photoKey.
      * Всі зображення містяться в папці resources/images
-     */
+     *//*
     public Message sendPhotoMessage(String photoKey) {
         SendPhoto command = createApiPhotoMessageCommand(photoKey, null);
         return executeTelegramApiMethod(command);
     }
 
-    /**
+    *//**
      * Метод відправляє в чат ФОТО (Зображення) та ТЕКСТ.
      * Зображення задається ключем – photoKey.
      * Всі зображення містяться в папці resources/images
-     */
-    public Message sendPhotoTextMessage(String photoKey, String text)  {
+     *//*
+    public Message sendPhotoTextMessage(String photoKey, String text) {
         SendPhoto command = createApiPhotoMessageCommand(photoKey, text);
         return executeTelegramApiMethod(command);
     }
 
-    /**
+    *//**
      * Метод змінює ТЕКСТ у раніше надісланному повідомленні.
-     */
+     *//*
     public void updateTextMessage(Message message, String text) {
         EditMessageText command = new EditMessageText();
         command.setChatId(message.getChatId());
@@ -139,9 +132,9 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         executeTelegramApiMethod(command);
     }
 
-    /**
+    *//**
      * Повідомлення з кнопками (Inline Buttons)
-     */
+     *//*
     public Message sendTextButtonsMessage(String text, String... buttons) {
         SendMessage command = createApiSendMessageCommand(text);
         if (buttons.length > 0)
@@ -150,9 +143,9 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         return executeTelegramApiMethod(command);
     }
 
-    /**
+    *//**
      * Повідомлення з кнопками (Inline Buttons)
-     */
+     *//*
     public void sendTextButtonsMessage(String text, List<String> buttons) {
         SendMessage command = createApiSendMessageCommand(text);
         if (buttons != null && !buttons.isEmpty())
@@ -161,57 +154,6 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         executeTelegramApiMethod(command);
     }
 
-    public void showMainMenu(String... commands) {
-        ArrayList<BotCommand> list = new ArrayList<BotCommand>();
-
-        //convert strings to command list
-        for (int i = 0; i < commands.length; i += 2) {
-            String description = commands[i];
-            String key = commands[i+1];
-
-            if (key.startsWith("/")) //remove first /
-                key = key.substring(1);
-
-            BotCommand bc = new BotCommand(key, description);
-            list.add(bc);
-        }
-
-        //отримати список команд
-        var chatId = getCurrentChatId();
-        GetMyCommands gmcs = new GetMyCommands();
-        gmcs.setScope(BotCommandScopeChat.builder().chatId(chatId).build());
-        ArrayList<BotCommand> oldCommands = executeTelegramApiMethod(gmcs);
-
-        //ігнорувати зміни команд для того самого списку команд
-        if (oldCommands.equals(list))
-            return;
-
-        //встановити список команд
-        SetMyCommands cmds = new SetMyCommands();
-        cmds.setCommands(list);
-        cmds.setScope(BotCommandScopeChat.builder().chatId(chatId).build());
-        executeTelegramApiMethod(cmds);
-
-        //показати кнопку меню
-        var ex = new SetChatMenuButton();
-        ex.setChatId(chatId);
-        ex.setMenuButton(MenuButtonCommands.builder().build());
-        executeTelegramApiMethod(ex);
-    }
-
-    public void hideMainMenu() {
-        //видалити списку команд
-        var chatId = getCurrentChatId();
-        DeleteMyCommands dmds = new DeleteMyCommands();
-        dmds.setScope(BotCommandScopeChat.builder().chatId(chatId).build());
-        executeTelegramApiMethod(dmds);
-
-        //сховати кнопку меню
-        var ex = new SetChatMenuButton();
-        ex.setChatId(chatId);
-        ex.setMenuButton(MenuButtonDefault.builder().build());
-        executeTelegramApiMethod(ex);
-    }
 
     public List<List<PhotoSize>> getUserProfilePhotos() {
         var userId = getCurrentChatId();
@@ -258,7 +200,7 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
     private SendPhoto createApiPhotoMessageCommand(String photoKey, String text) {
         try {
             InputFile inputFile = new InputFile();
-            var is = loadImage(photoKey);
+            var is = TelegramBotFileUtil.loadImage(photoKey);
             inputFile.setMedia(is, photoKey);
 
             SendPhoto photo = new SendPhoto();
@@ -271,33 +213,6 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
             return photo;
         } catch (Exception e) {
             throw new RuntimeException("Can't create photo message!");
-        }
-    }
-
-
-    public static String loadPrompt(String name) {
-        try {
-            var is = ClassLoader.getSystemResourceAsStream("prompts/" + name + ".txt");
-            return new String(is.readAllBytes());
-        } catch (IOException e) {
-            throw new RuntimeException("Can't load GPT prompt!");
-        }
-    }
-
-    public static String loadMessage(String name) {
-        try {
-            var is = ClassLoader.getSystemResourceAsStream("messages/" + name + ".txt");
-            return new String(is.readAllBytes());
-        } catch (IOException e) {
-            throw new RuntimeException("Can't load message!");
-        }
-    }
-
-    public static InputStream loadImage(String name) {
-        try {
-            return ClassLoader.getSystemResourceAsStream("images/" + name + ".jpg");
-        } catch (Exception e) {
-            throw new RuntimeException("Can't load photo!");
         }
     }
 
@@ -316,5 +231,5 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 }

@@ -1,7 +1,7 @@
 package com.javarush.telegram;
 
 public enum DialogMode {
-    MAIN,
+    START,
     PROFILE,
     OPENER,
     MESSAGE,
