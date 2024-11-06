@@ -5,12 +5,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Immutable
 public final class TinderBoltApp extends MultiSessionTelegramBot {
 
-    private final List<ResponseMessage> events = new ArrayList<>();
+    private final List<ResponseMessage> responseMessages = new ArrayList<>();
 
     public TinderBoltApp() {
         super(System.getenv("TELEGRAM_BOT_NAME"), System.getenv("TELEGRAM_BOT_TOKEN"));
@@ -21,27 +23,28 @@ public final class TinderBoltApp extends MultiSessionTelegramBot {
         String token = System.getenv("OPEN_AI_TOKEN");
         TelegramBotContext context = new TelegramBotContext(ChatGPTService.of(token));
 
-        this.events.addAll(
+        this.responseMessages.addAll(
                 List.of(
-                        new StartDialogEvent(context),
-                        new OpenerDialogEvent(context),
-                        new ProfileDialogEvent(context),
-                        new MessageDialogEvent(context),
-                        new DateDialogEvent(context),
-                        new GptDialogEvent(context),
-                        new ProfileQuestionEvent(context),
-                        new MessageNextEvent(context),
-                        new MessageButtonPressedEvent(context),
-                        new CelebritySelectedEvent(context),
-                        new CelebritySendMessageEvent(context),
-                        new GptSendMessageEvent(context)
+                        new StartDialog(context),
+                        new OpenerDialog(context),
+                        new ProfileDialog(context),
+                        new MessageDialog(context),
+                        new DateDialog(context),
+                        new GptDialog(context),
+                        new ProfileQuestion(context),
+                        new OpenerQuestion(context),
+                        new MessageNext(context),
+                        new MessageButtonPressed(context),
+                        new CelebritySelected(context),
+                        new CelebritySendMessage(context),
+                        new GptSendMessage(context)
                 )
         );
     }
 
     @Override
     public void onUpdateEventReceived(Update update) {
-        for (ResponseMessage message : events) {
+        for (ResponseMessage message : responseMessages) {
             if (message.apply(this, update)) {
                 break;
             }

@@ -6,7 +6,7 @@ public abstract class AbstractCallbackQuery
         extends AbstractMessageCore
         implements ResponseMessage {
 
-    public AbstractCallbackQuery(TelegramBotContext context) {
+    protected AbstractCallbackQuery(TelegramBotContext context) {
         super(context);
     }
 

@@ -1,16 +1,21 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.responder.PhotoMessage;
+import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class CelebritySelectedEvent extends AbstractCallbackQuery {
+public final class CelebritySelected extends AbstractCallbackQuery {
 
-    public CelebritySelectedEvent(TelegramBotContext context) {
+    public CelebritySelected(TelegramBotContext context) {
         super(context);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
 
@@ -18,7 +23,9 @@ public final class CelebritySelectedEvent extends AbstractCallbackQuery {
             String data = update.getCallbackQuery().getData();
 
             if (data.startsWith("date_")) {
-                sendPhotoMessage(bot, update, data);
+                new Responder(bot, getChatId(update))
+                        .execute(new PhotoMessage(data));
+
                 String prompt = TelegramBotFileUtil.loadPrompt(data);
                 context().chatGPTService().setPrompt(prompt);
                 return true;
