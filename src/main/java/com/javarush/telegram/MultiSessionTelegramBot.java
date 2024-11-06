@@ -47,6 +47,6 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    public abstract void onUpdateEventReceived(Update updateEvent) throws Exception;
+    public abstract void onUpdateEventReceived(Update updateEvent);
 
 }
