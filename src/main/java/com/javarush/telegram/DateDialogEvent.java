@@ -1,5 +1,7 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.command.SendPhotoMessage;
+import com.javarush.telegram.command.SendTextButtonsMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
@@ -9,6 +11,8 @@ import static com.javarush.telegram.DialogMode.DATE;
 
 @Immutable
 public final class DateDialogEvent extends AbstractMessage {
+
+    private final static String KEYWORD = "date";
 
     private final Map<String, String> buttons = Map.of(
             "Аріана Гранде \uD83D\uDD25", "date_grande",
@@ -29,9 +33,10 @@ public final class DateDialogEvent extends AbstractMessage {
         if (messageText.equalsIgnoreCase(DATE.toString())) {
             context().setMode(DATE);
 
-            String text = TelegramBotFileUtil.loadMessage("date");
-            sendPhotoMessage(bot, update, "date");
-            sendTextButtonsMessage(bot, update, text, buttons);
+            String text = TelegramBotFileUtil.loadMessage(KEYWORD);
+            Long chatId = getChatId(update);
+            new SendPhotoMessage(KEYWORD).handle(bot, chatId);
+            new SendTextButtonsMessage(text, buttons).handle(bot, chatId);
 
             return true;
         }

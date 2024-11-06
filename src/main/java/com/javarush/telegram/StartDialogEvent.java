@@ -1,5 +1,6 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.command.SendTextMessage;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -45,10 +46,10 @@ public final class StartDialogEvent extends AbstractMessage {
             context().setMode(START);
 
             String text = TelegramBotFileUtil.loadMessage("main");
-            sendTextMessage(bot, update, text);
+            Long chatId = getChatId(update);
+            new SendTextMessage(text).handle(bot, chatId);
 
             SetMyCommands commands = new SetMyCommands();
-            Long chatId = getChatId(update);
 
             commands.setCommands(menu);
             commands.setScope(BotCommandScopeChat.builder().chatId(chatId).build());

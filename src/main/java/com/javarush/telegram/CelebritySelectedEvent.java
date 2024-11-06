@@ -1,5 +1,6 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.command.SendPhotoMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
@@ -18,7 +19,7 @@ public final class CelebritySelectedEvent extends AbstractCallbackQuery {
             String data = update.getCallbackQuery().getData();
 
             if (data.startsWith("date_")) {
-                sendPhotoMessage(bot, update, data);
+                new SendPhotoMessage(data).handle(bot, getChatId(update));
                 String prompt = TelegramBotFileUtil.loadPrompt(data);
                 context().chatGPTService().setPrompt(prompt);
                 return true;

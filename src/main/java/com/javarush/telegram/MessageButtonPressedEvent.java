@@ -1,5 +1,6 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.command.SendTextMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
@@ -21,7 +22,8 @@ public final class MessageButtonPressedEvent extends AbstractCallbackQuery {
 
                 String history = String.join("\n\n", context().chatHistory());
                 String answer = context().chatGPTService().sendMessage(prompt, history);
-                sendTextMessage(bot, update, answer);
+
+                new SendTextMessage(answer).handle(bot, getChatId(update));
 
                 context().chatHistory().clear();
                 return true;

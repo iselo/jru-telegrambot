@@ -1,5 +1,7 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.command.SendPhotoMessage;
+import com.javarush.telegram.command.SendTextButtonsMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
@@ -29,9 +31,11 @@ public final class MessageDialogEvent extends AbstractMessage {
             context().setMode(MESSAGE);
             context().chatHistory().clear();
 
-            sendPhotoMessage(bot, update, KEYWORD);
+            Long chatId = getChatId(update);
+            new SendPhotoMessage(KEYWORD).handle(bot, chatId);
+
             String text = TelegramBotFileUtil.loadMessage(KEYWORD);
-            sendTextButtonsMessage(bot, update, text, buttons);
+            new SendTextButtonsMessage(text, buttons).handle(bot, chatId);
 
             return true;
         }

@@ -1,5 +1,7 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.command.SendTextMessage;
+import com.javarush.telegram.command.UpdateTextMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -17,11 +19,12 @@ public final class GptSendMessageEvent extends AbstractMessage {
 
         if (context().getMode() == DialogMode.GPT) {
             String prompt = TelegramBotFileUtil.loadPrompt("gpt");
-            Message message = sendTextMessage(bot, update, "Please wait.");
+            Long chatId = getChatId(update);
+            Message message = new SendTextMessage("Please wait.").handle(bot, chatId);
 
             String messageText = update.getMessage().getText();
             String answer = context().chatGPTService().sendMessage(prompt, messageText);
-            updateTextMessage(bot, update, message, answer);
+            new UpdateTextMessage(message, answer).handle(bot, chatId);
 
             return true;
         }
