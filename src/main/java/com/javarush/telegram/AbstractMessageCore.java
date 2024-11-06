@@ -33,7 +33,7 @@ public abstract class AbstractMessageCore {
         try {
             bot.execute(photo);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            throw new TelegramBotException(e.getMessage());
         }
     }
 
@@ -54,7 +54,7 @@ public abstract class AbstractMessageCore {
         try {
             bot.executeAsync(command);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            throw new TelegramBotException(e.getMessage());
         }
     }
 

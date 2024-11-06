@@ -23,7 +23,7 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         try {
             return super.sendApiMethod(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            throw new TelegramBotException(e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
             this.updateEvent.set(updateEvent);
             onUpdateEventReceived(this.updateEvent.get());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new TelegramBotException(e.getMessage());
         }
     }
 
