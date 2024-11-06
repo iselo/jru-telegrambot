@@ -5,10 +5,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.annotation.concurrent.Immutable;
 import java.util.Map;
 
+import static com.javarush.telegram.DialogMode.DATE;
+
 @Immutable
 public final class DateDialogEvent extends AbstractMessage {
-
-    private static final String EVENT = "/date";
 
     private final Map<String, String> buttons = Map.of(
             "Аріана Гранде \uD83D\uDD25", "date_grande",
@@ -26,8 +26,8 @@ public final class DateDialogEvent extends AbstractMessage {
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();
 
-        if (messageText.equalsIgnoreCase(EVENT)) {
-            context().setMode(DialogMode.DATE);
+        if (messageText.equalsIgnoreCase(DATE.toString())) {
+            context().setMode(DATE);
 
             String text = TelegramBotFileUtil.loadMessage("date");
             sendPhotoMessage(bot, update, "date");

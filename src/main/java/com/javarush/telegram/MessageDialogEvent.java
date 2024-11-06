@@ -5,11 +5,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.annotation.concurrent.Immutable;
 import java.util.Map;
 
+import static com.javarush.telegram.DialogMode.MESSAGE;
+
 @Immutable
 public final class MessageDialogEvent extends AbstractMessage {
 
-    private static final String EVENT_KEYWORD = "message";
-    private static final String EVENT = "/" + EVENT_KEYWORD;
+    private static final String KEYWORD = "message";
 
     private final Map<String, String> buttons = Map.of(
             "Наступне повідомлення", "message_next",
@@ -24,12 +25,12 @@ public final class MessageDialogEvent extends AbstractMessage {
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();
 
-        if (messageText.equalsIgnoreCase(EVENT)) {
-            context().setMode(DialogMode.MESSAGE);
+        if (messageText.equalsIgnoreCase(MESSAGE.toString())) {
+            context().setMode(MESSAGE);
             context().chatHistory().clear();
 
-            sendPhotoMessage(bot, update, EVENT_KEYWORD);
-            String text = TelegramBotFileUtil.loadMessage(EVENT_KEYWORD);
+            sendPhotoMessage(bot, update, KEYWORD);
+            String text = TelegramBotFileUtil.loadMessage(KEYWORD);
             sendTextButtonsMessage(bot, update, text, buttons);
 
             return true;

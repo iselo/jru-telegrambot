@@ -7,7 +7,6 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class MessageNextEvent extends AbstractMessage {
 
-
     public MessageNextEvent(TelegramBotContext context) {
         super(context);
     }

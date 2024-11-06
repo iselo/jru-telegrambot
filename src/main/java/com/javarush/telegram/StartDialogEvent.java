@@ -11,10 +11,10 @@ import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.javarush.telegram.DialogMode.*;
+
 @Immutable
 public final class StartDialogEvent extends AbstractMessage {
-
-    private static final String EVENT = "/start";
 
     private final List<BotCommand> menu = new ArrayList<>();
 
@@ -26,12 +26,12 @@ public final class StartDialogEvent extends AbstractMessage {
     private void configure() {
         menu.addAll(
                 List.of(
-                        new BotCommand("/start", "Start bot"),
-                        new BotCommand("/profile", "Create profile"),
-                        new BotCommand("/opener", "Dating message"),
-                        new BotCommand("/message", "Chat from your identity"),
-                        new BotCommand("/date", "Chat with celebrity \uD83D\uDD25"),
-                        new BotCommand("/gpt", "Ask chatGPT")
+                        new BotCommand(START.toString(), "Start bot"),
+                        new BotCommand(PROFILE.toString(), "Create profile"),
+                        new BotCommand(OPENER.toString(), "Dating message"),
+                        new BotCommand(MESSAGE.toString(), "Chat from your identity"),
+                        new BotCommand(DATE.toString(), "Chat with celebrity \uD83D\uDD25"),
+                        new BotCommand(GPT.toString(), "Ask chatGPT")
                 )
         );
     }
@@ -41,8 +41,8 @@ public final class StartDialogEvent extends AbstractMessage {
         String messageText = update.getMessage().getText();
 
 
-        if (messageText.equalsIgnoreCase(EVENT)) {
-            context().setMode(DialogMode.START);
+        if (messageText.equalsIgnoreCase(START.toString())) {
+            context().setMode(START);
 
             String text = TelegramBotFileUtil.loadMessage("main");
             sendTextMessage(bot, update, text);
