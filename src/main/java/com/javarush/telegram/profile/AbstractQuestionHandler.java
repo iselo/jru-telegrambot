@@ -24,5 +24,5 @@ public abstract class AbstractQuestionHandler {
         return nextQuestion;
     }
 
-    public abstract void handle(String messageText);
+    protected abstract void handle(String messageText);
 }

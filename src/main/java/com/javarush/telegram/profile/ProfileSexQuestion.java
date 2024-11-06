@@ -13,7 +13,7 @@ public final class ProfileSexQuestion extends AbstractQuestionHandler {
     }
 
     @Override
-    public void handle(String messageText) {
+    protected void handle(String messageText) {
         this.userInfoBuilder().setName(messageText);
     }
 }

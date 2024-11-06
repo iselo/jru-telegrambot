@@ -10,19 +10,16 @@ public final class TelegramBotContext {
 
     private final ChatGPTService chatGPTService;
 
-    private final List<String> chatHistory;
+    private final List<String> chatHistory = new ArrayList<>();
 
     private final List<AbstractQuestionHandler> questionHandlers = new ArrayList<>();
 
-    private DialogMode mode;
+    private DialogMode mode = DialogMode.START;
 
-    private final IUserInfoBuilder userInfoBuilder;
+    private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
 
     public TelegramBotContext(ChatGPTService chatGPTService) {
         this.chatGPTService = chatGPTService;
-        this.chatHistory = new ArrayList<>();
-        this.userInfoBuilder = UserInfo.newBuilder();
-        this.mode = DialogMode.START;
         resetQuestions();
     }
 

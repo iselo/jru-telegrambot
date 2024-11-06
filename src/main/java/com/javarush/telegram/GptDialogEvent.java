@@ -11,7 +11,7 @@ import static com.javarush.telegram.DialogMode.GPT;
 @Immutable
 public final class GptDialogEvent extends AbstractMessage {
 
-    private final static String KEYWORD = "gpt";
+    private static final String KEYWORD = "gpt";
 
     public GptDialogEvent(TelegramBotContext context) {
         super(context);

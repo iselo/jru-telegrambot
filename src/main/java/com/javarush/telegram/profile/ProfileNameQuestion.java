@@ -13,7 +13,7 @@ public final class ProfileNameQuestion extends AbstractQuestionHandler {
     }
 
     @Override
-    public void handle(String messageText) {
+    protected void handle(String messageText) {
         // Intentionally empty.
     }
 }
