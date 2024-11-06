@@ -13,7 +13,7 @@ public abstract class AbstractMessageCore {
 
     private final TelegramBotContext context;
 
-    public AbstractMessageCore(TelegramBotContext context) {
+    protected AbstractMessageCore(TelegramBotContext context) {
         this.context = context;
     }
 

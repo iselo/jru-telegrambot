@@ -7,7 +7,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class GptDialogEvent extends AbstractMessage {
 
-    private final static String EVENT = "/gpt";
+    private static final String EVENT = "/gpt";
 
     public GptDialogEvent(TelegramBotContext context) {
         super(context);

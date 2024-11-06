@@ -8,7 +8,7 @@ import java.util.Map;
 @Immutable
 public final class DateDialogEvent extends AbstractMessage {
 
-    private final static String EVENT = "/date";
+    private static final String EVENT = "/date";
 
     private final Map<String, String> buttons = Map.of(
             "Аріана Гранде \uD83D\uDD25", "date_grande",

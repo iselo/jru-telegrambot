@@ -3,7 +3,6 @@ package com.javarush.telegram;
 import com.javarush.telegram.profile.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +12,7 @@ public final class TelegramBotContext {
 
     private final List<String> chatHistory;
 
-    private final LinkedList<AbstractQuestionHandler> questionHandlers = new LinkedList<>();
+    private final List<AbstractQuestionHandler> questionHandlers = new ArrayList<>();
 
     private DialogMode mode;
 
@@ -47,7 +46,7 @@ public final class TelegramBotContext {
         return chatHistory;
     }
 
-    public LinkedList<AbstractQuestionHandler> questionHandlers() {
+    public List<AbstractQuestionHandler> questionHandlers() {
         return questionHandlers;
     }
 

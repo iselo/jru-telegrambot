@@ -8,8 +8,8 @@ import java.util.Map;
 @Immutable
 public final class MessageDialogEvent extends AbstractMessage {
 
-    private final static String EVENT_KEYWORD = "message";
-    private final static String EVENT = "/" + EVENT_KEYWORD;
+    private static final String EVENT_KEYWORD = "message";
+    private static final String EVENT = "/" + EVENT_KEYWORD;
 
     private final Map<String, String> buttons = Map.of(
             "Наступне повідомлення", "message_next",

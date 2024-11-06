@@ -14,7 +14,7 @@ import java.util.List;
 @Immutable
 public final class StartDialogEvent extends AbstractMessage {
 
-    private final static String EVENT = "/start";
+    private static final String EVENT = "/start";
 
     private final List<BotCommand> menu = new ArrayList<>();
 

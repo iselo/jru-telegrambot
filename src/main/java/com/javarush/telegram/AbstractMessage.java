@@ -6,7 +6,7 @@ public abstract class AbstractMessage
         extends AbstractMessageCore
         implements ResponseMessage {
 
-    public AbstractMessage(TelegramBotContext context) {
+    protected AbstractMessage(TelegramBotContext context) {
         super(context);
     }
 

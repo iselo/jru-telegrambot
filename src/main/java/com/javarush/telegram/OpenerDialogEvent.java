@@ -7,8 +7,8 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class OpenerDialogEvent extends AbstractMessage {
 
-    private final static String EVENT_KEYWORD = "opener";
-    private final static String EVENT = "/" + EVENT_KEYWORD;
+    private static final String EVENT_KEYWORD = "opener";
+    private static final String EVENT = "/" + EVENT_KEYWORD;
 
     public OpenerDialogEvent(TelegramBotContext context) {
         super(context);

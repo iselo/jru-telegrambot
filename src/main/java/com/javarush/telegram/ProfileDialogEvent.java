@@ -7,8 +7,8 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class ProfileDialogEvent extends AbstractMessage {
 
-    private final static String EVENT_KEYWORD = "profile";
-    private final static String EVENT = "/" + EVENT_KEYWORD;
+    private static final String EVENT_KEYWORD = "profile";
+    private static final String EVENT = "/" + EVENT_KEYWORD;
 
     public ProfileDialogEvent(TelegramBotContext context) {
         super(context);

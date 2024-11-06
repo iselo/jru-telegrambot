@@ -10,7 +10,7 @@ public abstract class AbstractQuestionHandler {
 
     private final Optional<String> nextQuestion;
 
-    public AbstractQuestionHandler(IUserInfoBuilder userInfoBuilder, Optional<String> nextQuestion) {
+    protected AbstractQuestionHandler(IUserInfoBuilder userInfoBuilder, Optional<String> nextQuestion) {
         this.userInfoBuilder = userInfoBuilder;
         this.nextQuestion = nextQuestion;
     }

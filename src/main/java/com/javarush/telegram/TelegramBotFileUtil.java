@@ -1,9 +1,15 @@
 package com.javarush.telegram;
 
+import javax.annotation.concurrent.Immutable;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Immutable
 public final class TelegramBotFileUtil {
+
+    private TelegramBotFileUtil() {
+        // Intentionally empty
+    }
 
     public static String loadPrompt(String name) {
         try {

@@ -4,13 +4,6 @@ public final class UserInfo {
     private final String name; //Ім'я
     private final String sex; //Стать
     private final String age; //Вік
-//    private final String city; //Місто
-//    private final String occupation; //Професія
-//    private final String hobby; //Хобі
-//    public String handsome; //Краса, привабливість
-//    public String wealth; //Дохід, багатство
-//    public String annoys; //Мене дратує у людях
-//    public String goals; //Цілі знайомства
 
     private UserInfo(String name, String sex, String age) {
         this.name = name;
@@ -32,13 +25,6 @@ public final class UserInfo {
         result += fieldToString(name, "Ім'я");
         result += fieldToString(sex, "Стать");
         result += fieldToString(age, "Вік");
-//        result += fieldToString(city, "Місто");
-//        result += fieldToString(occupation, "Професія");
-//        result += fieldToString(hobby, "Хобі");
-//        result += fieldToString(handsome, "Краса, привабливість у балах (максимум 10 балів)");
-//        result += fieldToString(wealth, "Доход, богатство");
-//        result += fieldToString(annoys, "В людях дратує");
-//        result += fieldToString(goals, "Цілі знайомства");
 
         return result;
     }
@@ -49,9 +35,9 @@ public final class UserInfo {
 
     private static class UserInfoBuilder implements IUserInfoBuilder {
 
-        public String name;
-        public String sex;
-        public String age;
+        private String name;
+        private String sex;
+        private String age;
 
         public UserInfoBuilder setName(String name) {
             this.name = name;
@@ -66,7 +52,6 @@ public final class UserInfo {
             this.sex = sex;
             return this;
         }
-
 
         public UserInfo build() {
             return new UserInfo(name, sex, age);
