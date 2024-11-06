@@ -19,7 +19,7 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         this.token = token;
     }
 
-    public <T extends Serializable, Method extends BotApiMethod<T>> T customSendApiMethod(Method message) {
+    public <T extends Serializable, Method extends BotApiMethod<T>> T customSendApiMethod(Method message) { // NOSONAR
         try {
             return super.sendApiMethod(message);
         } catch (TelegramApiException e) {

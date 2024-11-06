@@ -6,9 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class MessageButtonPressedEvent extends AbstractCallbackQuery {
+public final class MessageButtonPressed extends AbstractCallbackQuery {
 
-    public MessageButtonPressedEvent(TelegramBotContext context) {
+    public MessageButtonPressed(TelegramBotContext context) {
         super(context);
     }
 

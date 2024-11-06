@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class GptSendMessageEvent extends AbstractMessage {
+public final class GptSendMessage extends AbstractMessage {
 
-    public GptSendMessageEvent(TelegramBotContext context) {
+    public GptSendMessage(TelegramBotContext context) {
         super(context);
     }
 

@@ -6,14 +6,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
 
-import static com.javarush.telegram.DialogMode.OPENER;
+import static com.javarush.telegram.DialogMode.GPT;
 
 @Immutable
-public final class OpenerDialogEvent extends AbstractMessage {
+public final class GptDialog extends AbstractMessage {
 
-    private static final String KEYWORD = "opener";
+    private static final String KEYWORD = "gpt";
 
-    public OpenerDialogEvent(TelegramBotContext context) {
+    public GptDialog(TelegramBotContext context) {
         super(context);
     }
 
@@ -21,13 +21,13 @@ public final class OpenerDialogEvent extends AbstractMessage {
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();
 
-        if (messageText.equalsIgnoreCase(OPENER.toString())) {
-            context().setMode(OPENER);
-            context().resetQuestions();
+        if (messageText.equalsIgnoreCase(GPT.toString())) {
+            context().setMode(GPT);
 
             new SendPhotoMessage(KEYWORD).handle(bot, getChatId(update));
             String text = TelegramBotFileUtil.loadMessage(KEYWORD);
             new SendTextMessage(text).handle(bot, getChatId(update));
+            return true;
         }
 
         return false;

@@ -15,11 +15,11 @@ import java.util.List;
 import static com.javarush.telegram.DialogMode.*;
 
 @Immutable
-public final class StartDialogEvent extends AbstractMessage {
+public final class StartDialog extends AbstractMessage {
 
     private final List<BotCommand> menu = new ArrayList<>();
 
-    public StartDialogEvent(TelegramBotContext context) {
+    public StartDialog(TelegramBotContext context) {
         super(context);
         configure();
     }
@@ -40,7 +40,6 @@ public final class StartDialogEvent extends AbstractMessage {
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();
-
 
         if (messageText.equalsIgnoreCase(START.toString())) {
             context().setMode(START);

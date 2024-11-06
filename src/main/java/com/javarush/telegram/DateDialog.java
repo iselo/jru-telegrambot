@@ -10,7 +10,7 @@ import java.util.Map;
 import static com.javarush.telegram.DialogMode.DATE;
 
 @Immutable
-public final class DateDialogEvent extends AbstractMessage {
+public final class DateDialog extends AbstractMessage {
 
     private static final String KEYWORD = "date";
 
@@ -22,7 +22,7 @@ public final class DateDialogEvent extends AbstractMessage {
             "Том Харді \uD83D\uDE0E\uD83D\uDE0E", "date_hardy"
     );
 
-    public DateDialogEvent(TelegramBotContext context) {
+    public DateDialog(TelegramBotContext context) {
         super(context);
     }
 

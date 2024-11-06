@@ -6,9 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class CelebritySelectedEvent extends AbstractCallbackQuery {
+public final class CelebritySelected extends AbstractCallbackQuery {
 
-    public CelebritySelectedEvent(TelegramBotContext context) {
+    public CelebritySelected(TelegramBotContext context) {
         super(context);
     }
 

@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Immutable
-public final class ProfileQuestionEvent extends AbstractMessage {
+public final class ProfileQuestion extends AbstractMessage {
 
-    public ProfileQuestionEvent(TelegramBotContext context) {
+    public ProfileQuestion(TelegramBotContext context) {
         super(context);
     }
 

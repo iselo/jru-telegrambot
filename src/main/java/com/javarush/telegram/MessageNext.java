@@ -5,9 +5,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class MessageNextEvent extends AbstractMessage {
+public final class MessageNext extends AbstractMessage {
 
-    public MessageNextEvent(TelegramBotContext context) {
+    public MessageNext(TelegramBotContext context) {
         super(context);
     }
 

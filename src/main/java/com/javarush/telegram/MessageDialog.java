@@ -10,7 +10,7 @@ import java.util.Map;
 import static com.javarush.telegram.DialogMode.MESSAGE;
 
 @Immutable
-public final class MessageDialogEvent extends AbstractMessage {
+public final class MessageDialog extends AbstractMessage {
 
     private static final String KEYWORD = "message";
 
@@ -19,7 +19,7 @@ public final class MessageDialogEvent extends AbstractMessage {
             "Запросити на побачення", "message_date"
     );
 
-    public MessageDialogEvent(TelegramBotContext context) {
+    public MessageDialog(TelegramBotContext context) {
         super(context);
     }
 
