@@ -1,33 +1,52 @@
 package com.javarush.telegram;
 
+import static java.net.Proxy.Type.HTTP;
+
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 import com.plexpt.chatgpt.entity.chat.Message;
-
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.concurrent.Immutable;
 
-public class ChatGPTService {
-    private ChatGPT chatGPT;
+@Immutable
+public final class ChatGPTService {
 
-    private List<Message> messageHistory = new ArrayList<>(); //История переписки із ChatGPT; потрібна для діалогів
+    private static final String API_OPENAI_HOST = "https://api.openai.com/";
 
-    public ChatGPTService(String token) {
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("18.199.183.77", 49232));
-        if (token.startsWith("gpt:")) {
-            token = "sk-proj-" + new StringBuilder(token.substring(4)).reverse();
-        }
+    private static final String PROXY_HOST = System.getenv("PROXY_HOST");
 
-        this.chatGPT = ChatGPT.builder()
+    private static final int PROXY_PORT = Integer.parseInt(System.getenv("PROXY_PORT"));
+
+    private final ChatGPT chatGPT;
+
+    private final List<Message> messageHistory;  //История переписки із ChatGPT; потрібна для діалогів
+
+    private ChatGPTService(ChatGPT chatGPT) {
+        this.chatGPT = chatGPT;
+        this.messageHistory = new ArrayList<>();
+    }
+
+    /**
+     * Returns a new configured ChatGPTService instance.
+     *
+     * @return {@code ChatGPTService} instance.
+     */
+    public static ChatGPTService of(String token) {
+        Proxy proxy = new Proxy(HTTP, new InetSocketAddress(PROXY_HOST, PROXY_PORT));
+
+        ChatGPT chatGPT = ChatGPT.builder()
                 .apiKey(token)
-                .apiHost("https://api.openai.com/")
+                .apiHost(API_OPENAI_HOST)
                 .proxy(proxy)
                 .build()
                 .init();
+
+        return new ChatGPTService(chatGPT);
     }
 
     /**
@@ -39,18 +58,20 @@ public class ChatGPTService {
     public String sendMessage(String prompt, String question) {
         Message system = Message.ofSystem(prompt);
         Message message = Message.of(question);
-        messageHistory = new ArrayList<>(Arrays.asList(system, message));
+        messageHistory.clear();
+        messageHistory.addAll(Arrays.asList(system, message));
 
         return sendMessagesToChatGPT();
     }
-    
+
     /**
      * Запити до ChatGPT із збереженням історії повідомлень.
      * Метод setPrompt() задає контекст запиту
      */
     public void setPrompt(String prompt) {
         Message system = Message.ofSystem(prompt);
-        messageHistory = new ArrayList<>(List.of(system));
+        messageHistory.clear();
+        messageHistory.addAll(List.of(system));
     }
 
     /**
@@ -68,7 +89,7 @@ public class ChatGPTService {
      * Відправляємо ChatGPT серію повідомлень: prompt, message1, answer1, message2, answer2, ..., messageN
      * Відповідь ChatGPT додається в кінець messageHistory для подальшого використання
      */
-    private String sendMessagesToChatGPT(){
+    private String sendMessagesToChatGPT() {
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 .model(ChatCompletion.Model.GPT4oMini) // GPT4oMini or GPT_3_5_TURBO
                 .messages(messageHistory)

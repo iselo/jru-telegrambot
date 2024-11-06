@@ -1,33 +1,41 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.ChatGPTService;
-import com.javarush.telegram.DialogMode;
-import com.javarush.telegram.MultiSessionTelegramBot;
-import com.javarush.telegram.UserInfo;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.concurrent.Immutable;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.util.ArrayList;
+@Immutable
+public final class TinderBoltApp extends MultiSessionTelegramBot {
 
-public class TinderBoltApp extends MultiSessionTelegramBot {
-    public static final String TELEGRAM_BOT_NAME = "bot-name"; //TODO: додай ім'я бота в лапках
-    public static final String TELEGRAM_BOT_TOKEN = "bot-token"; //TODO: додай токен бота в лапках
-    public static final String OPEN_AI_TOKEN = "chat-gpt-token"; //TODO: додай токен ChatGPT у лапках
+    private final List<ResponseMessage> responseMessages = new ArrayList<>();
 
     public TinderBoltApp() {
-        super(TELEGRAM_BOT_NAME, TELEGRAM_BOT_TOKEN);
-    }
-
-    @Override
-    public void onUpdateEventReceived(Update update) {
-        //TODO: основний функціонал бота будемо писати тут
-
+        super(System.getenv("TELEGRAM_BOT_NAME"), System.getenv("TELEGRAM_BOT_TOKEN"));
+        configure();
     }
 
     public static void main(String[] args) throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(new TinderBoltApp());
+    }
+
+    private void configure() {
+        String token = System.getenv("OPEN_AI_TOKEN");
+        TelegramBotContext context = new TelegramBotContext(ChatGPTService.of(token));
+
+        this.responseMessages.addAll(List.of(new StartDialog(context), new OpenerDialog(context), new ProfileDialog(context), new MessageDialog(context), new DateDialog(context), new GptDialog(context), new ProfileQuestion(context), new OpenerQuestion(context), new MessageNext(context), new MessageButtonPressed(context), new CelebritySelected(context), new CelebritySendMessage(context), new GptSendMessage(context)));
+    }
+
+    @Override
+    public void onUpdateEventReceived(Update update) {
+        for (ResponseMessage message : responseMessages) {
+            if (message.apply(this, update)) {
+                break;
+            }
+        }
     }
 }
