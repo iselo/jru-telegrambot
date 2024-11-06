@@ -14,7 +14,7 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
     private final ThreadLocal<Update> updateEvent = new ThreadLocal<>();
 
-    public MultiSessionTelegramBot(String name, String token) {
+    protected MultiSessionTelegramBot(String name, String token) {
         this.name = name;
         this.token = token;
     }

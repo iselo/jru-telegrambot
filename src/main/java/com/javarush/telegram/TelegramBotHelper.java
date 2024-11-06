@@ -42,8 +42,9 @@ public final class TelegramBotHelper {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-        for (String buttonName : buttons.keySet()) {
-            String buttonValue = buttons.get(buttonName);
+        for (Map.Entry<String,String> entry : buttons.entrySet()) {
+            String buttonName = entry.getKey();
+            String buttonValue = entry.getValue();
 
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(new String(buttonName.getBytes(), StandardCharsets.UTF_8));
