@@ -1,4 +1,4 @@
-package com.javarush.telegram.command;
+package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 import com.javarush.telegram.TelegramBotException;
@@ -14,11 +14,11 @@ import java.io.InputStream;
 import static org.glassfish.jersey.internal.guava.Preconditions.checkNotNull;
 
 @Immutable
-public final class SendPhotoMessage extends Command<Message> {
+public final class PhotoMessage extends RespondProcess<Message> {
 
     private final String pictureName;
 
-    public SendPhotoMessage(String pictureName) {
+    public PhotoMessage(String pictureName) {
         this.pictureName = checkNotNull(pictureName);
     }
 

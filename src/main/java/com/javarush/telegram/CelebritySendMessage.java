@@ -1,6 +1,7 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.command.SendTextMessage;
+import com.javarush.telegram.responder.Responder;
+import com.javarush.telegram.responder.TextMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
@@ -18,7 +19,8 @@ public final class CelebritySendMessage extends AbstractMessage {
         if (context().getMode() == DialogMode.DATE) {
             String messageText = update.getMessage().getText();
             String answer = context().chatGPTService().addMessage(messageText);
-            new SendTextMessage(answer).handle(bot, getChatId(update));
+            new Responder(bot, getChatId(update))
+                    .accept(new TextMessage(answer));
             return true;
         }
         return false;

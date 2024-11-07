@@ -1,12 +1,10 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.command.SendTextMessage;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
+import com.javarush.telegram.responder.ChatMenu;
+import com.javarush.telegram.responder.Responder;
+import com.javarush.telegram.responder.TextMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeChat;
-import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonCommands;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;
@@ -44,20 +42,12 @@ public final class StartDialog extends AbstractMessage {
         if (messageText.equalsIgnoreCase(START.toString())) {
             context().setMode(START);
 
+            Responder responder = new Responder(bot, getChatId(update));
+
             String text = TelegramBotFileUtil.loadMessage("main");
-            Long chatId = getChatId(update);
-            new SendTextMessage(text).handle(bot, chatId);
+            responder.accept(new TextMessage(text));
 
-            SetMyCommands commands = new SetMyCommands();
-
-            commands.setCommands(menu);
-            commands.setScope(BotCommandScopeChat.builder().chatId(chatId).build());
-            bot.customSendApiMethod(commands);
-
-            SetChatMenuButton menuButton = new SetChatMenuButton();
-            menuButton.setChatId(chatId);
-            menuButton.setMenuButton(MenuButtonCommands.builder().build());
-            bot.customSendApiMethod(menuButton);
+            responder.accept(new ChatMenu(menu));
 
             return true;
         }

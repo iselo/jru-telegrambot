@@ -32,6 +32,7 @@ public final class TinderBoltApp extends MultiSessionTelegramBot {
                         new DateDialog(context),
                         new GptDialog(context),
                         new ProfileQuestion(context),
+                        new OpenerQuestion(context),
                         new MessageNext(context),
                         new MessageButtonPressed(context),
                         new CelebritySelected(context),

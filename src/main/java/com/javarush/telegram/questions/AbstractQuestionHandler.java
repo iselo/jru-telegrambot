@@ -1,4 +1,4 @@
-package com.javarush.telegram.profile;
+package com.javarush.telegram.questions;
 
 import com.javarush.telegram.IUserInfoBuilder;
 

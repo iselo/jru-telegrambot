@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Immutable
-public final class ProfileQuestion extends AbstractMessage {
+public final class OpenerQuestion extends AbstractMessage {
 
-    public ProfileQuestion(TelegramBotContext context) {
+    public OpenerQuestion(TelegramBotContext context) {
         super(context);
     }
 
@@ -24,7 +24,7 @@ public final class ProfileQuestion extends AbstractMessage {
 
         List<AbstractQuestionHandler> questionHandlers = context().questionHandlers();
 
-        if (context().getMode() == DialogMode.PROFILE && !questionHandlers.isEmpty()) {
+        if (context().getMode() == DialogMode.OPENER && !questionHandlers.isEmpty()) {
             AbstractQuestionHandler questionHandler = questionHandlers.remove(0);
             Optional<String> maybeLastQuestion = questionHandler.apply(messageText);
 
@@ -35,9 +35,9 @@ public final class ProfileQuestion extends AbstractMessage {
                     () -> {
                         Message message = responder.accept(new TextMessage("Please wait."));
 
-                        String prompt = TelegramBotFileUtil.loadPrompt("profile");
-                        UserInfo userInfo = context().userInfoBuilder().build();
-                        String answer = context().chatGPTService().sendMessage(prompt, userInfo.toString());
+                        String prompt = TelegramBotFileUtil.loadPrompt("opener");
+                        UserInfo personInfo = context().userInfoBuilder().build();
+                        String answer = context().chatGPTService().sendMessage(prompt, personInfo.toString());
 
                         responder.accept(new UpdatedTextMessage(message, answer));
                     }

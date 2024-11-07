@@ -1,6 +1,6 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.profile.*;
+import com.javarush.telegram.questions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +27,10 @@ public final class TelegramBotContext {
         questionHandlers.clear();
         questionHandlers.addAll(
                 List.of(
-                        new ProfileNameQuestion(userInfoBuilder, Optional.of("Name")),
-                        new ProfileSexQuestion(userInfoBuilder, Optional.of("Sex")),
-                        new ProfileAgeQuestion(userInfoBuilder, Optional.of("Age")),
-                        new ProfileLastQuestion2Question(userInfoBuilder, Optional.empty())
+                        new NameQuestion(userInfoBuilder, Optional.of("Name")),
+                        new SexQuestion(userInfoBuilder, Optional.of("Sex")),
+                        new AgeQuestion(userInfoBuilder, Optional.of("Age")),
+                        new LastQuestion(userInfoBuilder, Optional.empty())
                 )
         );
     }

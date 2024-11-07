@@ -1,10 +1,10 @@
-package com.javarush.telegram.command;
+package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 
 import static org.glassfish.jersey.internal.guava.Preconditions.checkNotNull;
 
-public abstract class Command<R> {
+public abstract class RespondProcess<R> {
 
     public final R handle(MultiSessionTelegramBot bot, Long chatId) {
         checkNotNull(bot);

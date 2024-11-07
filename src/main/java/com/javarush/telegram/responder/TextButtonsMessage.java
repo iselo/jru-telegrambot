@@ -1,4 +1,4 @@
-package com.javarush.telegram.command;
+package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 @Immutable
-public final class SendTextButtonsMessage extends SendTextMessage{
+public final class TextButtonsMessage extends TextMessage {
 
     private final Map<String, String> buttons;
 
-    public SendTextButtonsMessage(String text, Map<String, String> buttons) {
+    public TextButtonsMessage(String text, Map<String, String> buttons) {
         super(text);
         this.buttons = buttons;
     }

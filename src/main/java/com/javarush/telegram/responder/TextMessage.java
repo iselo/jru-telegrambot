@@ -1,4 +1,4 @@
-package com.javarush.telegram.command;
+package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -8,11 +8,11 @@ import java.nio.charset.StandardCharsets;
 
 import static org.glassfish.jersey.internal.guava.Preconditions.checkNotNull;
 
-public class SendTextMessage extends Command<Message> {
+public class TextMessage extends RespondProcess<Message> {
 
     protected final String text;
 
-    public SendTextMessage(String text) {
+    public TextMessage(String text) {
         this.text = checkNotNull(text);
     }
 

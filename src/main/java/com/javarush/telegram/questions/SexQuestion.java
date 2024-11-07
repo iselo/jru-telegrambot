@@ -1,4 +1,4 @@
-package com.javarush.telegram.profile;
+package com.javarush.telegram.questions;
 
 import com.javarush.telegram.IUserInfoBuilder;
 
@@ -6,9 +6,9 @@ import javax.annotation.concurrent.Immutable;
 import java.util.Optional;
 
 @Immutable
-public final class ProfileSexQuestion extends AbstractQuestionHandler {
+public final class SexQuestion extends AbstractQuestionHandler {
 
-    public ProfileSexQuestion(IUserInfoBuilder userInfoBuilder, Optional<String> nextQuestion) {
+    public SexQuestion(IUserInfoBuilder userInfoBuilder, Optional<String> nextQuestion) {
         super(userInfoBuilder, nextQuestion);
     }
 

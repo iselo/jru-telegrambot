@@ -17,7 +17,6 @@ public final class MessageNext extends AbstractMessage {
         if (context().getMode() == DialogMode.MESSAGE) {
             String messageText = update.getMessage().getText();
             context().chatHistory().add(messageText);
-
             return true;
         }
 

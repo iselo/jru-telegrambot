@@ -1,7 +1,8 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.command.SendTextMessage;
-import com.javarush.telegram.command.UpdateTextMessage;
+import com.javarush.telegram.responder.Responder;
+import com.javarush.telegram.responder.TextMessage;
+import com.javarush.telegram.responder.UpdatedTextMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -18,13 +19,15 @@ public final class GptSendMessage extends AbstractMessage {
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
 
         if (context().getMode() == DialogMode.GPT) {
-            String prompt = TelegramBotFileUtil.loadPrompt("gpt");
-            Long chatId = getChatId(update);
-            Message message = new SendTextMessage("Please wait.").handle(bot, chatId);
+            Responder responder = new Responder(bot, getChatId(update));
 
+            Message message = responder.accept(new TextMessage("Please wait."));
+
+            String prompt = TelegramBotFileUtil.loadPrompt("gpt");
             String messageText = update.getMessage().getText();
             String answer = context().chatGPTService().sendMessage(prompt, messageText);
-            new UpdateTextMessage(message, answer).handle(bot, chatId);
+
+            responder.accept(new UpdatedTextMessage(message, answer));
 
             return true;
         }

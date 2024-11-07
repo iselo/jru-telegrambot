@@ -1,4 +1,4 @@
-package com.javarush.telegram.command;
+package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 import com.javarush.telegram.TelegramBotException;
@@ -11,13 +11,13 @@ import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 @Immutable
-public final class UpdateTextMessage extends Command<CompletableFuture<Serializable>> {
+public final class UpdatedTextMessage extends RespondProcess<CompletableFuture<Serializable>> {
 
     private final Message message;
 
     private final String newText;
 
-    public UpdateTextMessage(Message message, String newText) {
+    public UpdatedTextMessage(Message message, String newText) {
         this.message = message;
         this.newText = newText;
     }
