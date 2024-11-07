@@ -37,10 +37,10 @@ public final class MessageDialog extends AbstractMessage {
 
             Responder responder = new Responder(bot, getChatId(update));
 
-            responder.accept(new PhotoMessage(KEYWORD));
+            responder.execute(new PhotoMessage(KEYWORD));
 
             String text = TelegramBotFileUtil.loadMessage(KEYWORD);
-            responder.accept(new TextButtonsMessage(text, buttons));
+            responder.execute(new TextButtonsMessage(text, buttons));
 
             return true;
         }

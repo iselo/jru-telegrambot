@@ -1,19 +1,17 @@
 package com.javarush.telegram.questions;
 
-import com.javarush.telegram.IUserInfoBuilder;
-
 import javax.annotation.concurrent.Immutable;
 import java.util.Optional;
 
 @Immutable
-public final class SexQuestion extends AbstractQuestionHandler {
+public final class SexQuestion extends QuestionCore implements Question {
 
-    public SexQuestion(IUserInfoBuilder userInfoBuilder, Optional<String> nextQuestion) {
-        super(userInfoBuilder, nextQuestion);
+    public SexQuestion(Optional<String> question) {
+        super(question);
     }
 
     @Override
-    protected void handle(String messageText) {
-        this.userInfoBuilder().setName(messageText);
+    public void accept(QuestionVisitor visitor, String previousAnswer) {
+        visitor.visit(this, previousAnswer);
     }
 }

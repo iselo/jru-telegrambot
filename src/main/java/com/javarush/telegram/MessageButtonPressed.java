@@ -28,7 +28,7 @@ public final class MessageButtonPressed extends AbstractCallbackQuery {
                 String answer = context().chatGPTService().sendMessage(prompt, history);
 
                 new Responder(bot, getChatId(update))
-                        .accept(new TextMessage(answer));
+                        .execute(new TextMessage(answer));
 
                 context().chatHistory().clear();
                 return true;

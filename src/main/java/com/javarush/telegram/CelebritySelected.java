@@ -24,7 +24,7 @@ public final class CelebritySelected extends AbstractCallbackQuery {
 
             if (data.startsWith("date_")) {
                 new Responder(bot, getChatId(update))
-                        .accept(new PhotoMessage(data));
+                        .execute(new PhotoMessage(data));
 
                 String prompt = TelegramBotFileUtil.loadPrompt(data);
                 context().chatGPTService().setPrompt(prompt);

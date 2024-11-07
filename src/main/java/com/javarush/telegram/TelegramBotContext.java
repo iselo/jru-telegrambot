@@ -1,10 +1,7 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.questions.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public final class TelegramBotContext {
 
@@ -12,27 +9,10 @@ public final class TelegramBotContext {
 
     private final List<String> chatHistory = new ArrayList<>();
 
-    private final List<AbstractQuestionHandler> questionHandlers = new ArrayList<>();
-
-    private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
-
     private DialogMode mode = DialogMode.START;
 
     public TelegramBotContext(ChatGPTService chatGPTService) {
         this.chatGPTService = chatGPTService;
-        resetQuestions();
-    }
-
-    public void resetQuestions() {
-        questionHandlers.clear();
-        questionHandlers.addAll(
-                List.of(
-                        new NameQuestion(userInfoBuilder, Optional.of("Name")),
-                        new SexQuestion(userInfoBuilder, Optional.of("Sex")),
-                        new AgeQuestion(userInfoBuilder, Optional.of("Age")),
-                        new LastQuestion(userInfoBuilder, Optional.empty())
-                )
-        );
     }
 
     public ChatGPTService chatGPTService() {
@@ -41,14 +21,6 @@ public final class TelegramBotContext {
 
     public List<String> chatHistory() {
         return chatHistory;
-    }
-
-    public List<AbstractQuestionHandler> questionHandlers() {
-        return questionHandlers;
-    }
-
-    public IUserInfoBuilder userInfoBuilder() {
-        return userInfoBuilder;
     }
 
     public DialogMode getMode() {

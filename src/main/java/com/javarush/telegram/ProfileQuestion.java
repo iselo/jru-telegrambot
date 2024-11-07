@@ -1,6 +1,6 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.questions.AbstractQuestionHandler;
+import com.javarush.telegram.questions.*;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
 import com.javarush.telegram.responder.UpdatedTextMessage;
@@ -8,38 +8,55 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.concurrent.Immutable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Immutable
 public final class ProfileQuestion extends AbstractMessage {
 
+    private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
+
+    private final List<Question> questions = new ArrayList<>();
+
     public ProfileQuestion(TelegramBotContext context) {
         super(context);
+        configure();
+    }
+
+    private void configure() {
+        questions.addAll(
+                List.of(
+                        new FirstQuestion(Optional.of("Name")),
+                        new SexQuestion(Optional.of("Sex")),
+                        new AgeQuestion(Optional.of("Age")),
+                        new LastQuestion(Optional.empty())
+                )
+        );
     }
 
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
-        String messageText = update.getMessage().getText();
 
-        List<AbstractQuestionHandler> questionHandlers = context().questionHandlers();
+        if (context().getMode() == DialogMode.PROFILE && !questions.isEmpty()) {
+            Question question = questions.remove(0);
+            Optional<String> maybeLastQuestion = question.value();
 
-        if (context().getMode() == DialogMode.PROFILE && !questionHandlers.isEmpty()) {
-            AbstractQuestionHandler questionHandler = questionHandlers.remove(0);
-            Optional<String> maybeLastQuestion = questionHandler.apply(messageText);
+            String messageText = update.getMessage().getText();
+            question.accept(userInfoBuilder, messageText);
 
             Responder responder = new Responder(bot, getChatId(update));
 
             maybeLastQuestion.ifPresentOrElse(
-                    q -> responder.accept(new TextMessage(q)),
+                    q -> responder.execute(new TextMessage(q)),
                     () -> {
-                        Message message = responder.accept(new TextMessage("Please wait."));
+                        Message message = responder.execute(new TextMessage("Please wait."));
 
                         String prompt = TelegramBotFileUtil.loadPrompt("profile");
-                        UserInfo userInfo = context().userInfoBuilder().build();
+                        UserInfo userInfo = userInfoBuilder.build();
                         String answer = context().chatGPTService().sendMessage(prompt, userInfo.toString());
 
-                        responder.accept(new UpdatedTextMessage(message, answer));
+                        responder.execute(new UpdatedTextMessage(message, answer));
                     }
             );
 

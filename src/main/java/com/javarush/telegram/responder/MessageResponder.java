@@ -7,11 +7,11 @@ import java.util.concurrent.CompletableFuture;
 
 public interface MessageResponder {
 
-    Message accept(TextMessage command);
+    Message execute(TextMessage command);
 
-    Message accept(PhotoMessage command);
+    Message execute(PhotoMessage command);
 
-    CompletableFuture<Serializable> accept(UpdatedTextMessage command);
+    CompletableFuture<Serializable> execute(UpdatedTextMessage command);
 
-    Boolean accept(ChatMenu command);
+    Boolean execute(ChatMenu command);
 }

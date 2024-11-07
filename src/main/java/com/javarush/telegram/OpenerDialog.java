@@ -27,14 +27,13 @@ public final class OpenerDialog extends AbstractMessage {
 
         if (messageText.equalsIgnoreCase(OPENER.toString())) {
             context().setMode(OPENER);
-            context().resetQuestions();
 
             Responder responder = new Responder(bot, getChatId(update));
 
-            responder.accept(new PhotoMessage(KEYWORD));
+            responder.execute(new PhotoMessage(KEYWORD));
 
             String text = TelegramBotFileUtil.loadMessage(KEYWORD);
-            responder.accept(new TextMessage(text));
+            responder.execute(new TextMessage(text));
         }
 
         return false;

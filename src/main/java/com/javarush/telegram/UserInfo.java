@@ -1,5 +1,10 @@
 package com.javarush.telegram;
 
+import com.javarush.telegram.questions.AgeQuestion;
+import com.javarush.telegram.questions.FirstQuestion;
+import com.javarush.telegram.questions.LastQuestion;
+import com.javarush.telegram.questions.SexQuestion;
+
 import javax.annotation.concurrent.Immutable;
 
 import static org.glassfish.jersey.internal.guava.Preconditions.checkNotNull;
@@ -60,25 +65,24 @@ public final class UserInfo {
 
         private String age;
 
-        public UserInfoBuilder setName(String name) {
-            this.name = name;
-            return this;
+        @Override
+        public void visit(FirstQuestion question, String previousAnswer) {
+            // Intentionally empty
         }
 
-        /**
-         * @inheritDoc
-         */
-        public UserInfoBuilder setAge(String age) {
-            this.age = age;
-            return this;
+        @Override
+        public void visit(SexQuestion question, String previousAnswer) {
+            this.name = previousAnswer;
         }
 
-        /**
-         * @inheritDoc
-         */
-        public UserInfoBuilder setSex(String sex) {
-            this.sex = sex;
-            return this;
+        @Override
+        public void visit(AgeQuestion question, String previousAnswer) {
+            this.sex = previousAnswer;
+        }
+
+        @Override
+        public void visit(LastQuestion question, String previousAnswer) {
+            this.age = previousAnswer;
         }
 
         /**

@@ -48,9 +48,9 @@ public final class StartDialog extends AbstractMessage {
             Responder responder = new Responder(bot, getChatId(update));
 
             String text = TelegramBotFileUtil.loadMessage("main");
-            responder.accept(new TextMessage(text));
+            responder.execute(new TextMessage(text));
 
-            responder.accept(new ChatMenu(menu));
+            responder.execute(new ChatMenu(menu));
 
             return true;
         }

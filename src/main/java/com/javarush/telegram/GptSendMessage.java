@@ -24,13 +24,13 @@ public final class GptSendMessage extends AbstractMessage {
         if (context().getMode() == DialogMode.GPT) {
             Responder responder = new Responder(bot, getChatId(update));
 
-            Message message = responder.accept(new TextMessage("Please wait."));
+            Message message = responder.execute(new TextMessage("Please wait."));
 
             String prompt = TelegramBotFileUtil.loadPrompt("gpt");
             String messageText = update.getMessage().getText();
             String answer = context().chatGPTService().sendMessage(prompt, messageText);
 
-            responder.accept(new UpdatedTextMessage(message, answer));
+            responder.execute(new UpdatedTextMessage(message, answer));
 
             return true;
         }

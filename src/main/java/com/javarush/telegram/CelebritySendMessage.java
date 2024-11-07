@@ -23,7 +23,7 @@ public final class CelebritySendMessage extends AbstractMessage {
             String messageText = update.getMessage().getText();
             String answer = context().chatGPTService().addMessage(messageText);
             new Responder(bot, getChatId(update))
-                    .accept(new TextMessage(answer));
+                    .execute(new TextMessage(answer));
             return true;
         }
         return false;
