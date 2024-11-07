@@ -1,4 +1,4 @@
-package com.javarush.telegram.questions;
+package com.javarush.telegram.survey;
 
 public interface QuestionVisitor {
 

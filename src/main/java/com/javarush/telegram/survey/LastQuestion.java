@@ -1,12 +1,12 @@
-package com.javarush.telegram.questions;
+package com.javarush.telegram.survey;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.Optional;
 
 @Immutable
-public final class SexQuestion extends QuestionCore implements Question {
+public final class LastQuestion extends QuestionCore implements Question {
 
-    public SexQuestion(Optional<String> question) {
+    public LastQuestion(Optional<String> question) {
         super(question);
     }
 

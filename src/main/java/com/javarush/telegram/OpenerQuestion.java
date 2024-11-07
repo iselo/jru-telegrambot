@@ -1,9 +1,9 @@
 package com.javarush.telegram;
 
-import com.javarush.telegram.questions.*;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
 import com.javarush.telegram.responder.UpdatedTextMessage;
+import com.javarush.telegram.survey.*;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Immutable
 public final class OpenerQuestion extends AbstractMessage {
 
-    private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
+    private final Survey survey = new Survey();
 
     private final List<Question> questions = new ArrayList<>();
 
@@ -35,7 +35,6 @@ public final class OpenerQuestion extends AbstractMessage {
         );
     }
 
-
     /**
      * @inheritDoc
      */
@@ -47,7 +46,7 @@ public final class OpenerQuestion extends AbstractMessage {
             Optional<String> maybeLastQuestion = question.value();
 
             String messageText = update.getMessage().getText();
-            question.accept(userInfoBuilder, messageText);
+            question.accept(survey, messageText);
 
             Responder responder = new Responder(bot, getChatId(update));
 
@@ -57,7 +56,7 @@ public final class OpenerQuestion extends AbstractMessage {
                         Message message = responder.execute(new TextMessage("Please wait."));
 
                         String prompt = TelegramBotFileUtil.loadPrompt("opener");
-                        UserInfo userInfo = userInfoBuilder.build();
+                        UserInfo userInfo = survey.newUserInfo();
                         String answer = context().chatGPTService().sendMessage(prompt, userInfo.toString());
 
                         responder.execute(new UpdatedTextMessage(message, answer));
