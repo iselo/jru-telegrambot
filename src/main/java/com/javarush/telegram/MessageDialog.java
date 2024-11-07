@@ -24,6 +24,9 @@ public final class MessageDialog extends AbstractMessage {
         super(context);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();

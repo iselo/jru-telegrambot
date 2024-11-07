@@ -13,6 +13,9 @@ public final class CelebritySendMessage extends AbstractMessage {
         super(context);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
 

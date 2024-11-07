@@ -18,7 +18,9 @@ import static java.net.Proxy.Type.HTTP;
 public final class ChatGPTService {
 
     private static final String API_OPENAI_HOST = "https://api.openai.com/";
+
     private static final String PROXY_HOST = "18.199.183.77";
+
     private static final int PROXY_PORT = 49232;
 
     private final ChatGPT chatGPT;
@@ -28,6 +30,24 @@ public final class ChatGPTService {
     private ChatGPTService(ChatGPT chatGPT) {
         this.chatGPT = chatGPT;
         this.messageHistory = new ArrayList<>();
+    }
+
+    /**
+     * Returns a new configured ChatGPTService instance.
+     *
+     * @return {@code ChatGPTService} instance.
+     */
+    public static ChatGPTService of(String token) {
+        Proxy proxy = new Proxy(HTTP, new InetSocketAddress(PROXY_HOST, PROXY_PORT));
+
+        ChatGPT chatGPT = ChatGPT.builder()
+                .apiKey(token)
+                .apiHost(API_OPENAI_HOST)
+                .proxy(proxy)
+                .build()
+                .init();
+
+        return new ChatGPTService(chatGPT);
     }
 
     /**
@@ -83,23 +103,5 @@ public final class ChatGPTService {
         messageHistory.add(res);
 
         return res.getContent();
-    }
-
-    /**
-     * Returns a new configured ChatGPTService instance.
-     *
-     * @return {@code ChatGPTService} instance.
-     */
-    public static ChatGPTService of(String token) {
-        Proxy proxy = new Proxy(HTTP, new InetSocketAddress(PROXY_HOST, PROXY_PORT));
-
-        ChatGPT chatGPT = ChatGPT.builder()
-                .apiKey(token)
-                .apiHost(API_OPENAI_HOST)
-                .proxy(proxy)
-                .build()
-                .init();
-
-        return new ChatGPTService(chatGPT);
     }
 }

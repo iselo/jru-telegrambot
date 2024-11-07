@@ -1,5 +1,8 @@
 package com.javarush.telegram;
 
+/**
+ * Represents Telegram dialog mode.
+ */
 public enum DialogMode {
 
     START("/start"),
@@ -9,12 +12,15 @@ public enum DialogMode {
     DATE("/date"),
     GPT("/gpt");
 
-    private String modeName;
+    private final String modeName;
 
     DialogMode(String modeName) {
         this.modeName = modeName;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
         return modeName;

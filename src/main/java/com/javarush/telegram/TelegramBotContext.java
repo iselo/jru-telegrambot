@@ -14,9 +14,9 @@ public final class TelegramBotContext {
 
     private final List<AbstractQuestionHandler> questionHandlers = new ArrayList<>();
 
-    private DialogMode mode = DialogMode.START;
-
     private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
+
+    private DialogMode mode = DialogMode.START;
 
     public TelegramBotContext(ChatGPTService chatGPTService) {
         this.chatGPTService = chatGPTService;

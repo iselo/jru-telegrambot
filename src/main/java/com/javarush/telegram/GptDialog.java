@@ -18,6 +18,9 @@ public final class GptDialog extends AbstractMessage {
         super(context);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();

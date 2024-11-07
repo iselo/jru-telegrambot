@@ -15,6 +15,9 @@ public final class GptSendMessage extends AbstractMessage {
         super(context);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
 

@@ -13,6 +13,9 @@ public final class CelebritySelected extends AbstractCallbackQuery {
         super(context);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
 

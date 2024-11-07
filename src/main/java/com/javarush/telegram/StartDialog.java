@@ -35,6 +35,9 @@ public final class StartDialog extends AbstractMessage {
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
         String messageText = update.getMessage().getText();
