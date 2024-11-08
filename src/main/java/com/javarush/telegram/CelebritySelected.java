@@ -2,9 +2,8 @@ package com.javarush.telegram;
 
 import com.javarush.telegram.responder.PhotoMessage;
 import com.javarush.telegram.responder.Responder;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 import javax.annotation.concurrent.Immutable;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
 public final class CelebritySelected extends AbstractCallbackQuery {

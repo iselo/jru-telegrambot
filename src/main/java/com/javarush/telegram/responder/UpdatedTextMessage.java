@@ -2,13 +2,12 @@ package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 import com.javarush.telegram.TelegramBotException;
+import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
+import javax.annotation.concurrent.Immutable;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import javax.annotation.concurrent.Immutable;
-import java.io.Serializable;
-import java.util.concurrent.CompletableFuture;
 
 @Immutable
 public final class UpdatedTextMessage extends RespondProcess<CompletableFuture<Serializable>> {

@@ -2,9 +2,7 @@ package com.javarush.telegram;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public abstract class AbstractMessage
-        extends AbstractMessageCore
-        implements ResponseMessage {
+public abstract class AbstractMessage extends AbstractMessageCore implements ResponseMessage {
 
     protected AbstractMessage(TelegramBotContext context) {
         super(context);

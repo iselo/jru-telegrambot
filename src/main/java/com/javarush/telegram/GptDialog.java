@@ -1,13 +1,12 @@
 package com.javarush.telegram;
 
+import static com.javarush.telegram.DialogMode.GPT;
+
 import com.javarush.telegram.responder.PhotoMessage;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 import javax.annotation.concurrent.Immutable;
-
-import static com.javarush.telegram.DialogMode.GPT;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
 public final class GptDialog extends AbstractMessage {

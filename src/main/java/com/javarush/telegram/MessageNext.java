@@ -1,8 +1,7 @@
 package com.javarush.telegram;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 import javax.annotation.concurrent.Immutable;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
 public final class MessageNext extends AbstractMessage {

@@ -1,9 +1,8 @@
 package com.javarush.telegram.responder;
 
-import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 public interface MessageResponder {
 

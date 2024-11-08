@@ -16,5 +16,4 @@ public abstract class AbstractQuestion {
     public Optional<String> value() {
         return value;
     }
-
 }

@@ -1,11 +1,10 @@
 package com.javarush.telegram;
 
+import java.io.Serializable;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.io.Serializable;
 
 public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
 

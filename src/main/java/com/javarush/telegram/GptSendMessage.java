@@ -3,10 +3,9 @@ package com.javarush.telegram;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
 import com.javarush.telegram.responder.UpdatedTextMessage;
+import javax.annotation.concurrent.Immutable;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class GptSendMessage extends AbstractMessage {

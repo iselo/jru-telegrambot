@@ -1,9 +1,9 @@
 package com.javarush.telegram.survey;
 
-import javax.annotation.concurrent.Immutable;
-import java.util.Optional;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Optional;
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class LastEmptyQuestion extends AbstractQuestion implements Question {
