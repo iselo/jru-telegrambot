@@ -19,9 +19,9 @@ public final class ChatGPTService {
 
     private static final String API_OPENAI_HOST = "https://api.openai.com/";
 
-    private static final String PROXY_HOST = "18.199.183.77";
+    private static final String PROXY_HOST = System.getenv("PROXY_HOST");
 
-    private static final int PROXY_PORT = 49232;
+    private static final int PROXY_PORT = Integer.parseInt(System.getenv("PROXY_PORT"));
 
     private final ChatGPT chatGPT;
 
