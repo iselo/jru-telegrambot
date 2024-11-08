@@ -1,11 +1,13 @@
 package com.javarush.telegram;
 
-import javax.annotation.concurrent.Immutable;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class TelegramBotFileUtil {
+
+    private final static String EXTENTION = ".txt";
 
     private TelegramBotFileUtil() {
         // Intentionally empty
@@ -13,7 +15,7 @@ public final class TelegramBotFileUtil {
 
     public static String loadPrompt(String name) {
         try {
-            var is = ClassLoader.getSystemResourceAsStream("prompts/" + name + ".txt");
+            var is = ClassLoader.getSystemResourceAsStream("prompts/" + name + EXTENTION);
             return new String(is.readAllBytes());
         } catch (IOException e) {
             throw new TelegramBotException("Can't load GPT prompt!");
@@ -22,7 +24,7 @@ public final class TelegramBotFileUtil {
 
     public static String loadMessage(String name) {
         try {
-            InputStream stream = ClassLoader.getSystemResourceAsStream("messages/" + name + ".txt");
+            InputStream stream = ClassLoader.getSystemResourceAsStream("messages/" + name + EXTENTION);
             return new String(stream.readAllBytes());
         } catch (IOException e) {
             throw new TelegramBotException("Can't load message!");

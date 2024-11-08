@@ -1,16 +1,20 @@
 package com.javarush.telegram;
 
+import static com.javarush.telegram.DialogMode.DATE;
+import static com.javarush.telegram.DialogMode.GPT;
+import static com.javarush.telegram.DialogMode.MESSAGE;
+import static com.javarush.telegram.DialogMode.OPENER;
+import static com.javarush.telegram.DialogMode.PROFILE;
+import static com.javarush.telegram.DialogMode.START;
+
 import com.javarush.telegram.responder.ChatMenu;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-
-import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.javarush.telegram.DialogMode.*;
+import javax.annotation.concurrent.Immutable;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 @Immutable
 public final class StartDialog extends AbstractMessage {
@@ -33,6 +37,7 @@ public final class StartDialog extends AbstractMessage {
                         new BotCommand(GPT.toString(), "Ask chatGPT")
                 )
         );
+
     }
 
     /**

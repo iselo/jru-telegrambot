@@ -1,8 +1,8 @@
 package com.javarush.telegram.survey;
 
-import javax.annotation.concurrent.Immutable;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class UserInfo {
@@ -17,6 +17,13 @@ public final class UserInfo {
         this.name = checkNotNull(name);
         this.gender = checkNotNull(gender);
         this.age = checkNotNull(age);
+    }
+
+    /**
+     * Returns a new builder of {@code UserInfo} instance.
+     */
+    public static IUserInfoBuilder newBuilder() {
+        return new UserInfoBuilder();
     }
 
     /**
@@ -35,18 +42,12 @@ public final class UserInfo {
         return result;
     }
 
-    /**
-     * Returns a new builder of {@code UserInfo} instance.
-     */
-    public static IUserInfoBuilder newBuilder() {
-        return new UserInfoBuilder();
-    }
-
     private String fieldToString(String str, String description) {
-        if (str != null && !str.isEmpty())
+        if (str != null && !str.isEmpty()) {
             return description + ": " + str + "\n";
-        else
+        } else {
             return "";
+        }
     }
 
     /**

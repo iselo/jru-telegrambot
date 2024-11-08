@@ -22,10 +22,11 @@ public abstract class AbstractMessageCore {
     /**
      * Handles a response message
      *
-     * @param bot   Telegram bot instance
-     * @param update chat Update instance
+     * @param bot    Telegram bot instance
+     * @param update chat Update instanc
      * @return {@code true} if handling is completed, otherwise {@code false}
      */
+
     protected abstract boolean handle(MultiSessionTelegramBot bot, Update update);
 
     /**

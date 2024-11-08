@@ -1,11 +1,10 @@
 package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
+import javax.annotation.concurrent.Immutable;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Immutable
 public final class Responder implements MessageResponder {

@@ -1,18 +1,17 @@
 package com.javarush.telegram;
 
+import static java.net.Proxy.Type.HTTP;
+
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 import com.plexpt.chatgpt.entity.chat.Message;
-
-import javax.annotation.concurrent.Immutable;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.net.Proxy.Type.HTTP;
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class ChatGPTService {

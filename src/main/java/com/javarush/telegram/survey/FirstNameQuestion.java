@@ -1,7 +1,7 @@
 package com.javarush.telegram.survey;
 
-import javax.annotation.concurrent.Immutable;
 import java.util.Optional;
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class FirstNameQuestion extends AbstractQuestion implements Question {

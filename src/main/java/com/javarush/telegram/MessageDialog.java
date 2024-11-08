@@ -1,14 +1,13 @@
 package com.javarush.telegram;
 
+import static com.javarush.telegram.DialogMode.MESSAGE;
+
 import com.javarush.telegram.responder.PhotoMessage;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextButtonsMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
-import javax.annotation.concurrent.Immutable;
 import java.util.Map;
-
-import static com.javarush.telegram.DialogMode.MESSAGE;
+import javax.annotation.concurrent.Immutable;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
 public final class MessageDialog extends AbstractMessage {

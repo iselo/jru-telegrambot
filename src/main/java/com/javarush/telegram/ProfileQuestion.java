@@ -3,14 +3,19 @@ package com.javarush.telegram;
 import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
 import com.javarush.telegram.responder.UpdatedTextMessage;
-import com.javarush.telegram.survey.*;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
-import javax.annotation.concurrent.Immutable;
+import com.javarush.telegram.survey.AgeQuestion;
+import com.javarush.telegram.survey.FirstNameQuestion;
+import com.javarush.telegram.survey.GenderQuestion;
+import com.javarush.telegram.survey.LastEmptyQuestion;
+import com.javarush.telegram.survey.Question;
+import com.javarush.telegram.survey.UserInfo;
+import com.javarush.telegram.survey.UserInfoSurvey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.concurrent.Immutable;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
 public final class ProfileQuestion extends AbstractMessage {
