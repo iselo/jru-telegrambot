@@ -6,12 +6,12 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
-public final class AgeQuestion extends AbstractQuestion implements Question {
+public final class GenderQuestion extends AbstractQuestion implements Question {
 
-    private final static String AGE = "Your age:";
+    private final static String GENDER = "Your gender:";
 
-    public AgeQuestion() {
-        super(Optional.of(AGE));
+    public GenderQuestion() {
+        super(Optional.of(GENDER));
     }
 
     /**

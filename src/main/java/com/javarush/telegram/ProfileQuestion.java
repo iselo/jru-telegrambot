@@ -15,7 +15,9 @@ import java.util.Optional;
 @Immutable
 public final class ProfileQuestion extends AbstractMessage {
 
-    private final Survey survey = new Survey();
+    private final static int TOP_ELEMENT = 0;
+
+    private final UserInfoSurvey survey = new UserInfoSurvey();
 
     private final List<Question> questions = new ArrayList<>();
 
@@ -27,10 +29,10 @@ public final class ProfileQuestion extends AbstractMessage {
     private void configure() {
         questions.addAll(
                 List.of(
-                        new FirstQuestion(Optional.of("Name")),
-                        new SexQuestion(Optional.of("Sex")),
-                        new AgeQuestion(Optional.of("Age")),
-                        new LastQuestion(Optional.empty())
+                        new FirstNameQuestion(),
+                        new GenderQuestion(),
+                        new AgeQuestion(),
+                        new LastEmptyQuestion()
                 )
         );
     }
@@ -39,14 +41,14 @@ public final class ProfileQuestion extends AbstractMessage {
     protected boolean handle(MultiSessionTelegramBot bot, Update update) {
 
         if (context().getMode() == DialogMode.PROFILE && !questions.isEmpty()) {
-            Question question = questions.remove(0);
-            Optional<String> maybeQuestion = question.value();
 
-            String messageText = update.getMessage().getText();
-            question.accept(survey, messageText);
+            String previousQuestionAnswer = update.getMessage().getText();
+            Question question = questions.remove(TOP_ELEMENT);
+            question.accept(survey, previousQuestionAnswer);
 
             Responder responder = new Responder(bot, getChatId(update));
 
+            Optional<String> maybeQuestion = question.value();
             maybeQuestion.ifPresentOrElse(
                     q -> responder.execute(new TextMessage(q)),
                     () -> {

@@ -2,23 +2,20 @@ package com.javarush.telegram.survey;
 
 import javax.annotation.concurrent.Immutable;
 
-import static org.glassfish.jersey.internal.guava.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A user info
- */
 @Immutable
 public final class UserInfo {
 
     private final String name;
 
-    private final String sex;
+    private final String gender;
 
     private final String age;
 
-    private UserInfo(String name, String sex, String age) {
+    private UserInfo(String name, String gender, String age) {
         this.name = checkNotNull(name);
-        this.sex = checkNotNull(sex);
+        this.gender = checkNotNull(gender);
         this.age = checkNotNull(age);
     }
 
@@ -32,12 +29,15 @@ public final class UserInfo {
         String result = "";
 
         result += fieldToString(name, "Ім'я");
-        result += fieldToString(sex, "Стать");
+        result += fieldToString(gender, "Стать");
         result += fieldToString(age, "Вік");
 
         return result;
     }
 
+    /**
+     * Returns a new builder of {@code UserInfo} instance.
+     */
     public static IUserInfoBuilder newBuilder() {
         return new UserInfoBuilder();
     }
@@ -56,7 +56,7 @@ public final class UserInfo {
 
         private String name;
 
-        private String sex;
+        private String gender;
 
         private String age;
 
@@ -76,8 +76,8 @@ public final class UserInfo {
         /**
          * @inheritDoc
          */
-        public UserInfoBuilder setSex(String sex) {
-            this.sex = sex;
+        public UserInfoBuilder setGender(String gender) {
+            this.gender = gender;
             return this;
         }
 
@@ -85,7 +85,7 @@ public final class UserInfo {
          * @inheritDoc
          */
         public UserInfo build() {
-            return new UserInfo(name, sex, age);
+            return new UserInfo(name, gender, age);
         }
     }
 }

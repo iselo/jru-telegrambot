@@ -2,7 +2,8 @@ package com.javarush.telegram.responder;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 
-import static org.glassfish.jersey.internal.guava.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public abstract class RespondProcess<R> {
 

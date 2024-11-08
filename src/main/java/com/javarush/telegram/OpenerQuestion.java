@@ -15,7 +15,7 @@ import java.util.Optional;
 @Immutable
 public final class OpenerQuestion extends AbstractMessage {
 
-    private final Survey survey = new Survey();
+    private final UserInfoSurvey survey = new UserInfoSurvey();
 
     private final List<Question> questions = new ArrayList<>();
 
@@ -27,10 +27,10 @@ public final class OpenerQuestion extends AbstractMessage {
     private void configure() {
         questions.addAll(
                 List.of(
-                        new FirstQuestion(Optional.of("Name")),
-                        new SexQuestion(Optional.of("Sex")),
-                        new AgeQuestion(Optional.of("Age")),
-                        new LastQuestion(Optional.empty())
+                        new FirstNameQuestion(),
+                        new GenderQuestion(),
+                        new AgeQuestion(),
+                        new LastEmptyQuestion()
                 )
         );
     }
@@ -43,14 +43,14 @@ public final class OpenerQuestion extends AbstractMessage {
 
         if (context().getMode() == DialogMode.OPENER && !questions.isEmpty()) {
             Question question = questions.remove(0);
-            Optional<String> maybeLastQuestion = question.value();
+            Optional<String> maybeQuestion = question.value();
 
             String messageText = update.getMessage().getText();
             question.accept(survey, messageText);
 
             Responder responder = new Responder(bot, getChatId(update));
 
-            maybeLastQuestion.ifPresentOrElse(
+            maybeQuestion.ifPresentOrElse(
                     q -> responder.execute(new TextMessage(q)),
                     () -> {
                         Message message = responder.execute(new TextMessage("Please wait."));
