@@ -11,12 +11,12 @@ public interface IUserInfoBuilder {
     IUserInfoBuilder setName(String name);
 
     /**
-     * Sets sex.
+     * Sets gender.
      *
-     * @param sex {@code String} value
+     * @param gender {@code String} value
      * @return reference of the builder
      */
-    IUserInfoBuilder setSex(String sex);
+    IUserInfoBuilder setGender(String gender);
 
     /**
      * Sets age.
