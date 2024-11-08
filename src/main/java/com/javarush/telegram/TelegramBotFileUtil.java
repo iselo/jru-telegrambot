@@ -7,7 +7,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class TelegramBotFileUtil {
 
-    private final static String EXTENTION = ".txt";
+    private static final String EXTENTION = ".txt";
 
     private TelegramBotFileUtil() {
         // Intentionally empty

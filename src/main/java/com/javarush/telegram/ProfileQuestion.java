@@ -20,7 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Immutable
 public final class ProfileQuestion extends AbstractMessage {
 
-    private final static int TOP_ELEMENT = 0;
+    private static final int TOP_ELEMENT = 0;
 
     private final UserInfoSurvey survey = new UserInfoSurvey();
 

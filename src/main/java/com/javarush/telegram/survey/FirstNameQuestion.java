@@ -6,7 +6,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class FirstNameQuestion extends AbstractQuestion implements Question {
 
-    private final static String NAME = "Your name:";
+    private static final String NAME = "Your name:";
 
     public FirstNameQuestion() {
         super(Optional.of(NAME));
