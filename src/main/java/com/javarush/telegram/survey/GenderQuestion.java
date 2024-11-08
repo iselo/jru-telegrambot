@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class GenderQuestion extends AbstractQuestion implements Question {
 
-    private final static String GENDER = "Your gender:";
+    private static final String GENDER = "Your gender:";
 
     public GenderQuestion() {
         super(Optional.of(GENDER));

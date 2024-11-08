@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class AgeQuestion extends AbstractQuestion implements Question {
 
-    private final static String AGE = "Your age:";
+    private static final String AGE = "Your age:";
 
     public AgeQuestion() {
         super(Optional.of(AGE));
