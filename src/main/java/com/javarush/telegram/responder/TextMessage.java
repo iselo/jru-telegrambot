@@ -15,6 +15,12 @@ public class TextMessage extends RespondProcess<Message> {
         this.text = checkNotNull(text);
     }
 
+    @Override
+    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
+        SendMessage message = createTextMessage(text, chatId);
+        return bot.customSendApiMethod(message);
+    }
+
     protected static SendMessage createTextMessage(String text, Long chatId) {
         SendMessage message = new SendMessage();
         message.setText(new String(text.getBytes(), StandardCharsets.UTF_8));
@@ -22,11 +28,5 @@ public class TextMessage extends RespondProcess<Message> {
         message.setChatId(chatId);
 
         return message;
-    }
-
-    @Override
-    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
-        SendMessage message = createTextMessage(text, chatId);
-        return bot.customSendApiMethod(message);
     }
 }

@@ -37,6 +37,4 @@ public final class Responder implements MessageResponder {
     public Boolean execute(ChatMenu command) {
         return command.handle(bot, chatId);
     }
-
-
 }

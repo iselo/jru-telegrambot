@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.javarush.telegram.MultiSessionTelegramBot;
 
-
 public abstract class RespondProcess<R> {
 
     public final R handle(MultiSessionTelegramBot bot, Long chatId) {
