@@ -6,11 +6,11 @@ package com.javarush.telegram;
 public enum DialogMode {
 
     START("/start"),
+    GPT("/gpt"),
     PROFILE("/profile"),
     OPENER("/opener"),
-    MESSAGE("/message"),
-    DATE("/date"),
-    GPT("/gpt");
+    CHAT("/chat"),
+    DATE("/date");
 
     private final String modeName;
 

@@ -1,34 +1,31 @@
 package com.javarush.telegram;
 
-import static java.net.Proxy.Type.HTTP;
-
+import com.google.errorprone.annotations.Immutable;
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
-import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 import com.plexpt.chatgpt.entity.chat.Message;
+
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.annotation.concurrent.Immutable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.net.Proxy.Type.HTTP;
 
 @Immutable
 public final class ChatGPTService {
 
     private static final String API_OPENAI_HOST = "https://api.openai.com/";
-
     private static final String PROXY_HOST = System.getenv("PROXY_HOST");
-
     private static final int PROXY_PORT = Integer.parseInt(System.getenv("PROXY_PORT"));
 
     private final ChatGPT chatGPT;
-
-    private final List<Message> messageHistory;  //История переписки із ChatGPT; потрібна для діалогів
+    private final List<Message> messageHistory = new ArrayList<>();
 
     private ChatGPTService(ChatGPT chatGPT) {
-        this.chatGPT = chatGPT;
-        this.messageHistory = new ArrayList<>();
+        this.chatGPT = checkNotNull(chatGPT);
     }
 
     /**
@@ -37,6 +34,8 @@ public final class ChatGPTService {
      * @return {@code ChatGPTService} instance.
      */
     public static ChatGPTService of(String token) {
+        checkNotNull(token);
+
         Proxy proxy = new Proxy(HTTP, new InetSocketAddress(PROXY_HOST, PROXY_PORT));
 
         ChatGPT chatGPT = ChatGPT.builder()
@@ -56,8 +55,11 @@ public final class ChatGPTService {
      * question - власне запит
      */
     public String sendMessage(String prompt, String question) {
-        Message system = Message.ofSystem(prompt);
-        Message message = Message.of(question);
+        checkNotNull(prompt);
+        checkNotNull(question);
+
+        var system = Message.ofSystem(prompt);
+        var message = Message.of(question);
         messageHistory.clear();
         messageHistory.addAll(Arrays.asList(system, message));
 
@@ -65,11 +67,12 @@ public final class ChatGPTService {
     }
 
     /**
-     * Запити до ChatGPT із збереженням історії повідомлень.
-     * Метод setPrompt() задає контекст запиту
+     * Sets prompt for the request to ChatGPT.
      */
     public void setPrompt(String prompt) {
-        Message system = Message.ofSystem(prompt);
+        checkNotNull(prompt);
+
+        var system = Message.ofSystem(prompt);
         messageHistory.clear();
         messageHistory.addAll(List.of(system));
     }
@@ -79,9 +82,10 @@ public final class ChatGPTService {
      * Метод addMessage() додає нове запитання (повідомлення) у чат.
      */
     public String addMessage(String question) {
-        Message message = Message.of(question);
-        messageHistory.add(message);
+        checkNotNull(question);
 
+        var message = Message.of(question);
+        messageHistory.add(message);
         return sendMessagesToChatGPT();
     }
 
@@ -90,17 +94,17 @@ public final class ChatGPTService {
      * Відповідь ChatGPT додається в кінець messageHistory для подальшого використання
      */
     private String sendMessagesToChatGPT() {
-        ChatCompletion chatCompletion = ChatCompletion.builder()
+        var chatCompletion = ChatCompletion.builder()
                 .model(ChatCompletion.Model.GPT4oMini) // GPT4oMini or GPT_3_5_TURBO
                 .messages(messageHistory)
                 .maxTokens(3000)
                 .temperature(0.9)
                 .build();
 
-        ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
-        Message res = response.getChoices().get(0).getMessage();
-        messageHistory.add(res);
+        var chatCompletionResponse = chatGPT.chatCompletion(chatCompletion);
+        var message = chatCompletionResponse.getChoices().get(0).getMessage();
+        messageHistory.add(message);
 
-        return res.getContent();
+        return message.getContent();
     }
 }

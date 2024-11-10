@@ -1,7 +1,6 @@
 package com.javarush.telegram.survey;
 
-
-import javax.annotation.concurrent.Immutable;
+import com.google.errorprone.annotations.Immutable;
 
 /**
  * Represents survey that gathers information about a user to build the corresponding instance of
@@ -11,9 +10,20 @@ import javax.annotation.concurrent.Immutable;
 public final class UserInfoSurvey implements QuestionVisitor {
 
     private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
+    private final SurveyQuestions questions = new SurveyQuestions();
 
+    /**
+     * Returns a new {@code UserInfo} instance.
+     */
     public UserInfo newUserInfo() {
         return userInfoBuilder.build();
+    }
+
+    /**
+     * Returns the questions of this survey.
+     */
+    public SurveyQuestions questions() {
+        return questions;
     }
 
     /**
@@ -42,9 +52,6 @@ public final class UserInfoSurvey implements QuestionVisitor {
 
     /**
      * Sets age value.
-     *
-     * @param question       instance of the {@code Question}
-     * @param previousAnswer
      */
     @Override
     public void visit(LastEmptyQuestion question, String previousAnswer) {

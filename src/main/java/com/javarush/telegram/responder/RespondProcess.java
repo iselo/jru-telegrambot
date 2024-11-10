@@ -1,8 +1,8 @@
 package com.javarush.telegram.responder;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.javarush.telegram.MultiSessionTelegramBot;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class RespondProcess<R> {
 

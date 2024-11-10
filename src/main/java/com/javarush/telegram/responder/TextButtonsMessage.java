@@ -1,15 +1,18 @@
 package com.javarush.telegram.responder;
 
+import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.MultiSessionTelegramBot;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.concurrent.Immutable;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
 public final class TextButtonsMessage extends TextMessage {
@@ -18,16 +21,7 @@ public final class TextButtonsMessage extends TextMessage {
 
     public TextButtonsMessage(String text, Map<String, String> buttons) {
         super(text);
-        this.buttons = buttons;
-    }
-
-    @Override
-    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
-        SendMessage message = createTextMessage(text, chatId);
-        if (!buttons.isEmpty()) {
-            attachButtons(message, buttons);
-        }
-        return bot.customSendApiMethod(message);
+        this.buttons = checkNotNull(buttons);
     }
 
     private static void attachButtons(SendMessage message, Map<String, String> buttons) {
@@ -47,5 +41,14 @@ public final class TextButtonsMessage extends TextMessage {
 
         markup.setKeyboard(keyboard);
         message.setReplyMarkup(markup);
+    }
+
+    @Override
+    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
+        SendMessage message = createTextMessage(text, chatId);
+        if (!buttons.isEmpty()) {
+            attachButtons(message, buttons);
+        }
+        return bot.customSendApiMethod(message);
     }
 }

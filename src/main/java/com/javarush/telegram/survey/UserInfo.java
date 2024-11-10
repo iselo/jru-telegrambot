@@ -1,16 +1,14 @@
 package com.javarush.telegram.survey;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.errorprone.annotations.Immutable;
 
-import javax.annotation.concurrent.Immutable;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
 public final class UserInfo {
 
     private final String name;
-
     private final String gender;
-
     private final String age;
 
     private UserInfo(String name, String gender, String age) {
@@ -56,11 +54,12 @@ public final class UserInfo {
     private static class UserInfoBuilder implements IUserInfoBuilder {
 
         private String name;
-
         private String gender;
-
         private String age;
 
+        /**
+         * @inheritDoc
+         */
         public UserInfoBuilder setName(String name) {
             this.name = name;
             return this;

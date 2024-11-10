@@ -1,10 +1,13 @@
 package com.javarush.telegram.responder;
 
-import java.io.Serializable;
-import java.util.concurrent.CompletableFuture;
+import com.google.errorprone.annotations.Immutable;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-public interface MessageResponder {
+import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
+
+@Immutable
+interface MessageResponder {
 
     Message execute(TextMessage command);
 
@@ -12,5 +15,5 @@ public interface MessageResponder {
 
     CompletableFuture<Serializable> execute(UpdatedTextMessage command);
 
-    Boolean execute(ChatMenu command);
+    Boolean execute(Menu command);
 }

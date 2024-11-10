@@ -1,9 +1,10 @@
 package com.javarush.telegram;
 
-import javax.annotation.concurrent.Immutable;
+import com.google.errorprone.annotations.Immutable;
 
 @Immutable
 public final class TelegramBotException extends RuntimeException {
+
     public TelegramBotException(String message) {
         super(message);
     }
