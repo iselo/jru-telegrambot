@@ -20,8 +20,8 @@ public final class ChatMenu extends RespondProcess<Boolean> {
 
     @Override
     protected Boolean execute(MultiSessionTelegramBot bot, Long chatId) {
-        SetMyCommands commands = new SetMyCommands();
 
+        SetMyCommands commands = new SetMyCommands();
         commands.setCommands(menu);
         commands.setScope(BotCommandScopeChat.builder().chatId(chatId).build());
         bot.customSendApiMethod(commands);

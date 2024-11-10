@@ -21,6 +21,16 @@ public final class PhotoMessage extends RespondProcess<Message> {
         this.pictureName = checkNotNull(pictureName);
     }
 
+    @Override
+    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
+        try {
+            SendPhoto photo = createPhotoMessage(chatId, pictureName);
+            return bot.execute(photo);
+        } catch (TelegramApiException e) {
+            throw new TelegramBotException(e.getMessage());
+        }
+    }
+
     private static SendPhoto createPhotoMessage(Long chatId, String pictureName) {
         InputFile inputFile = new InputFile();
         InputStream mediaStream = TelegramBotFileUtil.loadImage(pictureName);
@@ -30,15 +40,5 @@ public final class PhotoMessage extends RespondProcess<Message> {
         photo.setPhoto(inputFile);
         photo.setChatId(chatId);
         return photo;
-    }
-
-    @Override
-    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
-        try {
-            SendPhoto photo = createPhotoMessage(chatId, pictureName);
-            return bot.execute(photo);
-        } catch (TelegramApiException e) {
-            throw new TelegramBotException(e.getMessage());
-        }
     }
 }

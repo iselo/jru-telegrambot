@@ -21,6 +21,15 @@ public final class TextButtonsMessage extends TextMessage {
         this.buttons = buttons;
     }
 
+    @Override
+    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
+        SendMessage message = createTextMessage(text, chatId);
+        if (!buttons.isEmpty()) {
+            attachButtons(message, buttons);
+        }
+        return bot.customSendApiMethod(message);
+    }
+
     private static void attachButtons(SendMessage message, Map<String, String> buttons) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -38,14 +47,5 @@ public final class TextButtonsMessage extends TextMessage {
 
         markup.setKeyboard(keyboard);
         message.setReplyMarkup(markup);
-    }
-
-    @Override
-    protected Message execute(MultiSessionTelegramBot bot, Long chatId) {
-        SendMessage message = createTextMessage(text, chatId);
-        if (!buttons.isEmpty()) {
-            attachButtons(message, buttons);
-        }
-        return bot.customSendApiMethod(message);
     }
 }
