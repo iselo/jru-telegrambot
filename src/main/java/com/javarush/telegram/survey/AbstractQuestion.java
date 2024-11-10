@@ -2,6 +2,9 @@ package com.javarush.telegram.survey;
 
 import java.util.Optional;
 
+/**
+ * Represents a survey question.
+ */
 public abstract class AbstractQuestion {
 
     private final Optional<String> value;
@@ -11,7 +14,7 @@ public abstract class AbstractQuestion {
     }
 
     /**
-     * Returns question value.
+     * Returns a question value.
      */
     public Optional<String> value() {
         return value;
