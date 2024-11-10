@@ -10,7 +10,7 @@ public interface Question {
     Optional<String> value();
 
     /**
-     * Accepts visitor to handle answer for the previous question.
+     * Accepts visitor to handle answer of the previous question.
      */
     void accept(QuestionVisitor visitor, String previousAnswer);
 }

@@ -7,8 +7,3 @@
 # Telegram Bot 
 
 This is refactored Telegram bot from JavaRush University educational marathon.
-
-The code was cleaned out to remove:
-- switch/case statements;
-- mutable fields; 
-- public fields.
