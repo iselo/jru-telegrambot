@@ -15,16 +15,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Immutable
 public final class Menu extends RespondProcess<Boolean> {
 
-    private final List<BotCommand> menu;
+    private final List<BotCommand> botCommands;
 
-    public Menu(List<BotCommand> menu) {
-        this.menu = checkNotNull(menu);
+    public Menu(List<BotCommand> botCommands) {
+        this.botCommands = checkNotNull(botCommands);
     }
 
     @Override
     protected Boolean execute(MultiSessionTelegramBot bot, Long chatId) {
         var commands = new SetMyCommands();
-        commands.setCommands(menu);
+        commands.setCommands(botCommands);
         commands.setScope(BotCommandScopeChat.builder().chatId(chatId).build());
         bot.customSendApiMethod(commands);
 
