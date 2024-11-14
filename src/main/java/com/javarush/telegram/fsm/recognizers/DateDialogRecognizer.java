@@ -15,9 +15,8 @@ public final class DateDialogRecognizer extends MessageRecognizer {
     @Override
     protected boolean handle(Update update, BotReadOnlyContext context, FsmOutput fsmOutput) {
         if (contentOf(update).equalsIgnoreCase(DATE.toString())) {
-            fsmOutput
-                    .addInstruction(new DialogModeInstruction(DATE))
-                    .addInstruction(new DateDialogInstruction());
+            fsmOutput.addInstruction(new DialogModeInstruction(DATE));
+            fsmOutput.addInstruction(new DateDialogInstruction());
 
             return true;
         }

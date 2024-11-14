@@ -1,6 +1,5 @@
 package com.javarush.telegram;
 
-import com.google.errorprone.annotations.Immutable;
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.Message;
@@ -14,7 +13,6 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.net.Proxy.Type.HTTP;
 
-@Immutable
 public final class ChatGPTService {
 
     private static final String API_OPENAI_HOST = "https://api.openai.com/";

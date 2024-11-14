@@ -34,16 +34,12 @@ public final class TelegramBotContext implements BotReadOnlyContext {
         return chatHistory;
     }
 
-    /**
-     * @inheritDoc
-     */
+    @Override
     public UserInfoSurvey survey() {
         return survey;
     }
 
-    /**
-     * @inheritDoc
-     */
+    @Override
     public DialogMode getMode() {
         return mode;
     }

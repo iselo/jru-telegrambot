@@ -1,6 +1,5 @@
 package com.javarush.telegram;
 
-import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.fsm.FiniteStateMachineFactory;
 import com.javarush.telegram.fsm.FiniteStateMachineResult;
 import com.javarush.telegram.fsm.FsmOutput;
@@ -13,7 +12,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 /**
  * The Telegram bot application.
  */
-@Immutable
 public final class TinderBotApp extends MultiSessionTelegramBot {
 
     private static final String TELEGRAM_BOT_NAME = System.getenv("TELEGRAM_BOT_NAME");

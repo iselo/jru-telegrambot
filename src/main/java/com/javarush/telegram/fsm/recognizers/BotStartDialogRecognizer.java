@@ -15,10 +15,8 @@ public final class BotStartDialogRecognizer extends MessageRecognizer {
     @Override
     protected boolean handle(Update update, BotReadOnlyContext context, FsmOutput fsmOutput) {
         if (contentOf(update).equalsIgnoreCase(START.toString())) {
-            fsmOutput
-                    .addInstruction(new DialogModeInstruction(START))
-                    .addInstruction(new MenuInstruction());
-
+            fsmOutput.addInstruction(new DialogModeInstruction(START));
+            fsmOutput.addInstruction(new MenuInstruction());
             return true;
         }
 

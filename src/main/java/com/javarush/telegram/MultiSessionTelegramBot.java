@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
-    private final ThreadLocal<Update> updateEvent = new ThreadLocal<>();
+    private static final ThreadLocal<Update> updateEvent = new ThreadLocal<>();
     private final String botUserName;
 
     protected MultiSessionTelegramBot(String botUserName, String token) {
@@ -31,8 +31,8 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
     @Override
     public final void onUpdateReceived(Update updateEvent) {
         try {
-            this.updateEvent.set(updateEvent);
-            onUpdateEventReceived(this.updateEvent.get());
+            MultiSessionTelegramBot.updateEvent.set(updateEvent);
+            onUpdateEventReceived(MultiSessionTelegramBot.updateEvent.get());
         } catch (Exception e) {
             throw new TelegramBotException(e.getMessage());
         }

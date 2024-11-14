@@ -21,11 +21,10 @@ public final class ProfileDialogRecognizer extends MessageRecognizer {
         if (contentOf(update).equalsIgnoreCase(PROFILE.toString())) {
             var noPreviousAnswer = Optional.<String>empty();
 
-            fsmOutput
-                    .addInstruction(new DialogModeInstruction(PROFILE))
-                    .addInstruction(new ProfileDialogInstruction())
-                    .addInstruction(new QuestionsResetInstruction())
-                    .addInstruction(new ProfileQuestionInstruction(noPreviousAnswer));
+            fsmOutput.addInstruction(new DialogModeInstruction(PROFILE));
+            fsmOutput.addInstruction(new ProfileDialogInstruction());
+            fsmOutput.addInstruction(new QuestionsResetInstruction());
+            fsmOutput.addInstruction(new ProfileQuestionInstruction(noPreviousAnswer));
 
             return true;
         }

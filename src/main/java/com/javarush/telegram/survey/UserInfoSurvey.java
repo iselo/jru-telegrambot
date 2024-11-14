@@ -1,12 +1,9 @@
 package com.javarush.telegram.survey;
 
-import com.google.errorprone.annotations.Immutable;
-
 /**
  * Represents survey that gathers information about a user to build the corresponding instance of
  * {@code UserInfo}.
  */
-@Immutable
 public final class UserInfoSurvey implements QuestionVisitor {
 
     private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
@@ -39,7 +36,8 @@ public final class UserInfoSurvey implements QuestionVisitor {
      */
     @Override
     public void visit(GenderQuestion question, String previousAnswer) {
-        userInfoBuilder.setName(previousAnswer);
+        @SuppressWarnings("unused")
+        var unused = userInfoBuilder.setName(previousAnswer);
     }
 
     /**
@@ -47,7 +45,8 @@ public final class UserInfoSurvey implements QuestionVisitor {
      */
     @Override
     public void visit(AgeQuestion question, String previousAnswer) {
-        userInfoBuilder.setGender(previousAnswer);
+        @SuppressWarnings("unused")
+        var unused = userInfoBuilder.setGender(previousAnswer);
     }
 
     /**
@@ -55,6 +54,7 @@ public final class UserInfoSurvey implements QuestionVisitor {
      */
     @Override
     public void visit(LastEmptyQuestion question, String previousAnswer) {
-        userInfoBuilder.setAge(previousAnswer);
+        @SuppressWarnings("unused")
+        var unused = userInfoBuilder.setAge(previousAnswer);
     }
 }

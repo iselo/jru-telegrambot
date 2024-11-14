@@ -22,6 +22,7 @@ public final class GptMessageInstruction extends Instruction {
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     protected void execute(Responder responder, TelegramBotContext context) {
         var message = responder.execute(new TextMessage(PLEASE_WAIT));
         var prompt = TelegramBotFileUtil.loadPrompt(GPT);

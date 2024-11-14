@@ -22,6 +22,7 @@ public final class OpenerQuestionInstruction extends Instruction {
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     protected void execute(Responder responder, TelegramBotContext context) {
         var survey = context.survey();
         var question = survey.questions().nextQuestion();
@@ -35,8 +36,8 @@ public final class OpenerQuestionInstruction extends Instruction {
                     var message = responder.execute(new TextMessage(PLEASE_WAIT));
 
                     var prompt = TelegramBotFileUtil.loadPrompt(OPENER);
-                    var userInfo = survey.newUserInfo();
-                    var gptAnswer = context.chatGPTService().sendMessage(prompt, userInfo.toString());
+                    var personInfo = survey.newUserInfo();
+                    var gptAnswer = context.chatGPTService().sendMessage(prompt, personInfo.toString());
 
                     responder.execute(new UpdatedTextMessage(message, gptAnswer));
                 }

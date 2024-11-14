@@ -18,7 +18,9 @@ public final class ProfileQuestionRecognizer extends MessageRecognizer {
         if (context.getMode() == PROFILE && context.survey().questions().isPresent()) {
             var messageText = contentOf(update);
             var previousAnswer = Optional.of(messageText);
+
             fsmOutput.addInstruction(new ProfileQuestionInstruction(previousAnswer));
+
             return true;
         }
 

@@ -1,16 +1,15 @@
 package com.javarush.telegram.fsm;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.fsm.recognizers.Recognizer;
-
-import java.util.Set;
 
 /**
  * Represents a finite state machine builder of given type.
  *
  * @param <E> the type of finite state machine
  */
-@Immutable
+@Immutable(containerOf = "E")
 interface FiniteStateMachineBuilder<E extends Enum> {
 
     /**
@@ -26,7 +25,7 @@ interface FiniteStateMachineBuilder<E extends Enum> {
     /**
      * Adds a set of possible states to which this state can transition.
      */
-    FiniteStateMachineBuilder<E> addTransition(E fsmState, Set<E> fsmStateSet);
+    FiniteStateMachineBuilder<E> addTransition(E fsmState, ImmutableSet<E> fsmStateSet);
 
 
     /**

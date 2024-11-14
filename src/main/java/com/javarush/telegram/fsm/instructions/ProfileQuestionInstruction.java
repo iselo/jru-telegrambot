@@ -12,8 +12,8 @@ import java.util.Optional;
 @Immutable
 public final class ProfileQuestionInstruction extends Instruction {
 
-    private static final String PLEASE_WAIT = "Please wait.";
-    private static final String KEYWORD = "profile";
+    private static final String PLEASE_WAIT = "Please wait!";
+    private static final String PROFILE = "profile";
 
     private final Optional<String> previousAnswer;
 
@@ -22,6 +22,7 @@ public final class ProfileQuestionInstruction extends Instruction {
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     protected void execute(Responder responder, TelegramBotContext context) {
         var survey = context.survey();
         var question = survey.questions().nextQuestion();
@@ -34,7 +35,7 @@ public final class ProfileQuestionInstruction extends Instruction {
                 () -> {
                     var message = responder.execute(new TextMessage(PLEASE_WAIT));
 
-                    var prompt = TelegramBotFileUtil.loadPrompt(KEYWORD);
+                    var prompt = TelegramBotFileUtil.loadPrompt(PROFILE);
                     var userInfo = survey.newUserInfo();
                     var gptAnswer = context.chatGPTService().sendMessage(prompt, userInfo.toString());
 

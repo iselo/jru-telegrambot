@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Immutable
 public final class TelegramBotFileUtil {
@@ -21,7 +22,7 @@ public final class TelegramBotFileUtil {
         try {
             var stream = ClassLoader.getSystemResourceAsStream("prompts/" + name + TXT_EXTENSION);
             checkNotNull(stream);
-            return new String(stream.readAllBytes());
+            return new String(stream.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new TelegramBotException("Can't load GPT prompt!");
         }
@@ -31,7 +32,7 @@ public final class TelegramBotFileUtil {
         try {
             var stream = ClassLoader.getSystemResourceAsStream("messages/" + name + TXT_EXTENSION);
             checkNotNull(stream);
-            return new String(stream.readAllBytes());
+            return new String(stream.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new TelegramBotException("Can't load message!");
         }

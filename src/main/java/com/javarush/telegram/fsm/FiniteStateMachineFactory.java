@@ -1,5 +1,6 @@
 package com.javarush.telegram.fsm;
 
+import com.google.common.collect.ImmutableSet;
 import com.javarush.telegram.fsm.recognizers.BotMenuRecogniser;
 import com.javarush.telegram.fsm.recognizers.BotModeRecogniser;
 import com.javarush.telegram.fsm.recognizers.BotStartDialogRecognizer;
@@ -17,9 +18,7 @@ import com.javarush.telegram.fsm.recognizers.OpenerQuestionRecognizer;
 import com.javarush.telegram.fsm.recognizers.ProfileDialogRecognizer;
 import com.javarush.telegram.fsm.recognizers.ProfileQuestionRecognizer;
 
-import java.util.EnumSet;
-
-public enum FiniteStateMachineFactory { // NOSONAR
+public enum FiniteStateMachineFactory {
 
     MAIN() {
         @Override
@@ -28,14 +27,14 @@ public enum FiniteStateMachineFactory { // NOSONAR
                     .setStartState(MainFsmState.START)
                     .setFinishState(MainFsmState.FINISH)
                     .addTransition(MainFsmState.START,
-                            EnumSet.of(
+                            ImmutableSet.of(
                                     MainFsmState.BOT_MENU,
                                     MainFsmState.BOT_MODE
                             )
                     )
-                    .addTransition(MainFsmState.BOT_MENU, EnumSet.of(MainFsmState.FINISH))
-                    .addTransition(MainFsmState.BOT_MODE, EnumSet.of(MainFsmState.FINISH))
-                    .addTransition(MainFsmState.FINISH, EnumSet.noneOf(MainFsmState.class))
+                    .addTransition(MainFsmState.BOT_MENU, ImmutableSet.of(MainFsmState.FINISH))
+                    .addTransition(MainFsmState.BOT_MODE, ImmutableSet.of(MainFsmState.FINISH))
+                    .addTransition(MainFsmState.FINISH, ImmutableSet.of())
                     .addRecogniser(MainFsmState.BOT_MENU, new BotMenuRecogniser())
                     .addRecogniser(MainFsmState.BOT_MODE, new BotModeRecogniser())
                     .addRecogniser(MainFsmState.FINISH, new FinishRecognizer())
@@ -50,7 +49,7 @@ public enum FiniteStateMachineFactory { // NOSONAR
                     .setStartState(MenuFsmState.START)
                     .setFinishState(MenuFsmState.FINISH)
                     .addTransition(MenuFsmState.START,
-                            EnumSet.of(
+                            ImmutableSet.of(
                                     MenuFsmState.MENU,
                                     MenuFsmState.GPT_DIALOG,
                                     MenuFsmState.PROFILE_DIALOG,
@@ -60,13 +59,13 @@ public enum FiniteStateMachineFactory { // NOSONAR
                                     MenuFsmState.FINISH
                             )
                     )
-                    .addTransition(MenuFsmState.MENU, EnumSet.of(MenuFsmState.FINISH))
-                    .addTransition(MenuFsmState.GPT_DIALOG, EnumSet.of(MenuFsmState.FINISH))
-                    .addTransition(MenuFsmState.PROFILE_DIALOG, EnumSet.of(MenuFsmState.FINISH))
-                    .addTransition(MenuFsmState.OPENER_DIALOG, EnumSet.of(MenuFsmState.FINISH))
-                    .addTransition(MenuFsmState.CHAT_DIALOG, EnumSet.of(MenuFsmState.FINISH))
-                    .addTransition(MenuFsmState.DATE_DIALOG, EnumSet.of(MenuFsmState.FINISH))
-                    .addTransition(MenuFsmState.FINISH, EnumSet.noneOf(MenuFsmState.class))
+                    .addTransition(MenuFsmState.MENU, ImmutableSet.of(MenuFsmState.FINISH))
+                    .addTransition(MenuFsmState.GPT_DIALOG, ImmutableSet.of(MenuFsmState.FINISH))
+                    .addTransition(MenuFsmState.PROFILE_DIALOG, ImmutableSet.of(MenuFsmState.FINISH))
+                    .addTransition(MenuFsmState.OPENER_DIALOG, ImmutableSet.of(MenuFsmState.FINISH))
+                    .addTransition(MenuFsmState.CHAT_DIALOG, ImmutableSet.of(MenuFsmState.FINISH))
+                    .addTransition(MenuFsmState.DATE_DIALOG, ImmutableSet.of(MenuFsmState.FINISH))
+                    .addTransition(MenuFsmState.FINISH, ImmutableSet.of())
                     .addRecogniser(MenuFsmState.MENU, new BotStartDialogRecognizer())
                     .addRecogniser(MenuFsmState.GPT_DIALOG, new GptDialogRecognizer())
                     .addRecogniser(MenuFsmState.PROFILE_DIALOG, new ProfileDialogRecognizer())
@@ -85,7 +84,7 @@ public enum FiniteStateMachineFactory { // NOSONAR
                     .setStartState(ModeFsmState.START)
                     .setFinishState(ModeFsmState.FINISH)
                     .addTransition(ModeFsmState.START,
-                            EnumSet.of(
+                            ImmutableSet.of(
                                     ModeFsmState.GPT_MESSAGE,
                                     ModeFsmState.PROFILE_QUESTION,
                                     ModeFsmState.OPENER_QUESTION,
@@ -96,14 +95,14 @@ public enum FiniteStateMachineFactory { // NOSONAR
                                     ModeFsmState.FINISH
                             )
                     )
-                    .addTransition(ModeFsmState.GPT_MESSAGE, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.PROFILE_QUESTION, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.OPENER_QUESTION, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.CHAT_MESSAGE_ADD, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.CHAT_MESSAGE_SEND, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.DATE_CELEBRITY_SELECT, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.DATE_CELEBRITY_MESSAGE, EnumSet.of(ModeFsmState.FINISH))
-                    .addTransition(ModeFsmState.FINISH, EnumSet.noneOf(ModeFsmState.class))
+                    .addTransition(ModeFsmState.GPT_MESSAGE, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.PROFILE_QUESTION, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.OPENER_QUESTION, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.CHAT_MESSAGE_ADD, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.CHAT_MESSAGE_SEND, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.DATE_CELEBRITY_SELECT, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.DATE_CELEBRITY_MESSAGE, ImmutableSet.of(ModeFsmState.FINISH))
+                    .addTransition(ModeFsmState.FINISH, ImmutableSet.of())
                     .addRecogniser(ModeFsmState.GPT_MESSAGE, new GptMessageRecognizer())
                     .addRecogniser(ModeFsmState.PROFILE_QUESTION, new ProfileQuestionRecognizer())
                     .addRecogniser(ModeFsmState.OPENER_QUESTION, new OpenerQuestionRecognizer())

@@ -15,9 +15,8 @@ public final class GptDialogRecognizer extends MessageRecognizer {
     @Override
     protected boolean handle(Update update, BotReadOnlyContext context, FsmOutput fsmOutput) {
         if (contentOf(update).equalsIgnoreCase(GPT.toString())) {
-            fsmOutput
-                    .addInstruction(new DialogModeInstruction(GPT))
-                    .addInstruction(new GptDialogInstruction());
+            fsmOutput.addInstruction(new DialogModeInstruction(GPT));
+            fsmOutput.addInstruction(new GptDialogInstruction());
 
             return true;
         }

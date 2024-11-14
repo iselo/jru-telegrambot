@@ -19,6 +19,7 @@ public final class ChatMessageSendInstruction extends Instruction {
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     protected void execute(Responder responder, TelegramBotContext context) {
         var message = responder.execute(new TextMessage("Please wait!"));
 

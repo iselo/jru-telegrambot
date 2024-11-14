@@ -15,6 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Immutable
 public final class UpdatedTextMessage extends RespondProcess<CompletableFuture<Serializable>> {
 
+    @SuppressWarnings("Immutable")
     private final Message message;
 
     private final String newText;

@@ -21,11 +21,10 @@ public final class OpenerDialogRecognizer extends MessageRecognizer {
         if (contentOf(update).equalsIgnoreCase(OPENER.toString())) {
             var noPreviousAnswer = Optional.<String>empty();
 
-            fsmOutput
-                    .addInstruction(new DialogModeInstruction(OPENER))
-                    .addInstruction(new OpenerDialogInstruction())
-                    .addInstruction(new QuestionsResetInstruction())
-                    .addInstruction(new OpenerQuestionInstruction(noPreviousAnswer));
+            fsmOutput.addInstruction(new DialogModeInstruction(OPENER));
+            fsmOutput.addInstruction(new OpenerDialogInstruction());
+            fsmOutput.addInstruction(new QuestionsResetInstruction());
+            fsmOutput.addInstruction(new OpenerQuestionInstruction(noPreviousAnswer));
 
             return true;
         }

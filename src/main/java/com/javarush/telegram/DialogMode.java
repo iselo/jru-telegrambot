@@ -18,9 +18,6 @@ public enum DialogMode {
         this.modeName = modeName;
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public String toString() {
         return modeName;

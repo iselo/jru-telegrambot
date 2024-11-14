@@ -57,33 +57,25 @@ public final class UserInfo {
         private String gender;
         private String age;
 
-        /**
-         * @inheritDoc
-         */
+        @Override
         public UserInfoBuilder setName(String name) {
             this.name = name;
             return this;
         }
 
-        /**
-         * @inheritDoc
-         */
+        @Override
         public UserInfoBuilder setAge(String age) {
             this.age = age;
             return this;
         }
 
-        /**
-         * @inheritDoc
-         */
+        @Override
         public UserInfoBuilder setGender(String gender) {
             this.gender = gender;
             return this;
         }
 
-        /**
-         * @inheritDoc
-         */
+        @Override
         public UserInfo build() {
             return new UserInfo(name, gender, age);
         }

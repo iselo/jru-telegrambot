@@ -1,5 +1,7 @@
 package com.javarush.telegram.fsm;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.BotReadOnlyContext;
 import com.javarush.telegram.fsm.recognizers.Recognizer;
@@ -17,18 +19,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @param <E> the type of the Finite State Machine
  */
-@Immutable
+@Immutable(containerOf = "E")
 public final class FiniteStateMachine<E extends Enum> {
 
     private final E startState;
     private final E finishState;
-    private final Map<E, Set<E>> transitionTable;
-    private final Map<E, Recognizer> recognizers;
+    private final ImmutableMap<E, ImmutableSet<E>> transitionTable;
+    private final ImmutableMap<E, Recognizer> recognizers;
 
     public FiniteStateMachine(E startState,
                               E finishState,
-                              Map<E, Set<E>> transitionTable,
-                              Map<E, Recognizer> recognizers) {
+                              ImmutableMap<E, ImmutableSet<E>> transitionTable,
+                              ImmutableMap<E, Recognizer> recognizers) {
         this.startState = checkNotNull(startState);
         this.finishState = checkNotNull(finishState);
         this.transitionTable = transitionTable;
@@ -102,31 +104,35 @@ public final class FiniteStateMachine<E extends Enum> {
      *
      * @param <E> the builder type
      */
-    @Immutable
+    @SuppressWarnings("Immutable")
     private static final class Builder<E extends Enum> implements FiniteStateMachineBuilder<E> {
 
-        private final Map<E, Set<E>> transitionTable = new HashMap<>();
+        private final Map<E, ImmutableSet<E>> transitionTable = new HashMap<>();
         private final Map<E, Recognizer> recognizers = new HashMap<>();
         private E startState;
         private E finishState;
 
+        @Override
         public Builder<E> setStartState(E startState) {
             this.startState = startState;
             return this;
         }
 
+        @Override
         public Builder<E> setFinishState(E finishState) {
             this.finishState = finishState;
             return this;
         }
 
-        public Builder<E> addTransition(E fsmState, Set<E> fsmStateSet) {
+        @Override
+        public Builder<E> addTransition(E fsmState, ImmutableSet<E> fsmStateSet) {
             checkNotNull(fsmState);
             checkNotNull(fsmStateSet);
             transitionTable.put(fsmState, fsmStateSet);
             return this;
         }
 
+        @Override
         public Builder<E> addRecogniser(E fsmState, Recognizer recognizer) {
             checkNotNull(fsmState);
             checkNotNull(recognizer);
@@ -134,8 +140,11 @@ public final class FiniteStateMachine<E extends Enum> {
             return this;
         }
 
+        @Override
         public FiniteStateMachine<E> build() {
-            return new FiniteStateMachine<>(startState, finishState, transitionTable, recognizers);
+            var immutableTransitionTable = ImmutableMap.copyOf(transitionTable);
+            var immutableRecognizers = ImmutableMap.copyOf(recognizers);
+            return new FiniteStateMachine<>(startState, finishState, immutableTransitionTable, immutableRecognizers);
         }
     }
 }

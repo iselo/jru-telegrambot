@@ -16,10 +16,9 @@ public final class ChatDialogRecognizer extends MessageRecognizer {
     @Override
     protected boolean handle(Update update, BotReadOnlyContext context, FsmOutput fsmOutput) {
         if (contentOf(update).equalsIgnoreCase(CHAT.toString())) {
-            fsmOutput
-                    .addInstruction(new DialogModeInstruction(CHAT))
-                    .addInstruction(new ChatHistoryClearInstruction())
-                    .addInstruction(new ChatDialogInstruction());
+            fsmOutput.addInstruction(new DialogModeInstruction(CHAT));
+            fsmOutput.addInstruction(new ChatHistoryClearInstruction());
+            fsmOutput.addInstruction(new ChatDialogInstruction());
 
             return true;
         }

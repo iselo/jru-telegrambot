@@ -1,11 +1,13 @@
 package com.javarush.telegram.fsm.recognizers;
 
+import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.BotReadOnlyContext;
 import com.javarush.telegram.fsm.FsmOutput;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Immutable
 public abstract class Recognizer {
 
     /**
