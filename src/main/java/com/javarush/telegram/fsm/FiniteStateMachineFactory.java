@@ -119,5 +119,5 @@ public enum FiniteStateMachineFactory { // NOSONAR
     /**
      * Returns a new instance of configured finite state machine.
      */
-    public abstract FiniteStateMachine<? extends Enum> newInstance();
+    public abstract FiniteStateMachine<? extends Enum> newInstance(); // NOSONAR
 }
