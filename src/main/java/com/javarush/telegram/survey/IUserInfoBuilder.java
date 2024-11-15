@@ -3,6 +3,7 @@ package com.javarush.telegram.survey;
 /**
  * The builder interface for creating {@code UserInfo} instance.
  */
+
 public interface IUserInfoBuilder {
 
     /**

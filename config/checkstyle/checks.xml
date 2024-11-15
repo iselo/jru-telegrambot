@@ -29,6 +29,8 @@
         <module name="TodoComment">
             <property name="severity" value="warning"/>
         </module>
+
+        <module name="VisibilityModifier"/>
     </module>
     <module name="JavadocPackage"/>
     <module name="NewlineAtEndOfFile"/>

@@ -1,9 +1,11 @@
 package com.javarush.telegram.responder;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.MultiSessionTelegramBot;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+@Immutable
 public abstract class RespondProcess<R> {
 
     public final R handle(MultiSessionTelegramBot bot, Long chatId) {

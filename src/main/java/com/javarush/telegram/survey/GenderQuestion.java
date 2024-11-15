@@ -1,25 +1,20 @@
 package com.javarush.telegram.survey;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.errorprone.annotations.Immutable;
 
 import java.util.Optional;
-import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class GenderQuestion extends AbstractQuestion implements Question {
+public final class GenderQuestion extends Question {
 
-    private static final String GENDER = "Your gender:";
+    private static final String GENDER = "Gender:";
 
     public GenderQuestion() {
         super(Optional.of(GENDER));
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
-    public void accept(QuestionVisitor visitor, String previousAnswer) {
-        checkNotNull(visitor);
+    protected void handle(QuestionVisitor visitor, String previousAnswer) {
         visitor.visit(this, previousAnswer);
     }
 }

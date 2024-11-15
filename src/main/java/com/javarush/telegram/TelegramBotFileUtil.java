@@ -1,13 +1,18 @@
 package com.javarush.telegram;
 
+import com.google.errorprone.annotations.Immutable;
+
 import java.io.IOException;
 import java.io.InputStream;
-import javax.annotation.concurrent.Immutable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Immutable
 public final class TelegramBotFileUtil {
 
-    private static final String EXTENTION = ".txt";
+    private static final String TXT_EXTENSION = ".txt";
+    private static final String JPG_EXTENSION = ".jpg";
 
     private TelegramBotFileUtil() {
         // Intentionally empty
@@ -15,8 +20,9 @@ public final class TelegramBotFileUtil {
 
     public static String loadPrompt(String name) {
         try {
-            var is = ClassLoader.getSystemResourceAsStream("prompts/" + name + EXTENTION);
-            return new String(is.readAllBytes());
+            var stream = ClassLoader.getSystemResourceAsStream("prompts/" + name + TXT_EXTENSION);
+            checkNotNull(stream);
+            return new String(stream.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new TelegramBotException("Can't load GPT prompt!");
         }
@@ -24,8 +30,9 @@ public final class TelegramBotFileUtil {
 
     public static String loadMessage(String name) {
         try {
-            InputStream stream = ClassLoader.getSystemResourceAsStream("messages/" + name + EXTENTION);
-            return new String(stream.readAllBytes());
+            var stream = ClassLoader.getSystemResourceAsStream("messages/" + name + TXT_EXTENSION);
+            checkNotNull(stream);
+            return new String(stream.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new TelegramBotException("Can't load message!");
         }
@@ -33,7 +40,7 @@ public final class TelegramBotFileUtil {
 
     public static InputStream loadImage(String name) {
         try {
-            return ClassLoader.getSystemResourceAsStream("images/" + name + ".jpg");
+            return ClassLoader.getSystemResourceAsStream("images/" + name + JPG_EXTENSION);
         } catch (Exception e) {
             throw new TelegramBotException("Can't load photo!");
         }
