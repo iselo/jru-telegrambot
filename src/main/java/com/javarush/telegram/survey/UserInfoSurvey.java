@@ -6,7 +6,7 @@ package com.javarush.telegram.survey;
  */
 public final class UserInfoSurvey implements QuestionVisitor {
 
-    private final IUserInfoBuilder userInfoBuilder = UserInfo.newBuilder();
+    private final UserInfo.Builder userInfoBuilder = UserInfo.newBuilder();
     private final SurveyQuestions questions = new SurveyQuestions();
 
     /**

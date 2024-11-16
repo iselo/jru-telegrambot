@@ -20,8 +20,8 @@ public final class UserInfo {
     /**
      * Returns a new builder of {@code UserInfo} instance.
      */
-    public static IUserInfoBuilder newBuilder() {
-        return new UserInfoBuilder();
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     /**
@@ -51,31 +51,30 @@ public final class UserInfo {
     /**
      * A builder of {@code UserInfo} instance.
      */
-    private static class UserInfoBuilder implements IUserInfoBuilder {
+    public static class Builder {
 
         private String name;
         private String gender;
         private String age;
 
-        @Override
-        public UserInfoBuilder setName(String name) {
+        private Builder() {
+        }
+
+        public Builder setName(String name) {
             this.name = name;
             return this;
         }
 
-        @Override
-        public UserInfoBuilder setAge(String age) {
+        public Builder setAge(String age) {
             this.age = age;
             return this;
         }
 
-        @Override
-        public UserInfoBuilder setGender(String gender) {
+        public Builder setGender(String gender) {
             this.gender = gender;
             return this;
         }
 
-        @Override
         public UserInfo build() {
             return new UserInfo(name, gender, age);
         }
