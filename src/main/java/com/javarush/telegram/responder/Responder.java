@@ -1,40 +1,49 @@
 package com.javarush.telegram.responder;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.javarush.telegram.MultiSessionTelegramBot;
-import java.io.Serializable;
-import java.util.concurrent.CompletableFuture;
-import javax.annotation.concurrent.Immutable;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-@Immutable
+import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public final class Responder implements MessageResponder {
 
     private final MultiSessionTelegramBot bot;
-
     private final Long chatId;
 
     public Responder(MultiSessionTelegramBot bot, Long chatId) {
-        this.bot = bot;
-        this.chatId = chatId;
+        this.bot = checkNotNull(bot);
+        this.chatId = checkNotNull(chatId);
     }
 
     @Override
+    @CanIgnoreReturnValue
     public Message execute(TextMessage command) {
+        checkNotNull(command);
         return command.handle(bot, chatId);
     }
 
     @Override
+    @CanIgnoreReturnValue
     public Message execute(PhotoMessage command) {
+        checkNotNull(command);
         return command.handle(bot, chatId);
     }
 
     @Override
+    @CanIgnoreReturnValue
     public CompletableFuture<Serializable> execute(UpdatedTextMessage command) {
+        checkNotNull(command);
         return command.handle(bot, chatId);
     }
 
     @Override
-    public Boolean execute(ChatMenu command) {
+    @CanIgnoreReturnValue
+    public Boolean execute(Menu command) {
+        checkNotNull(command);
         return command.handle(bot, chatId);
     }
 }

@@ -1,23 +1,46 @@
 package com.javarush.telegram;
 
-import java.io.Serializable;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.Serializable;
+
 public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
-    private final String name;
-    private final String token;
+    private static final ThreadLocal<Update> updateEvent = new ThreadLocal<>();
+    private final String botUserName;
 
-    private final ThreadLocal<Update> updateEvent = new ThreadLocal<>();
-
-    protected MultiSessionTelegramBot(String name, String token) {
-        this.name = name;
-        this.token = token;
+    protected MultiSessionTelegramBot(String botUserName, String token) {
+        super(token);
+        this.botUserName = botUserName;
     }
 
+    /**
+     * Returns a username of this Telegram bot.
+     */
+    @Override
+    public String getBotUsername() {
+        return botUserName;
+    }
+
+    /**
+     * Handles Telegram bot {@code Update} when even is occurred.
+     */
+    @Override
+    public final void onUpdateReceived(Update updateEvent) {
+        try {
+            MultiSessionTelegramBot.updateEvent.set(updateEvent);
+            onUpdateEventReceived(MultiSessionTelegramBot.updateEvent.get());
+        } catch (Exception e) {
+            throw new TelegramBotException(e.getMessage());
+        }
+    }
+
+    /**
+     * Handles execution of the message sending.
+     */
     public <T extends Serializable, Method extends BotApiMethod<T>> T customSendApiMethod(Method message) { // NOSONAR
         try {
             return super.sendApiMethod(message);
@@ -26,26 +49,24 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    @Override
-    public String getBotUsername() {
-        return name;
-    }
+    /**
+     * Returns the chat id of given Update.
+     *
+     * @param update the Telegram bot chat Update instance
+     * @return chat id
+     */
+    protected Long chatId(Update update) {
 
-    @Override
-    public String getBotToken() {
-        return token;
-    }
-
-    @Override
-    public final void onUpdateReceived(Update updateEvent) {
-        try {
-            this.updateEvent.set(updateEvent);
-            onUpdateEventReceived(this.updateEvent.get());
-        } catch (Exception e) {
-            throw new TelegramBotException(e.getMessage());
+        if (update.hasMessage()) {
+            return updateEvent.get().getMessage().getChatId();
         }
+
+        if (update.hasCallbackQuery()) {
+            return updateEvent.get().getCallbackQuery().getFrom().getId();
+        }
+
+        return null;
     }
 
-    public abstract void onUpdateEventReceived(Update updateEvent);
-
+    protected abstract void onUpdateEventReceived(Update updateEvent);
 }
