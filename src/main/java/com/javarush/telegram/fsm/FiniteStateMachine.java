@@ -43,8 +43,8 @@ public final class FiniteStateMachine<E extends Enum> {
      * @param <E> type of {@code FiniteStateMachine}
      * @return a new instance of the builder
      */
-    public static <E extends Enum> FiniteStateMachineBuilder<E> newBuilder() {
-        return new Builder<>();
+    public static <E extends Enum> Builder<E> newBuilder() {
+        return new Builder<E>();
     }
 
     /**
@@ -105,26 +105,26 @@ public final class FiniteStateMachine<E extends Enum> {
      * @param <E> the builder type
      */
     @SuppressWarnings("Immutable")
-    private static final class Builder<E extends Enum> implements FiniteStateMachineBuilder<E> {
+    public static final class Builder<E extends Enum> {
 
         private final Map<E, ImmutableSet<E>> transitionTable = new HashMap<>();
         private final Map<E, Recognizer> recognizers = new HashMap<>();
         private E startState;
         private E finishState;
 
-        @Override
+        private Builder() {
+        }
+
         public Builder<E> setStartState(E startState) {
             this.startState = startState;
             return this;
         }
 
-        @Override
         public Builder<E> setFinishState(E finishState) {
             this.finishState = finishState;
             return this;
         }
 
-        @Override
         public Builder<E> addTransition(E fsmState, ImmutableSet<E> fsmStateSet) {
             checkNotNull(fsmState);
             checkNotNull(fsmStateSet);
@@ -132,7 +132,6 @@ public final class FiniteStateMachine<E extends Enum> {
             return this;
         }
 
-        @Override
         public Builder<E> addRecogniser(E fsmState, Recognizer recognizer) {
             checkNotNull(fsmState);
             checkNotNull(recognizer);
@@ -140,7 +139,6 @@ public final class FiniteStateMachine<E extends Enum> {
             return this;
         }
 
-        @Override
         public FiniteStateMachine<E> build() {
             var immutableTransitionTable = ImmutableMap.copyOf(transitionTable);
             var immutableRecognizers = ImmutableMap.copyOf(recognizers);
