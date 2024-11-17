@@ -27,14 +27,11 @@ public final class FiniteStateMachine<E extends Enum> {
     private final ImmutableMap<E, ImmutableSet<E>> transitionTable;
     private final ImmutableMap<E, Recognizer> recognizers;
 
-    public FiniteStateMachine(E startState,
-                              E finishState,
-                              ImmutableMap<E, ImmutableSet<E>> transitionTable,
-                              ImmutableMap<E, Recognizer> recognizers) {
-        this.startState = checkNotNull(startState);
-        this.finishState = checkNotNull(finishState);
-        this.transitionTable = transitionTable;
-        this.recognizers = recognizers;
+    private FiniteStateMachine(Builder<E> builder) {
+        this.startState = builder.startState;
+        this.finishState = builder.finishState;
+        this.transitionTable = ImmutableMap.copyOf(builder.transitionTable);
+        this.recognizers = ImmutableMap.copyOf(builder.recognizers);
     }
 
     /**
@@ -116,12 +113,12 @@ public final class FiniteStateMachine<E extends Enum> {
         }
 
         public Builder<E> setStartState(E startState) {
-            this.startState = startState;
+            this.startState = checkNotNull(startState);
             return this;
         }
 
         public Builder<E> setFinishState(E finishState) {
-            this.finishState = finishState;
+            this.finishState = checkNotNull(finishState);
             return this;
         }
 
@@ -140,9 +137,7 @@ public final class FiniteStateMachine<E extends Enum> {
         }
 
         public FiniteStateMachine<E> build() {
-            var immutableTransitionTable = ImmutableMap.copyOf(transitionTable);
-            var immutableRecognizers = ImmutableMap.copyOf(recognizers);
-            return new FiniteStateMachine<>(startState, finishState, immutableTransitionTable, immutableRecognizers);
+            return new FiniteStateMachine<>(this);
         }
     }
 }

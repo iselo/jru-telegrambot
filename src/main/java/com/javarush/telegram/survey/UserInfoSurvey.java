@@ -36,8 +36,7 @@ public final class UserInfoSurvey implements QuestionVisitor {
      */
     @Override
     public void visit(GenderQuestion question, String previousAnswer) {
-        @SuppressWarnings("unused")
-        var unused = userInfoBuilder.setName(previousAnswer);
+        userInfoBuilder.setName(previousAnswer);
     }
 
     /**
@@ -45,8 +44,7 @@ public final class UserInfoSurvey implements QuestionVisitor {
      */
     @Override
     public void visit(AgeQuestion question, String previousAnswer) {
-        @SuppressWarnings("unused")
-        var unused = userInfoBuilder.setGender(previousAnswer);
+        userInfoBuilder.setGender(previousAnswer);
     }
 
     /**
@@ -54,7 +52,6 @@ public final class UserInfoSurvey implements QuestionVisitor {
      */
     @Override
     public void visit(LastEmptyQuestion question, String previousAnswer) {
-        @SuppressWarnings("unused")
-        var unused = userInfoBuilder.setAge(previousAnswer);
+        userInfoBuilder.setAge(previousAnswer);
     }
 }

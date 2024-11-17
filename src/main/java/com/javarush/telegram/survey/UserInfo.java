@@ -1,5 +1,6 @@
 package com.javarush.telegram.survey;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.Immutable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -11,10 +12,10 @@ public final class UserInfo {
     private final String gender;
     private final String age;
 
-    private UserInfo(String name, String gender, String age) {
-        this.name = checkNotNull(name);
-        this.gender = checkNotNull(gender);
-        this.age = checkNotNull(age);
+    private UserInfo(Builder builder) {
+        this.name = builder.name;
+        this.gender = builder.gender;
+        this.age = builder.age;
     }
 
     /**
@@ -60,23 +61,26 @@ public final class UserInfo {
         private Builder() {
         }
 
+        @CanIgnoreReturnValue
         public Builder setName(String name) {
-            this.name = name;
+            this.name = checkNotNull(name);
             return this;
         }
 
+        @CanIgnoreReturnValue
         public Builder setAge(String age) {
-            this.age = age;
+            this.age = checkNotNull(age);
             return this;
         }
 
+        @CanIgnoreReturnValue
         public Builder setGender(String gender) {
-            this.gender = gender;
+            this.gender = checkNotNull(gender);
             return this;
         }
 
         public UserInfo build() {
-            return new UserInfo(name, gender, age);
+            return new UserInfo(this);
         }
     }
 }
