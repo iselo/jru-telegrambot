@@ -1,25 +1,27 @@
 package com.javarush.telegram;
 
-/**
- * Represents Telegram dialog mode.
- */
-public enum DialogMode {
+import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.events.DialogModeChangeEvent;
 
-    START("/start"),
-    GPT("/gpt"),
-    PROFILE("/profile"),
-    OPENER("/opener"),
-    CHAT("/chat"),
-    DATE("/date");
+import static com.javarush.telegram.DialogModeState.START;
 
-    private final String modeName;
+public final class DialogMode {
 
-    DialogMode(String modeName) {
-        this.modeName = modeName;
+    private DialogModeState state = START;
+
+    /**
+     * Returns current Telegram bot dialog mode state.
+     */
+    public DialogModeState state() {
+        return state;
     }
 
-    @Override
-    public String toString() {
-        return modeName;
+    /**
+     * Sets current Telegram bot dialog mode.
+     */
+    @Subscribe
+    public void onDialogModeChange(DialogModeChangeEvent event) {
+        this.state = event.state();
     }
+
 }

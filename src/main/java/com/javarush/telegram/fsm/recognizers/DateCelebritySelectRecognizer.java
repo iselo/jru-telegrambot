@@ -1,22 +1,32 @@
 package com.javarush.telegram.fsm.recognizers;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.BotReadOnlyContext;
-import com.javarush.telegram.fsm.FsmOutput;
-import com.javarush.telegram.fsm.instructions.DateCelebritySelectInstruction;
+import com.javarush.telegram.TelegramBotContext;
+import com.javarush.telegram.eventbus.events.DateCelebritySelectEvent;
+import com.javarush.telegram.fsm.Chronology;
+import com.javarush.telegram.fsm.Instruction;
+import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.javarush.telegram.DialogMode.DATE;
+import static com.javarush.telegram.DialogModeState.DATE;
 
 @Immutable
 public final class DateCelebritySelectRecognizer extends CallbackQueryRecognizer {
 
     @Override
-    protected boolean handle(Update update, BotReadOnlyContext context, FsmOutput fsmOutput) {
+    protected boolean handle(Update update,
+                             TelegramBotContext context,
+                             Chronology chronology,
+                             Responder responder) {
         var data = contentOf(update);
 
-        if (context.getMode() == DATE && data.startsWith("date_")) {
-            fsmOutput.addInstruction(new DateCelebritySelectInstruction(data));
+        if (context.dialogMode().state() == DATE && data.startsWith("date_")) {
+            chronology.add(new Instruction() {
+                @Override
+                protected void execute(Responder responder, TelegramBotContext context) {
+                    context.eventBus().post(new DateCelebritySelectEvent(responder, context, data));
+                }
+            });
             return true;
         }
 

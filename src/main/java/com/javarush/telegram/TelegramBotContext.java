@@ -1,23 +1,50 @@
 package com.javarush.telegram;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.eventbus.EventBus;
+import com.javarush.telegram.eventbus.handlers.EventHandler;
+import com.javarush.telegram.eventbus.handlers.OnBotMenu;
+import com.javarush.telegram.eventbus.handlers.OnChatDialog;
+import com.javarush.telegram.eventbus.handlers.OnChatMessageSend;
+import com.javarush.telegram.eventbus.handlers.OnDateCelebrityMessage;
+import com.javarush.telegram.eventbus.handlers.OnDateCelebritySelect;
+import com.javarush.telegram.eventbus.handlers.OnDateDialog;
+import com.javarush.telegram.eventbus.handlers.OnGptDialog;
+import com.javarush.telegram.eventbus.handlers.OnGptMessage;
+import com.javarush.telegram.eventbus.handlers.OnOpenerDialog;
+import com.javarush.telegram.eventbus.handlers.OnOpenerQuestion;
+import com.javarush.telegram.eventbus.handlers.OnProfileDialog;
+import com.javarush.telegram.eventbus.handlers.OnProfileQuestion;
 import com.javarush.telegram.survey.UserInfoSurvey;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.javarush.telegram.DialogMode.START;
 
-public final class TelegramBotContext implements BotReadOnlyContext {
+public final class TelegramBotContext {
 
     private final ChatGPTService chatGPTService;
-    private final List<String> chatHistory = new ArrayList<>();
+    private final EventBus eventBus = new EventBus();
+    private final ChatHistory chatHistory = new ChatHistory();
     private final UserInfoSurvey survey = new UserInfoSurvey();
-
-    private DialogMode mode = START;
+    private final DialogMode dialogMode = new DialogMode();
+    private final ImmutableList<EventHandler<?>> eventHandlers =
+            ImmutableList.of(
+                    new OnBotMenu(),
+                    new OnGptDialog(),
+                    new OnGptMessage(),
+                    new OnChatDialog(),
+                    new OnChatMessageSend(),
+                    new OnDateDialog(),
+                    new OnDateCelebritySelect(),
+                    new OnDateCelebrityMessage(),
+                    new OnOpenerDialog(),
+                    new OnOpenerQuestion(),
+                    new OnProfileDialog(),
+                    new OnProfileQuestion()
+            );
 
     public TelegramBotContext(ChatGPTService chatGPTService) {
         this.chatGPTService = checkNotNull(chatGPTService);
+        configure();
     }
 
     /**
@@ -27,28 +54,30 @@ public final class TelegramBotContext implements BotReadOnlyContext {
         return chatGPTService;
     }
 
+
+    public EventBus eventBus() {
+        return eventBus;
+    }
+
     /**
      * Returns chat history.
      */
-    public List<String> chatHistory() {
+    public ChatHistory chatHistory() {
         return chatHistory;
     }
 
-    @Override
     public UserInfoSurvey survey() {
         return survey;
     }
 
-    @Override
-    public DialogMode getMode() {
-        return mode;
+    public DialogMode dialogMode() {
+        return dialogMode;
     }
 
-    /**
-     * Sets current Telegram bot dialog mode.
-     */
-    public void setMode(DialogMode mode) {
-        checkNotNull(mode);
-        this.mode = mode;
+    private void configure() {
+        eventBus.register(dialogMode);
+        eventBus.register(chatHistory);
+        eventBus.register(survey.questions());
+        eventHandlers.forEach(eventBus::register);
     }
 }

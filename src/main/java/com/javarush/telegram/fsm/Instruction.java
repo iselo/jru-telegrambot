@@ -1,4 +1,4 @@
-package com.javarush.telegram.fsm.instructions;
+package com.javarush.telegram.fsm;
 
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
