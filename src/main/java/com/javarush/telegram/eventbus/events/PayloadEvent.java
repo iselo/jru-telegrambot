@@ -9,7 +9,7 @@ public abstract class PayloadEvent extends Event {
 
     private final String text;
 
-    public PayloadEvent(Responder responder, TelegramBotContext context, String text) {
+    protected PayloadEvent(Responder responder, TelegramBotContext context, String text) {
         super(responder, context);
         this.text = checkNotNull(text);
     }

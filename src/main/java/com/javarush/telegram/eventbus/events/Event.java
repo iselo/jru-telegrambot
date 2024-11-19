@@ -10,7 +10,7 @@ public abstract class Event {
     private final Responder responder;
     private final TelegramBotContext context;
 
-    public Event(Responder responder, TelegramBotContext context) {
+    protected Event(Responder responder, TelegramBotContext context) {
         this.responder = checkNotNull(responder);
         this.context = checkNotNull(context);
     }

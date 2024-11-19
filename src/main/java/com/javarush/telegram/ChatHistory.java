@@ -9,21 +9,21 @@ import java.util.List;
 
 public final class ChatHistory {
 
-    private final List<String> chatHistory = new ArrayList<>();
+    private final List<String> history = new ArrayList<>();
 
     @Subscribe
     public void onChatHistoryClear(ChatHistoryClearEvent event) {
-        chatHistory.clear();
+        history.clear();
     }
 
     @Subscribe
     public void onChatMassageAdd(ChatMessageAddEvent event) {
-        chatHistory.add(event.toString());
+        history.add(event.toString());
     }
 
     @Override
     public String toString() {
-        return String.join("\n\n", chatHistory);
+        return String.join("\n\n", history);
     }
 
 }
