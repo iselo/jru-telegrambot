@@ -20,8 +20,7 @@ public final class OnGptMessage implements EventHandler<GptMessageSendEvent> {
         var responder = event.responder();
         var message = responder.execute(new TextMessage(PLEASE_WAIT));
         var prompt = TelegramBotFileUtil.loadPrompt(GPT);
-        var answer = event.context().chatGPTService().sendMessage(prompt, event.text());
+        var answer = event.context().chatGPTService().sendMessage(prompt, event.toString());
         responder.execute(new UpdatedTextMessage(message, answer));
     }
-
 }

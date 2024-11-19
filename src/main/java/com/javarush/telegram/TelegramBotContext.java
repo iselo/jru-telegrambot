@@ -2,6 +2,7 @@ package com.javarush.telegram;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
+import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.eventbus.handlers.EventHandler;
 import com.javarush.telegram.eventbus.handlers.OnBotMenu;
 import com.javarush.telegram.eventbus.handlers.OnChatDialog;
@@ -19,6 +20,8 @@ import com.javarush.telegram.survey.UserInfoSurvey;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Immutable
+@SuppressWarnings("Immutable")
 public final class TelegramBotContext {
 
     private final ChatGPTService chatGPTService;

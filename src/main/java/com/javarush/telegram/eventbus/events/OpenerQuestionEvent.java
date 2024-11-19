@@ -1,5 +1,6 @@
 package com.javarush.telegram.eventbus.events;
 
+import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.responder.Responder;
 
@@ -7,7 +8,8 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class OpenerQuestionEvent extends Event {
+@Immutable
+public final class OpenerQuestionEvent extends Event {
 
     private final Optional<String> previousAnswer;
 

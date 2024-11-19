@@ -16,6 +16,5 @@ public final class OnDateCelebritySelect implements EventHandler<DateCelebritySe
         var prompt = TelegramBotFileUtil.loadPrompt(data);
         event.context().chatGPTService().setPrompt(prompt);
         event.responder().execute(new PhotoMessage(data));
-
     }
 }

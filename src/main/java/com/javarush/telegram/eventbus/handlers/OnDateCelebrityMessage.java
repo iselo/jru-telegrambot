@@ -18,6 +18,5 @@ public final class OnDateCelebrityMessage implements EventHandler<DateCelebrityM
         var message = responder.execute(new TextMessage(PLEASE_WAIT));
         var gptAnswer = event.context().chatGPTService().addMessage(event.toString());
         responder.execute(new UpdatedTextMessage(message, gptAnswer));
-
     }
 }
