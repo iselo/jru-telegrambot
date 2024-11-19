@@ -1,5 +1,5 @@
 package com.javarush.telegram.eventbus.events;
 
-public class SurveyQuestionsResetEvent {
+public class SurveyQuestionsResetEvent { // NOSONAR
     // Intentionally empty
 }
