@@ -31,9 +31,9 @@ class ChatHistoryTest {
     @Test
     @DisplayName("Adds message to chat history on ChatMessageAddEvent")
     void addsMessage() {
-        var sample_message = new ChatMessageAddEvent("Sample Message");
-        eventBus.post(sample_message);
-        eventBus.post(sample_message);
+        var event = new ChatMessageAddEvent("Sample Message");
+        eventBus.post(event);
+        eventBus.post(event);
 
         assertEquals(chatHistory.toString(), "Sample Message\n\nSample Message");
     }
