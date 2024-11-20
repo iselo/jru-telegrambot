@@ -1,8 +1,14 @@
 package com.javarush.telegram.responder;
 
+import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.MultiSessionTelegramBot;
+import com.javarush.telegram.eventbus.events.MenuEvent;
+import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
+import com.javarush.telegram.eventbus.events.TextButtonsMessageEvent;
+import com.javarush.telegram.eventbus.events.TextMessageEvent;
+import com.javarush.telegram.eventbus.events.UpdatedTextMessageEvent;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.Serializable;
@@ -11,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
-public final class Responder implements MessageResponder {
+public final class Responder {
 
     @SuppressWarnings("Immutable")
     private final MultiSessionTelegramBot bot;
@@ -22,30 +28,55 @@ public final class Responder implements MessageResponder {
         this.chatId = checkNotNull(chatId);
     }
 
-    @Override
+    @Subscribe
+    void handle(PhotoMessageEvent event) {
+        this.execute(event.payload().data());
+    }
+
+    @Subscribe
+    void handle(TextMessageEvent event) {
+        var result = this.execute(event.payload().data());
+        if (event.consumer() != null) {
+            event.consumer().accept(result);
+        }
+    }
+
+    @Subscribe
+    void handle(UpdatedTextMessageEvent event) {
+        var result = this.execute(event.payload().data());
+    }
+
+    @Subscribe
+    void handle(TextButtonsMessageEvent event) {
+        this.execute(event.payload().data());
+    }
+
+    @Subscribe
+    void handle(MenuEvent event) {
+        this.execute(event.payload().data());
+    }
+
+
     @CanIgnoreReturnValue
-    public Message execute(TextMessage command) {
+    private Message execute(TextMessage command) {
         checkNotNull(command);
         return command.handle(bot, chatId);
     }
 
-    @Override
     @CanIgnoreReturnValue
-    public Message execute(PhotoMessage command) {
+    private Message execute(PhotoMessage command) {
         checkNotNull(command);
         return command.handle(bot, chatId);
     }
 
-    @Override
     @CanIgnoreReturnValue
-    public CompletableFuture<Serializable> execute(UpdatedTextMessage command) {
+    private CompletableFuture<Serializable> execute(UpdatedTextMessage command) {
         checkNotNull(command);
         return command.handle(bot, chatId);
     }
 
-    @Override
     @CanIgnoreReturnValue
-    public Boolean execute(Menu command) {
+    private Boolean execute(Menu command) {
         checkNotNull(command);
         return command.handle(bot, chatId);
     }

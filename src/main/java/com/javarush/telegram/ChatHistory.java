@@ -1,7 +1,8 @@
 package com.javarush.telegram;
 
 import com.google.common.eventbus.Subscribe;
-import com.javarush.telegram.eventbus.events.ChatHistoryClearEvent;
+import com.javarush.telegram.eventbus.events.ChatDialogEvent;
+import com.javarush.telegram.eventbus.events.ChatHistoryEvent;
 import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
 
 import java.util.ArrayList;
@@ -12,18 +13,20 @@ public final class ChatHistory {
     private final List<String> history = new ArrayList<>();
 
     @Subscribe
-    public void onChatHistoryClear(ChatHistoryClearEvent event) {
+    public void handle(ChatDialogEvent event) {
         history.clear();
     }
 
     @Subscribe
-    public void onChatMassageAdd(ChatMessageAddEvent event) {
-        history.add(event.toString());
+    public void handle(ChatMessageAddEvent event) {
+        history.add(event.payload().data());
     }
 
-    @Override
-    public String toString() {
-        return String.join("\n\n", history);
+    @Subscribe
+    public void handle(ChatHistoryEvent event) {
+        var consumer =event.consumer();
+        if (consumer != null){
+            consumer.accept(String.join("\n\n", history));
+        }
     }
-
 }

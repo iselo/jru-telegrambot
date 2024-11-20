@@ -5,9 +5,9 @@ import com.javarush.telegram.eventbus.Event;
 import com.javarush.telegram.eventbus.Payload;
 
 @Immutable
-public final class OpenerDialogEvent extends Event<Payload<String>> {
+public final class StartDialogEvent extends Event<Payload<String>> {
 
-    public OpenerDialogEvent(Payload<String> payload) {
+    public StartDialogEvent(Payload<String> payload) {
         super(payload);
     }
 }

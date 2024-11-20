@@ -1,26 +1,15 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.TelegramBotContext;
-import com.javarush.telegram.responder.Responder;
+import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Payload;
 
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 @Immutable
-public final class OpenerQuestionEvent extends Event {
+public final class OpenerQuestionEvent extends Event<Payload<Optional<String>>> {
 
-    private final Optional<String> previousAnswer;
-
-    public OpenerQuestionEvent(Responder responder,
-                               TelegramBotContext context,
-                               Optional<String> previousAnswer) {
-        super(responder, context);
-        this.previousAnswer = checkNotNull(previousAnswer);
-    }
-
-    public Optional<String> previousAnswer() {
-        return previousAnswer;
+    public OpenerQuestionEvent(Payload<Optional<String>> payload) {
+        super(payload);
     }
 }

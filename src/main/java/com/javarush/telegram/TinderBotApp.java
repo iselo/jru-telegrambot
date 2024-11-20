@@ -37,15 +37,20 @@ public final class TinderBotApp extends MultiSessionTelegramBot {
         Chronology chronology = new Chronology();
         Responder responder = new Responder(this, chatId(update));
 
+        var eventBus = Service.INSTANCE.eventBus();
+        eventBus.register(responder);
+
         FiniteStateMachineResult fsmResult =
                 FiniteStateMachineFactory.MAIN
                         .newInstance()
-                        .run(update, context, chronology, responder);
+                        .run(update, context, chronology);
 
         if (fsmResult == FiniteStateMachineResult.FINISHED) {
 
             chronology.queue()
-                    .forEach(instruction -> instruction.apply(responder, context));
+                    .forEach(instruction -> instruction.apply(context));
         }
+        eventBus.unregister(responder);
+
     }
 }

@@ -3,7 +3,6 @@ package com.javarush.telegram.fsm.recognizers;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -21,12 +20,11 @@ public abstract class Recognizer {
      */
     public boolean accept(Update update,
                           TelegramBotContext context,
-                          Chronology chronology,
-                          Responder responder) {
+                          Chronology chronology) {
         checkNotNull(update);
         checkNotNull(context);
         checkNotNull(chronology);
-        return handle(update, context, chronology, responder);
+        return handle(update, context, chronology);
     }
 
     /**
@@ -37,8 +35,7 @@ public abstract class Recognizer {
      */
     protected abstract boolean handle(Update update,
                                       TelegramBotContext context,
-                                      Chronology fsmOutput,
-                                      Responder responder);
+                                      Chronology fsmOutput);
 
     /**
      * Returns a message content or callbackquery content of given Update.

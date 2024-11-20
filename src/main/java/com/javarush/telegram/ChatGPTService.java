@@ -1,5 +1,8 @@
 package com.javarush.telegram;
 
+import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.events.ChatGPTMessageEvent;
+import com.javarush.telegram.eventbus.events.ChatGPTPromptEvent;
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.Message;
@@ -104,5 +107,19 @@ public final class ChatGPTService {
         messageHistory.add(message);
 
         return message.getContent();
+    }
+
+    @Subscribe
+    void handle(ChatGPTPromptEvent event) {
+        setPrompt(event.payload().data());
+    }
+
+    @Subscribe
+    void handle(ChatGPTMessageEvent event) {
+        var consumer = event.consumer();
+        if (consumer != null) {
+            var result = addMessage(event.payload().data());
+            consumer.accept(result);
+        }
     }
 }

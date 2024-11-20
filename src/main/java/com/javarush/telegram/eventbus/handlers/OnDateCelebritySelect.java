@@ -3,7 +3,10 @@ package com.javarush.telegram.eventbus.handlers;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
+import com.javarush.telegram.eventbus.Payload;
+import com.javarush.telegram.eventbus.events.ChatGPTPromptEvent;
 import com.javarush.telegram.eventbus.events.DateCelebritySelectEvent;
+import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
 import com.javarush.telegram.responder.PhotoMessage;
 
 @Immutable
@@ -12,9 +15,10 @@ public final class OnDateCelebritySelect implements EventHandler<DateCelebritySe
     @Override
     @Subscribe
     public void handle(DateCelebritySelectEvent event) {
-        var data = event.toString();
+        var payload = event.payload();
+        var data = payload.data();
         var prompt = TelegramBotFileUtil.loadPrompt(data);
-        event.context().chatGPTService().setPrompt(prompt);
-        event.responder().execute(new PhotoMessage(data));
+        new ChatGPTPromptEvent(Payload.of(prompt)).post();
+        new PhotoMessageEvent(Payload.of(new PhotoMessage(data))).post();
     }
 }

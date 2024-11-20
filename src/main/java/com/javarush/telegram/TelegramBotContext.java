@@ -1,7 +1,6 @@
 package com.javarush.telegram;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.eventbus.EventBus;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.eventbus.handlers.EventHandler;
 import com.javarush.telegram.eventbus.handlers.OnAskQuestion;
@@ -27,7 +26,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class TelegramBotContext {
 
     private final ChatGPTService chatGPTService;
-    private final EventBus eventBus = new EventBus();
     private final ChatHistory chatHistory = new ChatHistory();
     private final UserInfoSurvey survey = new UserInfoSurvey();
     private final DialogMode dialogMode = new DialogMode();
@@ -54,26 +52,6 @@ public final class TelegramBotContext {
         configure();
     }
 
-    /**
-     * Returns ChatGPT service.
-     */
-    public ChatGPTService chatGPTService() {
-        return chatGPTService;
-    }
-
-    /**
-     * Returns event bus.
-     */
-    public EventBus eventBus() {
-        return eventBus;
-    }
-
-    /**
-     * Returns chat history.
-     */
-    public ChatHistory chatHistory() {
-        return chatHistory;
-    }
 
     /**
      * Returns survey history.
@@ -90,8 +68,11 @@ public final class TelegramBotContext {
     }
 
     private void configure() {
+        var eventBus = Service.INSTANCE.eventBus();
         eventBus.register(dialogMode);
+        eventBus.register(chatGPTService);
         eventBus.register(chatHistory);
+        eventBus.register(survey);
         eventBus.register(survey.questions());
         eventHandlers.forEach(eventBus::register);
     }

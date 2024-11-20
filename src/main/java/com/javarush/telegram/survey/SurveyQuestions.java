@@ -1,7 +1,8 @@
 package com.javarush.telegram.survey;
 
 import com.google.common.eventbus.Subscribe;
-import com.javarush.telegram.eventbus.events.SurveyQuestionsResetEvent;
+import com.javarush.telegram.eventbus.events.OpenerDialogEvent;
+import com.javarush.telegram.eventbus.events.ProfileDialogEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class SurveyQuestions {
     private final List<Question> questions = new ArrayList<>();
 
     public SurveyQuestions() {
-        setQuestions();
+        resetQuestions();
     }
 
     /**
@@ -27,9 +28,13 @@ public class SurveyQuestions {
      * Resets questions of this survey to initial state.
      */
     @Subscribe
-    public void resetQuestions(SurveyQuestionsResetEvent event) {
-        questions.clear();
-        setQuestions();
+    public void handle(ProfileDialogEvent event) {
+        resetQuestions();
+    }
+
+    @Subscribe
+    public void handle(OpenerDialogEvent event) {
+        resetQuestions();
     }
 
     /**
@@ -39,7 +44,8 @@ public class SurveyQuestions {
         return !questions.isEmpty();
     }
 
-    private void setQuestions() {
+    private void resetQuestions() {
+        questions.clear();
         questions.addAll(
                 List.of(
                         new FirstNameQuestion(),

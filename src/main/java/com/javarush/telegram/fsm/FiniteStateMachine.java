@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.fsm.recognizers.Recognizer;
-import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
@@ -54,14 +53,13 @@ public final class FiniteStateMachine<E extends Enum> {
      */
     public FiniteStateMachineResult run(Update update,
                                         TelegramBotContext context,
-                                        Chronology fsmOutput,
-                                        Responder responder) {
+                                        Chronology fsmOutput) {
         E currentFsmState = startState;
 
         while (currentFsmState != finishState) {
             Set<E> transitions = transitions(currentFsmState);
 
-            Optional<E> nextFsmState = moveForward(transitions, update, context, fsmOutput, responder);
+            Optional<E> nextFsmState = moveForward(transitions, update, context, fsmOutput);
 
             if (nextFsmState.isEmpty()) {
 
@@ -86,13 +84,12 @@ public final class FiniteStateMachine<E extends Enum> {
     private Optional<E> moveForward(Iterable<E> transitions,
                                     Update update,
                                     TelegramBotContext context,
-                                    Chronology fsmOutput,
-                                    Responder responder) {
+                                    Chronology fsmOutput) {
         for (E fsmState : transitions) {
 
             var recognizer = recognizer(fsmState);
 
-            if (recognizer.accept(update, context, fsmOutput, responder)) {
+            if (recognizer.accept(update, context, fsmOutput)) {
                 return Optional.of(fsmState);
             }
         }

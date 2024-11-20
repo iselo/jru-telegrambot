@@ -1,13 +1,13 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.TelegramBotContext;
-import com.javarush.telegram.responder.Responder;
+import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Payload;
 
 @Immutable
-public final class ProfileDialogEvent extends Event {
+public final class ProfileDialogEvent extends Event<Payload<String>> {
 
-    public ProfileDialogEvent(Responder responder, TelegramBotContext context) {
-        super(responder, context);
+    public ProfileDialogEvent(Payload<String> payload) {
+        super(payload);
     }
 }

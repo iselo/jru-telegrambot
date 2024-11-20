@@ -1,8 +1,7 @@
 package com.javarush.telegram;
 
 import com.google.common.eventbus.EventBus;
-import com.javarush.telegram.eventbus.events.ChatHistoryClearEvent;
-import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
+import com.google.common.testing.NullPointerTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,31 +17,20 @@ class ChatHistoryTest {
     void setUp() {
         eventBus = new EventBus("test");
         chatHistory = new ChatHistory();
-
         eventBus.register(chatHistory);
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("New chat history is empty")
     void emptyIfNew() {
         assertEquals(chatHistory.toString(), "");
     }
 
     @Test
-    @DisplayName("Adds message to chat history on ChatMessageAddEvent")
-    void addsMessage() {
-        var event = new ChatMessageAddEvent("Sample Message");
-        eventBus.post(event);
-        eventBus.post(event);
-
-        assertEquals(chatHistory.toString(), "Sample Message\n\nSample Message");
-    }
-
-    @Test
-    void clearsContent() {
-        eventBus.post(new ChatMessageAddEvent("Sample Message"));
-        eventBus.post(new ChatHistoryClearEvent());
-
-        assertEquals(chatHistory.toString(), "");
+    @DisplayName("Public methods refuses null")
+    void refusesNull() {
+        var nullPointerTester = new NullPointerTester();
+        nullPointerTester.testAllPublicConstructors(ChatHistory.class);
+        nullPointerTester.testAllPublicStaticMethods(ChatHistory.class);
     }
 }

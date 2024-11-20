@@ -2,9 +2,11 @@ package com.javarush.telegram.eventbus.handlers;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
+import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.AskQuestionEvent;
 import com.javarush.telegram.eventbus.events.LastQuestionEvent;
 import com.javarush.telegram.eventbus.events.ProfileQuestionEvent;
+import com.javarush.telegram.eventbus.events.SurveyEvent;
 
 @Immutable
 public final class OnProfileQuestion implements EventHandler<ProfileQuestionEvent> {
@@ -14,19 +16,23 @@ public final class OnProfileQuestion implements EventHandler<ProfileQuestionEven
     @Override
     @Subscribe
     public void handle(ProfileQuestionEvent event) {
-        var responder = event.responder();
-        var context = event.context();
-        var previousAnswer = event.previousAnswer();
-        var eventBus = context.eventBus();
-        var survey = context.survey();
-        var question = survey.questions().nextQuestion();
+        var previousAnswer = event.payload().data();
 
-        previousAnswer.ifPresent(answer -> question.accept(survey, answer));
+        new SurveyEvent(
+                Payload.ofEmpty(),
+                (survey) -> {
+                    var question = survey.questions().nextQuestion();
 
-        var maybeQuestionValue = question.value();
-        maybeQuestionValue.ifPresentOrElse(
-                questionValue -> eventBus.post(new AskQuestionEvent(responder, context, questionValue)),
-                () -> eventBus.post(new LastQuestionEvent(responder, context, PROFILE))
-        );
+                    previousAnswer.ifPresent(answer -> question.accept(survey, answer));
+
+                    var maybeQuestionValue = question.value();
+                    maybeQuestionValue.ifPresentOrElse(
+                            questionValue -> new AskQuestionEvent(Payload.of(questionValue)).post(),
+                            () -> new LastQuestionEvent(Payload.of(PROFILE)).post()
+                    );
+                }
+        ).post();
+
+
     }
 }

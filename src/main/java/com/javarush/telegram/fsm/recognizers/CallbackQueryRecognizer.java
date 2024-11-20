@@ -3,7 +3,6 @@ package com.javarush.telegram.fsm.recognizers;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -14,10 +13,9 @@ public abstract class CallbackQueryRecognizer extends Recognizer {
     @Override
     public final boolean accept(Update update,
                                 TelegramBotContext context,
-                                Chronology chronology,
-                                Responder responder) {
+                                Chronology chronology) {
         checkNotNull(update);
-        return update.hasCallbackQuery() && super.accept(update, context, chronology, responder);
+        return update.hasCallbackQuery() && super.accept(update, context, chronology);
     }
 
     @Override

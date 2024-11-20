@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
+import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.ChatDialogEvent;
+import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
+import com.javarush.telegram.eventbus.events.TextButtonsMessageEvent;
 import com.javarush.telegram.responder.PhotoMessage;
 import com.javarush.telegram.responder.TextButtonsMessage;
 
@@ -22,8 +25,8 @@ public final class OnChatDialog implements EventHandler<ChatDialogEvent> {
     @Subscribe
     public void handle(ChatDialogEvent event) {
         var messageText = TelegramBotFileUtil.loadMessage(CHAT);
-        var responder = event.responder();
-        responder.execute(new PhotoMessage(CHAT));
-        responder.execute(new TextButtonsMessage(messageText, buttons));
+
+        new PhotoMessageEvent(Payload.of(new PhotoMessage(CHAT))).post();
+        new TextButtonsMessageEvent(Payload.of(new TextButtonsMessage(messageText, buttons))).post();
     }
 }

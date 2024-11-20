@@ -5,7 +5,6 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.fsm.Chronology;
 import com.javarush.telegram.fsm.FiniteStateMachineFactory;
 import com.javarush.telegram.fsm.FiniteStateMachineResult;
-import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
@@ -14,12 +13,11 @@ public final class BotMenuRecogniser extends CallbackQueryOrMessageRecognizer {
     @Override
     protected boolean handle(Update update,
                              TelegramBotContext context,
-                             Chronology chronology,
-                             Responder responder) {
+                             Chronology chronology) {
         var fsmResult =
                 FiniteStateMachineFactory.BOT_MENU
                         .newInstance()
-                        .run(update, context, chronology, responder);
+                        .run(update, context, chronology);
 
         return fsmResult == FiniteStateMachineResult.FINISHED && chronology.isPresent();
     }
