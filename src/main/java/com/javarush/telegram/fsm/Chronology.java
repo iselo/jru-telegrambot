@@ -1,7 +1,6 @@
 package com.javarush.telegram.fsm;
 
 import com.google.common.collect.ImmutableList;
-import com.javarush.telegram.fsm.instructions.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,26 +12,26 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * It contains instruction list to be performed as a response on Telegram bot {@code Update} event.
  */
-public final class FsmOutput {
+public final class Chronology {
 
-    private final List<Instruction> instructions = new ArrayList<>();
+    private final List<Instruction> events = new ArrayList<>();
 
-    public void addInstruction(Instruction instruction) {
-        checkNotNull(instruction);
-        instructions.add(instruction);
+    public void add(Instruction event) {
+        checkNotNull(event);
+        events.add(event);
     }
 
     /**
      * Returns a list of instructions.
      */
-    public ImmutableList<Instruction> instructions() {
-        return ImmutableList.copyOf(instructions);
+    public ImmutableList<Instruction> queue() {
+        return ImmutableList.copyOf(events);
     }
 
     /**
      * Returns {@code true} if output is not empty, otherwise {@code false}.
      */
     public boolean isPresent() {
-        return !instructions.isEmpty();
+        return !events.isEmpty();
     }
 }

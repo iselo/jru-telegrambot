@@ -1,6 +1,7 @@
 package com.javarush.telegram.responder;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.MultiSessionTelegramBot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -9,8 +10,10 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Immutable
 public final class Responder implements MessageResponder {
 
+    @SuppressWarnings("Immutable")
     private final MultiSessionTelegramBot bot;
     private final Long chatId;
 

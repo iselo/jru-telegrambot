@@ -1,24 +1,35 @@
 package com.javarush.telegram.fsm.recognizers;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.BotReadOnlyContext;
-import com.javarush.telegram.fsm.FsmOutput;
-import com.javarush.telegram.fsm.instructions.ChatDialogInstruction;
-import com.javarush.telegram.fsm.instructions.ChatHistoryClearInstruction;
-import com.javarush.telegram.fsm.instructions.DialogModeInstruction;
+import com.javarush.telegram.TelegramBotContext;
+import com.javarush.telegram.eventbus.events.ChatDialogEvent;
+import com.javarush.telegram.eventbus.events.ChatHistoryClearEvent;
+import com.javarush.telegram.eventbus.events.DialogModeChangeEvent;
+import com.javarush.telegram.fsm.Chronology;
+import com.javarush.telegram.fsm.Instruction;
+import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.javarush.telegram.DialogMode.CHAT;
+import static com.javarush.telegram.DialogModeState.CHAT;
 
 @Immutable
 public final class ChatDialogRecognizer extends MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update, BotReadOnlyContext context, FsmOutput fsmOutput) {
+    protected boolean handle(Update update,
+                             TelegramBotContext context,
+                             Chronology chronology,
+                             Responder responder) {
         if (contentOf(update).equalsIgnoreCase(CHAT.toString())) {
-            fsmOutput.addInstruction(new DialogModeInstruction(CHAT));
-            fsmOutput.addInstruction(new ChatHistoryClearInstruction());
-            fsmOutput.addInstruction(new ChatDialogInstruction());
+            chronology.add(new Instruction() {
+                @Override
+                protected void execute(Responder responder, TelegramBotContext context) {
+                    var eventBus = context.eventBus();
+                    eventBus.post(new DialogModeChangeEvent(CHAT));
+                    eventBus.post(new ChatHistoryClearEvent());
+                    eventBus.post(new ChatDialogEvent(responder, context));
+                }
+            });
 
             return true;
         }

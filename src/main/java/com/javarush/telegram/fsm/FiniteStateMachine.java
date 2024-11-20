@@ -3,8 +3,9 @@ package com.javarush.telegram.fsm;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.BotReadOnlyContext;
+import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.fsm.recognizers.Recognizer;
+import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
@@ -28,8 +29,8 @@ public final class FiniteStateMachine<E extends Enum> {
     private final ImmutableMap<E, Recognizer> recognizers;
 
     private FiniteStateMachine(Builder<E> builder) {
-        this.startState = builder.startState;
-        this.finishState = builder.finishState;
+        this.startState = checkNotNull(builder.startState);
+        this.finishState = checkNotNull(builder.finishState);
         this.transitionTable = ImmutableMap.copyOf(builder.transitionTable);
         this.recognizers = ImmutableMap.copyOf(builder.recognizers);
     }
@@ -52,14 +53,15 @@ public final class FiniteStateMachine<E extends Enum> {
      * @return result of the finite state machine run
      */
     public FiniteStateMachineResult run(Update update,
-                                        BotReadOnlyContext context,
-                                        FsmOutput fsmOutput) {
+                                        TelegramBotContext context,
+                                        Chronology fsmOutput,
+                                        Responder responder) {
         E currentFsmState = startState;
 
         while (currentFsmState != finishState) {
             Set<E> transitions = transitions(currentFsmState);
 
-            Optional<E> nextFsmState = moveForward(transitions, update, context, fsmOutput);
+            Optional<E> nextFsmState = moveForward(transitions, update, context, fsmOutput, responder);
 
             if (nextFsmState.isEmpty()) {
 
@@ -83,13 +85,14 @@ public final class FiniteStateMachine<E extends Enum> {
 
     private Optional<E> moveForward(Iterable<E> transitions,
                                     Update update,
-                                    BotReadOnlyContext context,
-                                    FsmOutput fsmOutput) {
+                                    TelegramBotContext context,
+                                    Chronology fsmOutput,
+                                    Responder responder) {
         for (E fsmState : transitions) {
 
             var recognizer = recognizer(fsmState);
 
-            if (recognizer.accept(update, context, fsmOutput)) {
+            if (recognizer.accept(update, context, fsmOutput, responder)) {
                 return Optional.of(fsmState);
             }
         }
@@ -113,12 +116,12 @@ public final class FiniteStateMachine<E extends Enum> {
         }
 
         public Builder<E> setStartState(E startState) {
-            this.startState = checkNotNull(startState);
+            this.startState = startState;
             return this;
         }
 
         public Builder<E> setFinishState(E finishState) {
-            this.finishState = checkNotNull(finishState);
+            this.finishState = finishState;
             return this;
         }
 

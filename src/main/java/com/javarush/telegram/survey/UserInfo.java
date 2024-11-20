@@ -13,9 +13,9 @@ public final class UserInfo {
     private final String age;
 
     private UserInfo(Builder builder) {
-        this.name = builder.name;
-        this.gender = builder.gender;
-        this.age = builder.age;
+        this.name = checkNotNull(builder.name);
+        this.gender = checkNotNull(builder.gender);
+        this.age = checkNotNull(builder.age);
     }
 
     /**
@@ -63,19 +63,19 @@ public final class UserInfo {
 
         @CanIgnoreReturnValue
         public Builder setName(String name) {
-            this.name = checkNotNull(name);
+            this.name = name;
             return this;
         }
 
         @CanIgnoreReturnValue
         public Builder setAge(String age) {
-            this.age = checkNotNull(age);
+            this.age = age;
             return this;
         }
 
         @CanIgnoreReturnValue
         public Builder setGender(String gender) {
-            this.gender = checkNotNull(gender);
+            this.gender = gender;
             return this;
         }
 

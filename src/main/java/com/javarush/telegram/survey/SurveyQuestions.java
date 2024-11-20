@@ -1,5 +1,8 @@
 package com.javarush.telegram.survey;
 
+import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.events.SurveyQuestionsResetEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,8 @@ public class SurveyQuestions {
     /**
      * Resets questions of this survey to initial state.
      */
-    public void resetQuestions() {
+    @Subscribe
+    public void resetQuestions(SurveyQuestionsResetEvent event) {
         questions.clear();
         setQuestions();
     }

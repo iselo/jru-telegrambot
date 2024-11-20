@@ -1,23 +1,23 @@
-package com.javarush.telegram.fsm.instructions;
+package com.javarush.telegram.eventbus.handlers;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.TelegramBotFileUtil;
+import com.javarush.telegram.eventbus.events.MenuInitializationEvent;
 import com.javarush.telegram.responder.Menu;
-import com.javarush.telegram.responder.Responder;
 import com.javarush.telegram.responder.TextMessage;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
-import static com.javarush.telegram.DialogMode.CHAT;
-import static com.javarush.telegram.DialogMode.DATE;
-import static com.javarush.telegram.DialogMode.GPT;
-import static com.javarush.telegram.DialogMode.OPENER;
-import static com.javarush.telegram.DialogMode.PROFILE;
-import static com.javarush.telegram.DialogMode.START;
+import static com.javarush.telegram.DialogModeState.CHAT;
+import static com.javarush.telegram.DialogModeState.DATE;
+import static com.javarush.telegram.DialogModeState.GPT;
+import static com.javarush.telegram.DialogModeState.OPENER;
+import static com.javarush.telegram.DialogModeState.PROFILE;
+import static com.javarush.telegram.DialogModeState.START;
 
 @Immutable
-public final class MenuInstruction extends Instruction {
+public final class OnBotMenu implements EventHandler<MenuInitializationEvent> {
 
     private static final String MAIN = "main";
 
@@ -32,9 +32,12 @@ public final class MenuInstruction extends Instruction {
     );
 
     @Override
-    protected void execute(Responder responder, TelegramBotContext context) {
+    @Subscribe
+    public void handle(MenuInitializationEvent event) {
         var text = TelegramBotFileUtil.loadMessage(MAIN);
+        var responder = event.responder();
         responder.execute(new TextMessage(text));
         responder.execute(new Menu(menu));
     }
+
 }
