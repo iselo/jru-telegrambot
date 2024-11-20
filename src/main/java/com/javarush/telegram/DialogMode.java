@@ -5,6 +5,9 @@ import com.javarush.telegram.eventbus.events.DialogModeChangeEvent;
 
 import static com.javarush.telegram.DialogModeState.START;
 
+/**
+ * Represents Telegram bot dialog mode state.
+ */
 public final class DialogMode {
 
     private DialogModeState state = START;

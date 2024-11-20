@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.eventbus.handlers.EventHandler;
+import com.javarush.telegram.eventbus.handlers.OnAskQuestion;
 import com.javarush.telegram.eventbus.handlers.OnBotMenu;
 import com.javarush.telegram.eventbus.handlers.OnChatDialog;
 import com.javarush.telegram.eventbus.handlers.OnChatMessageSend;
@@ -12,6 +13,7 @@ import com.javarush.telegram.eventbus.handlers.OnDateCelebritySelect;
 import com.javarush.telegram.eventbus.handlers.OnDateDialog;
 import com.javarush.telegram.eventbus.handlers.OnGptDialog;
 import com.javarush.telegram.eventbus.handlers.OnGptMessage;
+import com.javarush.telegram.eventbus.handlers.OnLastQuestion;
 import com.javarush.telegram.eventbus.handlers.OnOpenerDialog;
 import com.javarush.telegram.eventbus.handlers.OnOpenerQuestion;
 import com.javarush.telegram.eventbus.handlers.OnProfileDialog;
@@ -42,7 +44,9 @@ public final class TelegramBotContext {
                     new OnOpenerDialog(),
                     new OnOpenerQuestion(),
                     new OnProfileDialog(),
-                    new OnProfileQuestion()
+                    new OnProfileQuestion(),
+                    new OnAskQuestion(),
+                    new OnLastQuestion()
             );
 
     public TelegramBotContext(ChatGPTService chatGPTService) {
@@ -57,7 +61,9 @@ public final class TelegramBotContext {
         return chatGPTService;
     }
 
-
+    /**
+     * Returns event bus.
+     */
     public EventBus eventBus() {
         return eventBus;
     }
@@ -69,10 +75,16 @@ public final class TelegramBotContext {
         return chatHistory;
     }
 
+    /**
+     * Returns survey history.
+     */
     public UserInfoSurvey survey() {
         return survey;
     }
 
+    /**
+     * Returns dialog mode.
+     */
     public DialogMode dialogMode() {
         return dialogMode;
     }

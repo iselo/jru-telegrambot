@@ -14,8 +14,8 @@ public abstract class Recognizer {
     /**
      * Recognises the state of Finite State Machine for Telegram bot update.
      *
-     * @param update    the current Telegram update
-     * @param context   the Telegram bot context
+     * @param update     the current Telegram update
+     * @param context    the Telegram bot context
      * @param chronology the output of finite state machine run
      * @return {@code true} if state of the current update was recognised, otherwise {@code false}
      */

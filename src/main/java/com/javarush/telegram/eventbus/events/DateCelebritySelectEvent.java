@@ -7,7 +7,7 @@ import com.javarush.telegram.responder.Responder;
 @Immutable
 public final class DateCelebritySelectEvent extends PayloadEvent {
 
-    public DateCelebritySelectEvent(Responder responder, TelegramBotContext context, String text) {
-        super(responder, context, text);
+    public DateCelebritySelectEvent(Responder responder, TelegramBotContext context, String payload) {
+        super(responder, context, payload);
     }
 }

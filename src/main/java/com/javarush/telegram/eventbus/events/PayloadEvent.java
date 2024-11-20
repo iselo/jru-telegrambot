@@ -7,15 +7,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class PayloadEvent extends Event {
 
-    private final String text;
+    private final String payload;
 
-    protected PayloadEvent(Responder responder, TelegramBotContext context, String text) {
+    protected PayloadEvent(Responder responder, TelegramBotContext context, String payload) {
         super(responder, context);
-        this.text = checkNotNull(text);
+        this.payload = checkNotNull(payload);
     }
 
     @Override
     public String toString() {
-        return this.text;
+        return this.payload;
     }
 }

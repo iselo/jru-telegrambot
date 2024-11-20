@@ -5,9 +5,9 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.responder.Responder;
 
 @Immutable
-public final class ChatMessageSendEvent extends PayloadEvent {
+public final class LastQuestionEvent extends PayloadEvent {
 
-    public ChatMessageSendEvent(Responder responder, TelegramBotContext context, String payload) {
+    public LastQuestionEvent(Responder responder, TelegramBotContext context, String payload) {
         super(responder, context, payload);
     }
 }
