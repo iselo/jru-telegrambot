@@ -1,4 +1,4 @@
-name: Codecov
+name: JDK11, Maven
 on: [push, pull_request]
 jobs:
   run:
@@ -10,6 +10,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+          cache: maven
       - name: Install dependencies
         run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
       - name: Run tests and collect coverage
