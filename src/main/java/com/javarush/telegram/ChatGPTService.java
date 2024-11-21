@@ -111,14 +111,14 @@ public final class ChatGPTService {
 
     @Subscribe
     void handle(ChatGPTPromptEvent event) {
-        setPrompt(event.payload().data());
+        setPrompt(event.payload().value());
     }
 
     @Subscribe
     void handle(ChatGPTMessageEvent event) {
         var consumer = event.consumer();
         if (consumer != null) {
-            var result = addMessage(event.payload().data());
+            var result = addMessage(event.payload().value());
             consumer.accept(result);
         }
     }

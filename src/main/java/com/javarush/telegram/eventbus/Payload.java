@@ -7,25 +7,35 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Immutable(containerOf = "T")
 public final class Payload<T> {
 
-    private final T data;
+    private static final Payload<?> EMPTY = new Payload<>();
+
+    private final T value;
 
     private Payload() {
-        this.data = null;
+        this.value = null;
     }
 
-    private Payload(T data) {
-        this.data = checkNotNull(data);
+    private Payload(T value) {
+        this.value = checkNotNull(value);
     }
 
-    public static <T> Payload<T> of(T data) {
-        return new Payload<>(data);
+    /**
+     * Returns a Payload instance with value.
+     */
+    public static <T> Payload<T> of(T value) {
+        return new Payload<T>(value);
     }
 
-    public static <T> Payload<T> ofEmpty() {
-        return new Payload<>();
+    /**
+     * Returns an empty Payload instance. No value is present for this Payload.
+     */
+    public static <T> Payload<T> empty() {
+        @SuppressWarnings("unchecked")
+        Payload<T> empty = (Payload<T>) EMPTY;
+        return empty;
     }
 
-    public T data() {
-        return this.data;
+    public T value() {
+        return value;
     }
 }

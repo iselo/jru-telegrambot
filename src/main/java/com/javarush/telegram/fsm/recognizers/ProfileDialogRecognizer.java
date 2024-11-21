@@ -21,7 +21,7 @@ public final class ProfileDialogRecognizer extends MessageRecognizer {
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(PROFILE.toString())) {
             chronology.add(() -> {
-                new ProfileDialogEvent(Payload.ofEmpty()).post();
+                new ProfileDialogEvent(Payload.empty()).post();
                 var noPreviousAnswer = Optional.<String>empty();
                 new ProfileQuestionEvent(Payload.of(noPreviousAnswer)).post();
             });

@@ -25,9 +25,9 @@ public final class OnLastQuestion implements EventHandler<LastQuestionEvent> {
         new TextMessageEvent(
                 Payload.of(new TextMessage(PLEASE_WAIT)),
                 (message) -> {
-                    var prompt = TelegramBotFileUtil.loadPrompt(event.payload().data());
+                    var prompt = TelegramBotFileUtil.loadPrompt(event.payload().value());
                     new SurveyEvent(
-                            Payload.ofEmpty(),
+                            Payload.empty(),
                             (survey) -> {
                                 var userInfo = survey.newUserInfo();
 

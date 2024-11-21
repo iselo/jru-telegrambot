@@ -17,7 +17,7 @@ public final class GptDialogRecognizer extends MessageRecognizer {
                              TelegramBotContext context,
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(GPT.toString())) {
-            chronology.add(() -> new GptDialogEvent(Payload.ofEmpty()).post());
+            chronology.add(() -> new GptDialogEvent(Payload.empty()).post());
             return true;
         }
 

@@ -13,7 +13,7 @@ public final class OnAskQuestion implements EventHandler<AskQuestionEvent> {
     @Override
     @Subscribe
     public void handle(AskQuestionEvent event) {
-        var questionValue = event.payload().data();
+        var questionValue = event.payload().value();
 
         new TextMessageEvent(Payload.of(new TextMessage(questionValue))).post();
 

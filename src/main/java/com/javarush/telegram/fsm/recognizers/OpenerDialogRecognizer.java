@@ -21,7 +21,7 @@ public final class OpenerDialogRecognizer extends MessageRecognizer {
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(OPENER.toString())) {
             chronology.add(() -> {
-                new OpenerDialogEvent(Payload.ofEmpty()).post();
+                new OpenerDialogEvent(Payload.empty()).post();
                 var noPreviousAnswer = Optional.<String>empty();
                 new OpenerQuestionEvent(Payload.of(noPreviousAnswer)).post();
             });

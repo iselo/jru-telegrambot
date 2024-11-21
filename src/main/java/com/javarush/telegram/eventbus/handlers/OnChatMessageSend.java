@@ -25,11 +25,11 @@ public final class OnChatMessageSend implements EventHandler<ChatMessageSendEven
         new TextMessageEvent(
                 Payload.of(new TextMessage(PLEASE_WAIT)),
                 (message) -> {
-                    var prompt = TelegramBotFileUtil.loadPrompt(event.payload().data());
+                    var prompt = TelegramBotFileUtil.loadPrompt(event.payload().value());
                     new ChatGPTPromptEvent(Payload.of(prompt)).post();
 
                     new ChatHistoryEvent(
-                            Payload.ofEmpty(),
+                            Payload.empty(),
                             (history) -> {
                                 new ChatGPTMessageEvent(
                                         Payload.of(history),

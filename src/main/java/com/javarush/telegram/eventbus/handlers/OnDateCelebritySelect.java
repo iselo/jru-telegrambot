@@ -16,7 +16,7 @@ public final class OnDateCelebritySelect implements EventHandler<DateCelebritySe
     @Subscribe
     public void handle(DateCelebritySelectEvent event) {
         var payload = event.payload();
-        var data = payload.data();
+        var data = payload.value();
         var prompt = TelegramBotFileUtil.loadPrompt(data);
         new ChatGPTPromptEvent(Payload.of(prompt)).post();
         new PhotoMessageEvent(Payload.of(new PhotoMessage(data))).post();

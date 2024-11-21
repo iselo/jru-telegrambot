@@ -30,7 +30,7 @@ public final class OnGptMessage implements EventHandler<GptMessageSendEvent> {
 
                     new ChatGPTPromptEvent(Payload.of(prompt)).post();
                     new ChatGPTMessageEvent(
-                            Payload.of(event.payload().data()),
+                            Payload.of(event.payload().value()),
                             (gptAnswer) -> {
                                 new UpdatedTextMessageEvent(
                                         Payload.of(new UpdatedTextMessage(message, gptAnswer))

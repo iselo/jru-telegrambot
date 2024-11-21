@@ -16,10 +16,10 @@ public final class OnProfileQuestion implements EventHandler<ProfileQuestionEven
     @Override
     @Subscribe
     public void handle(ProfileQuestionEvent event) {
-        var previousAnswer = event.payload().data();
+        var previousAnswer = event.payload().value();
 
         new SurveyEvent(
-                Payload.ofEmpty(),
+                Payload.empty(),
                 (survey) -> {
                     var question = survey.questions().nextQuestion();
 

@@ -20,7 +20,7 @@ public final class ChatHistory {
 
     @Subscribe
     public void handle(ChatMessageAddEvent event) {
-        history.add(event.payload().data());
+        history.add(event.payload().value());
     }
 
     @Subscribe

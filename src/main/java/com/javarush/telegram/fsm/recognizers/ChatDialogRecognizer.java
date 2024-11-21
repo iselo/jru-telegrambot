@@ -17,7 +17,7 @@ public final class ChatDialogRecognizer extends MessageRecognizer {
                              TelegramBotContext context,
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(CHAT.toString())) {
-            chronology.add(() -> new ChatDialogEvent(Payload.ofEmpty()).post());
+            chronology.add(() -> new ChatDialogEvent(Payload.empty()).post());
             return true;
         }
 

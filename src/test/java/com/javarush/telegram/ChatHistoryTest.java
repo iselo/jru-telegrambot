@@ -40,7 +40,7 @@ class ChatHistoryTest {
     @DisplayName("Clears chat history")
     void clearsChatHistory() {
         new ChatMessageAddEvent(Payload.of("Message sample")).post();
-        new ChatDialogEvent(Payload.ofEmpty()).post();
+        new ChatDialogEvent(Payload.empty()).post();
         assertEquals("", chatHistory.toString());
     }
 
@@ -48,7 +48,7 @@ class ChatHistoryTest {
     void returnsChatHistory() {
         new ChatMessageAddEvent(Payload.of("Message sample")).post();
         AtomicReference<String> chatHistory = new AtomicReference<>();
-        new ChatHistoryEvent(Payload.ofEmpty(), chatHistory::set).post();
+        new ChatHistoryEvent(Payload.empty(), chatHistory::set).post();
         assertEquals("Message sample", chatHistory.get());
     }
 

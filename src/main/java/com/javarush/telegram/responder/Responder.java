@@ -30,12 +30,12 @@ public final class Responder {
 
     @Subscribe
     void handle(PhotoMessageEvent event) {
-        this.execute(event.payload().data());
+        this.execute(event.payload().value());
     }
 
     @Subscribe
     void handle(TextMessageEvent event) {
-        var result = this.execute(event.payload().data());
+        var result = this.execute(event.payload().value());
         if (event.consumer() != null) {
             event.consumer().accept(result);
         }
@@ -43,17 +43,17 @@ public final class Responder {
 
     @Subscribe
     void handle(UpdatedTextMessageEvent event) {
-        this.execute(event.payload().data());
+        this.execute(event.payload().value());
     }
 
     @Subscribe
     void handle(TextButtonsMessageEvent event) {
-        this.execute(event.payload().data());
+        this.execute(event.payload().value());
     }
 
     @Subscribe
     void handle(MenuEvent event) {
-        this.execute(event.payload().data());
+        this.execute(event.payload().value());
     }
 
 

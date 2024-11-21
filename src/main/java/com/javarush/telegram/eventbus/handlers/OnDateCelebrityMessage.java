@@ -23,7 +23,7 @@ public final class OnDateCelebrityMessage implements EventHandler<DateCelebrityM
                 (message) -> {
 
                     new ChatGPTMessageEvent(
-                            Payload.of(event.payload().data()),
+                            Payload.of(event.payload().value()),
                             (gptAnswer) -> {
                                 new UpdatedTextMessageEvent(
                                         Payload.of(new UpdatedTextMessage(message, gptAnswer))

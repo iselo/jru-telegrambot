@@ -17,7 +17,7 @@ public final class DateDialogRecognizer extends MessageRecognizer {
                              TelegramBotContext context,
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(DATE.toString())) {
-            chronology.add(() -> new DateDialogEvent(Payload.ofEmpty()).post());
+            chronology.add(() -> new DateDialogEvent(Payload.empty()).post());
             return true;
         }
 

@@ -16,10 +16,10 @@ public final class OnOpenerQuestion implements EventHandler<OpenerQuestionEvent>
     @Override
     @Subscribe
     public void handle(OpenerQuestionEvent event) {
-        var previousAnswer = event.payload().data();
+        var previousAnswer = event.payload().value();
 
         new SurveyEvent(
-                Payload.ofEmpty(),
+                Payload.empty(),
                 (survey) -> {
                     var question = survey.questions().nextQuestion();
 
