@@ -1,5 +1,6 @@
 package com.javarush.telegram;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.Subscribe;
 import com.javarush.telegram.eventbus.events.ChatDialogEvent;
 import com.javarush.telegram.eventbus.events.ChatHistoryEvent;
@@ -24,9 +25,16 @@ public final class ChatHistory {
 
     @Subscribe
     public void handle(ChatHistoryEvent event) {
-        var consumer =event.consumer();
-        if (consumer != null){
-            consumer.accept(String.join("\n\n", history));
+        var consumer = event.consumer();
+        if (consumer != null) {
+            consumer.accept(this.toString());
         }
     }
+
+    @Override
+    @VisibleForTesting
+    public String toString() {
+        return String.join("\n\n", history);
+    }
+
 }
