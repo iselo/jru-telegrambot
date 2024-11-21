@@ -3,6 +3,7 @@ package com.javarush.telegram;
 import com.javarush.telegram.fsm.Chronology;
 import com.javarush.telegram.fsm.FiniteStateMachineFactory;
 import com.javarush.telegram.fsm.FiniteStateMachineResult;
+import com.javarush.telegram.fsm.Instruction;
 import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -46,11 +47,9 @@ public final class TinderBotApp extends MultiSessionTelegramBot {
                         .run(update, context, chronology);
 
         if (fsmResult == FiniteStateMachineResult.FINISHED) {
-
-            chronology.queue()
-                    .forEach(instruction -> instruction.apply(context));
+            chronology.queue().forEach(Instruction::execute);
         }
-        eventBus.unregister(responder);
 
+        eventBus.unregister(responder);
     }
 }

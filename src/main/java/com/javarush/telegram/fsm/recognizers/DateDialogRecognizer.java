@@ -5,7 +5,6 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.DateDialogEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.javarush.telegram.DialogModeState.DATE;
@@ -18,12 +17,7 @@ public final class DateDialogRecognizer extends MessageRecognizer {
                              TelegramBotContext context,
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(DATE.toString())) {
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(TelegramBotContext context) {
-                    new DateDialogEvent(Payload.ofEmpty()).post();
-                }
-            });
+            chronology.add(() -> new DateDialogEvent(Payload.ofEmpty()).post());
             return true;
         }
 

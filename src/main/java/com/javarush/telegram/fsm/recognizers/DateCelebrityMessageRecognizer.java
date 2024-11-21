@@ -5,7 +5,6 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.DateCelebrityMessageEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.javarush.telegram.DialogModeState.DATE;
@@ -19,12 +18,7 @@ public final class DateCelebrityMessageRecognizer extends MessageRecognizer {
                              Chronology chronology) {
         if (context.dialogMode().state() == DATE) {
             var text = contentOf(update);
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(TelegramBotContext context) {
-                    new DateCelebrityMessageEvent(Payload.of(text)).post();
-                }
-            });
+            chronology.add(() -> new DateCelebrityMessageEvent(Payload.of(text)).post());
             return true;
         }
 

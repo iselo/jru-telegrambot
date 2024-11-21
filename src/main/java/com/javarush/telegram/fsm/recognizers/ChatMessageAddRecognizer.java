@@ -5,7 +5,6 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.javarush.telegram.DialogModeState.CHAT;
@@ -19,12 +18,7 @@ public final class ChatMessageAddRecognizer extends MessageRecognizer {
                              Chronology chronology) {
         if (context.dialogMode().state() == CHAT) {
             var messageText = contentOf(update);
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(TelegramBotContext context) {
-                    new ChatMessageAddEvent(Payload.of(messageText)).post();
-                }
-            });
+            chronology.add(() -> new ChatMessageAddEvent(Payload.of(messageText)).post());
             return true;
         }
 

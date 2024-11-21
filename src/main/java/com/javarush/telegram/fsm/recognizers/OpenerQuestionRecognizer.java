@@ -5,7 +5,6 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.OpenerQuestionEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
@@ -22,14 +21,7 @@ public final class OpenerQuestionRecognizer extends MessageRecognizer {
         if (context.dialogMode().state() == OPENER && context.survey().questions().isPresent()) {
             var messageText = contentOf(update);
             var previousAnswer = Optional.of(messageText);
-
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(TelegramBotContext context) {
-                    new OpenerQuestionEvent(Payload.of(previousAnswer)).post();
-                }
-            });
-
+            chronology.add(() -> new OpenerQuestionEvent(Payload.of(previousAnswer)).post());
             return true;
         }
 

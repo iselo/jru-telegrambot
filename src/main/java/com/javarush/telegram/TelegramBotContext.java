@@ -52,7 +52,6 @@ public final class TelegramBotContext {
         configure();
     }
 
-
     /**
      * Returns survey history.
      */

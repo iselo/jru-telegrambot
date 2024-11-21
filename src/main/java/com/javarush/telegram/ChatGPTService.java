@@ -55,7 +55,7 @@ public final class ChatGPTService {
      * prompt - контекст питання
      * question - власне запит
      */
-    public String sendMessage(String prompt, String question) {
+    private String sendMessage(String prompt, String question) {
         checkNotNull(prompt);
         checkNotNull(question);
 
@@ -70,7 +70,7 @@ public final class ChatGPTService {
     /**
      * Sets prompt for the request to ChatGPT.
      */
-    public void setPrompt(String prompt) {
+    private void setPrompt(String prompt) {
         checkNotNull(prompt);
 
         var system = Message.ofSystem(prompt);
@@ -82,7 +82,7 @@ public final class ChatGPTService {
      * Запити до ChatGPT із збереженням історії повідомлень.
      * Метод addMessage() додає нове запитання (повідомлення) у чат.
      */
-    public String addMessage(String question) {
+    private String addMessage(String question) {
         checkNotNull(question);
 
         var message = Message.of(question);

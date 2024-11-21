@@ -5,7 +5,6 @@ import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.StartDialogEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.javarush.telegram.DialogModeState.START;
@@ -18,13 +17,7 @@ public final class BotStartDialogRecognizer extends MessageRecognizer {
                              TelegramBotContext context,
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(START.toString())) {
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(TelegramBotContext context) {
-                    new StartDialogEvent(Payload.ofEmpty()).post();
-                }
-            });
-
+            chronology.add(() -> new StartDialogEvent(Payload.ofEmpty()).post());
             return true;
         }
 

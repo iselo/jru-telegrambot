@@ -43,7 +43,7 @@ public final class Responder {
 
     @Subscribe
     void handle(UpdatedTextMessageEvent event) {
-        var result = this.execute(event.payload().data());
+        this.execute(event.payload().data());
     }
 
     @Subscribe

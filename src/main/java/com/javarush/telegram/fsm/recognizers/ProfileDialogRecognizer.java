@@ -6,7 +6,6 @@ import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.ProfileDialogEvent;
 import com.javarush.telegram.eventbus.events.ProfileQuestionEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
@@ -21,13 +20,10 @@ public final class ProfileDialogRecognizer extends MessageRecognizer {
                              TelegramBotContext context,
                              Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(PROFILE.toString())) {
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(TelegramBotContext context) {
-                    new ProfileDialogEvent(Payload.ofEmpty()).post();
-                    var noPreviousAnswer = Optional.<String>empty();
-                    new ProfileQuestionEvent(Payload.of(noPreviousAnswer)).post();
-                }
+            chronology.add(() -> {
+                new ProfileDialogEvent(Payload.ofEmpty()).post();
+                var noPreviousAnswer = Optional.<String>empty();
+                new ProfileQuestionEvent(Payload.of(noPreviousAnswer)).post();
             });
             return true;
         }
