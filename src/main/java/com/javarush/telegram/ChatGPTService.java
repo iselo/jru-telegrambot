@@ -1,6 +1,7 @@
 package com.javarush.telegram;
 
 import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.ChatGPTMessageEvent;
 import com.javarush.telegram.eventbus.events.ChatGPTPromptEvent;
 import com.plexpt.chatgpt.ChatGPT;
@@ -16,7 +17,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.net.Proxy.Type.HTTP;
 
-public final class ChatGPTService {
+public final class ChatGPTService implements Subscribable {
 
     private static final String API_OPENAI_HOST = "https://api.openai.com/";
     private static final String PROXY_HOST = System.getenv("PROXY_HOST");

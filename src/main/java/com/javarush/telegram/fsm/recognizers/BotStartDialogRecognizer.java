@@ -10,12 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.javarush.telegram.DialogModeState.START;
 
 @Immutable
-public final class BotStartDialogRecognizer extends MessageRecognizer {
+public final class BotStartDialogRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(START.toString())) {
             chronology.add(() -> new StartDialogEvent(Payload.empty()).post());
             return true;

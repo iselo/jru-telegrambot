@@ -6,18 +6,11 @@ import com.javarush.telegram.fsm.Chronology;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
-public abstract class CallbackQueryOrMessageRecognizer extends Recognizer {
+interface CallbackQueryOrMessageRecognizer extends Recognizer {
 
     @Override
-    public final boolean accept(Update update,
-                                TelegramBotContext context,
-                                Chronology chronology) {
+    default boolean accept(Update update, TelegramBotContext context, Chronology chronology) {
         return (update.hasCallbackQuery() || update.hasMessage())
-                && super.accept(update, context, chronology);
-    }
-
-    @Override
-    protected String contentOf(Update update) {
-        return null;
+                && Recognizer.super.accept(update, context, chronology);
     }
 }

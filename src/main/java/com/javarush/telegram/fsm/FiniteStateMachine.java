@@ -22,6 +22,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Immutable(containerOf = "E")
 public final class FiniteStateMachine<E extends Enum> {
 
+    /**
+     * Represents a returned result by finite state machine after running.
+     */
+    public enum Result {
+        DEADLOCK,
+        FINISHED,
+        NOT_STARTED
+    }
+
+
     private final E startState;
     private final E finishState;
     private final ImmutableMap<E, ImmutableSet<E>> transitionTable;
@@ -51,7 +61,7 @@ public final class FiniteStateMachine<E extends Enum> {
      * @param context the Telegram bot context
      * @return result of the finite state machine run
      */
-    public FiniteStateMachineResult run(Update update,
+    public Result run(Update update,
                                         TelegramBotContext context,
                                         Chronology fsmOutput) {
         E currentFsmState = startState;
@@ -64,13 +74,13 @@ public final class FiniteStateMachine<E extends Enum> {
             if (nextFsmState.isEmpty()) {
 
                 return currentFsmState == startState ?
-                        FiniteStateMachineResult.NOT_STARTED :
-                        FiniteStateMachineResult.DEADLOCK;
+                        Result.NOT_STARTED :
+                        Result.DEADLOCK;
             }
 
             currentFsmState = nextFsmState.get();
         }
-        return FiniteStateMachineResult.FINISHED;
+        return Result.FINISHED;
     }
 
     private Set<E> transitions(E fsmState) {

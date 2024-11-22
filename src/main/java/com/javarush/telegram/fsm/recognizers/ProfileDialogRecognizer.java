@@ -13,12 +13,10 @@ import java.util.Optional;
 import static com.javarush.telegram.DialogModeState.PROFILE;
 
 @Immutable
-public final class ProfileDialogRecognizer extends MessageRecognizer {
+public final class ProfileDialogRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(PROFILE.toString())) {
             chronology.add(() -> {
                 new ProfileDialogEvent(Payload.empty()).post();
@@ -27,7 +25,6 @@ public final class ProfileDialogRecognizer extends MessageRecognizer {
             });
             return true;
         }
-
         return false;
     }
 }

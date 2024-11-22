@@ -1,8 +1,8 @@
 package com.javarush.telegram;
 
 import com.javarush.telegram.fsm.Chronology;
+import com.javarush.telegram.fsm.FiniteStateMachine;
 import com.javarush.telegram.fsm.FiniteStateMachineFactory;
-import com.javarush.telegram.fsm.FiniteStateMachineResult;
 import com.javarush.telegram.fsm.Instruction;
 import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -35,21 +35,20 @@ public final class TinderBotApp extends MultiSessionTelegramBot {
 
     @Override
     protected void onUpdateEventReceived(Update update) {
-        Chronology chronology = new Chronology();
-        Responder responder = new Responder(this, chatId(update));
+        var chronology = new Chronology();
+        var responder = new Responder(this, chatId(update));
 
-        var eventBus = Service.INSTANCE.eventBus();
-        eventBus.register(responder);
+        responder.register();
 
-        FiniteStateMachineResult fsmResult =
+        var fsmResult =
                 FiniteStateMachineFactory.MAIN
                         .newInstance()
                         .run(update, context, chronology);
 
-        if (fsmResult == FiniteStateMachineResult.FINISHED) {
+        if (fsmResult == FiniteStateMachine.Result.FINISHED) {
             chronology.queue().forEach(Instruction::execute);
         }
 
-        eventBus.unregister(responder);
+        responder.unregister();
     }
 }

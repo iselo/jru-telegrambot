@@ -1,13 +1,14 @@
 package com.javarush.telegram.survey;
 
 import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.OpenerDialogEvent;
 import com.javarush.telegram.eventbus.events.ProfileDialogEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyQuestions {
+public class SurveyQuestions implements Subscribable {
 
     private static final int TOP_ELEMENT = 0;
 

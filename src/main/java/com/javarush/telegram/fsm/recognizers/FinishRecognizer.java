@@ -6,12 +6,10 @@ import com.javarush.telegram.fsm.Chronology;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Immutable
-public final class FinishRecognizer extends CallbackQueryOrMessageRecognizer {
+public final class FinishRecognizer implements CallbackQueryOrMessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         return true;
     }
 }

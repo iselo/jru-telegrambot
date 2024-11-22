@@ -3,13 +3,14 @@ package com.javarush.telegram.eventbus.handlers;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.eventbus.Payload;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.AskQuestionEvent;
 import com.javarush.telegram.eventbus.events.LastQuestionEvent;
 import com.javarush.telegram.eventbus.events.OpenerQuestionEvent;
 import com.javarush.telegram.eventbus.events.SurveyEvent;
 
 @Immutable
-public final class OnOpenerQuestion implements EventHandler<OpenerQuestionEvent> {
+public final class OnOpenerQuestion implements EventHandler<OpenerQuestionEvent>, Subscribable {
 
     private static final String OPENER = "opener";
 

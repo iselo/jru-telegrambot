@@ -10,17 +10,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.javarush.telegram.DialogModeState.GPT;
 
 @Immutable
-public final class GptDialogRecognizer extends MessageRecognizer {
+public final class GptDialogRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(GPT.toString())) {
             chronology.add(() -> new GptDialogEvent(Payload.empty()).post());
             return true;
         }
-
         return false;
     }
 }

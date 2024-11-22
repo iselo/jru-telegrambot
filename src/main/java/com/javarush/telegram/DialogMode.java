@@ -1,6 +1,7 @@
 package com.javarush.telegram;
 
 import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.ChatDialogEvent;
 import com.javarush.telegram.eventbus.events.DateDialogEvent;
 import com.javarush.telegram.eventbus.events.GptDialogEvent;
@@ -18,7 +19,7 @@ import static com.javarush.telegram.DialogModeState.START;
 /**
  * Represents Telegram bot dialog mode state.
  */
-public final class DialogMode {
+public final class DialogMode implements Subscribable {
 
     private DialogModeState state = START;
 

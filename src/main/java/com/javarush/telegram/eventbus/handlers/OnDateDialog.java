@@ -5,6 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
 import com.javarush.telegram.eventbus.Payload;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.DateDialogEvent;
 import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
 import com.javarush.telegram.eventbus.events.TextButtonsMessageEvent;
@@ -12,7 +13,7 @@ import com.javarush.telegram.responder.PhotoMessage;
 import com.javarush.telegram.responder.TextButtonsMessage;
 
 @Immutable
-public final class OnDateDialog implements EventHandler<DateDialogEvent> {
+public final class OnDateDialog implements EventHandler<DateDialogEvent>, Subscribable {
 
     private static final String DATE = "date";
 

@@ -2,6 +2,7 @@ package com.javarush.telegram;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.ChatDialogEvent;
 import com.javarush.telegram.eventbus.events.ChatHistoryEvent;
 import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
@@ -9,7 +10,7 @@ import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ChatHistory {
+public final class ChatHistory implements Subscribable {
 
     private final List<String> history = new ArrayList<>();
 

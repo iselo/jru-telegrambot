@@ -1,12 +1,11 @@
 package com.javarush.telegram.eventbus;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.Service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable(containerOf = "P")
-public abstract class Event<P extends Payload<?>> {
+public abstract class Event<P extends Payload<?>> implements Observable {
 
     private final P payload;
 
@@ -18,7 +17,4 @@ public abstract class Event<P extends Payload<?>> {
         return payload;
     }
 
-    public final void post(){
-        Service.INSTANCE.eventBus().post(this);
-    }
 }

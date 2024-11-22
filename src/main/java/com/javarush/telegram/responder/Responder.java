@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.MultiSessionTelegramBot;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.MenuEvent;
 import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
 import com.javarush.telegram.eventbus.events.TextButtonsMessageEvent;
@@ -17,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
-public final class Responder {
+public final class Responder implements Subscribable {
 
     @SuppressWarnings("Immutable")
     private final MultiSessionTelegramBot bot;

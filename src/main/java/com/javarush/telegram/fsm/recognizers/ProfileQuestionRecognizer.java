@@ -12,19 +12,16 @@ import java.util.Optional;
 import static com.javarush.telegram.DialogModeState.PROFILE;
 
 @Immutable
-public final class ProfileQuestionRecognizer extends MessageRecognizer {
+public final class ProfileQuestionRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (context.dialogMode().state() == PROFILE && context.survey().questions().isPresent()) {
             var messageText = contentOf(update);
             var previousAnswer = Optional.of(messageText);
             chronology.add(() -> new ProfileQuestionEvent(Payload.of(previousAnswer)).post());
             return true;
         }
-
         return false;
     }
 }

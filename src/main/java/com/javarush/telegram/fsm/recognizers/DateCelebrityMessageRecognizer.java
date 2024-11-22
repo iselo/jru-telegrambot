@@ -10,18 +10,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.javarush.telegram.DialogModeState.DATE;
 
 @Immutable
-public final class DateCelebrityMessageRecognizer extends MessageRecognizer {
+public final class DateCelebrityMessageRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (context.dialogMode().state() == DATE) {
             var text = contentOf(update);
             chronology.add(() -> new DateCelebrityMessageEvent(Payload.of(text)).post());
             return true;
         }
-
         return false;
     }
 }

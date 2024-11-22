@@ -10,17 +10,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.javarush.telegram.DialogModeState.DATE;
 
 @Immutable
-public final class DateDialogRecognizer extends MessageRecognizer {
+public final class DateDialogRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(DATE.toString())) {
             chronology.add(() -> new DateDialogEvent(Payload.empty()).post());
             return true;
         }
-
         return false;
     }
 }

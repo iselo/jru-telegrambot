@@ -10,18 +10,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.javarush.telegram.DialogModeState.CHAT;
 
 @Immutable
-public final class ChatMessageAddRecognizer extends MessageRecognizer {
+public final class ChatMessageAddRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (context.dialogMode().state() == CHAT) {
             var messageText = contentOf(update);
             chronology.add(() -> new ChatMessageAddEvent(Payload.of(messageText)).post());
             return true;
         }
-
         return false;
     }
 }

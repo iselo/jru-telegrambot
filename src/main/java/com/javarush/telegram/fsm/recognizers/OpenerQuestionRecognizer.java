@@ -12,19 +12,16 @@ import java.util.Optional;
 import static com.javarush.telegram.DialogModeState.OPENER;
 
 @Immutable
-public final class OpenerQuestionRecognizer extends MessageRecognizer {
+public final class OpenerQuestionRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (context.dialogMode().state() == OPENER && context.survey().questions().isPresent()) {
             var messageText = contentOf(update);
             var previousAnswer = Optional.of(messageText);
             chronology.add(() -> new OpenerQuestionEvent(Payload.of(previousAnswer)).post());
             return true;
         }
-
         return false;
     }
 }

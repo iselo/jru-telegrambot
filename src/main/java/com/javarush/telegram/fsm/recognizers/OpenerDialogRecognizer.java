@@ -13,22 +13,18 @@ import java.util.Optional;
 import static com.javarush.telegram.DialogModeState.OPENER;
 
 @Immutable
-public final class OpenerDialogRecognizer extends MessageRecognizer {
+public final class OpenerDialogRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(OPENER.toString())) {
             chronology.add(() -> {
                 new OpenerDialogEvent(Payload.empty()).post();
                 var noPreviousAnswer = Optional.<String>empty();
                 new OpenerQuestionEvent(Payload.of(noPreviousAnswer)).post();
             });
-
             return true;
         }
-
         return false;
     }
 }
