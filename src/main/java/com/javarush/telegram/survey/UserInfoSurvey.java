@@ -1,10 +1,14 @@
 package com.javarush.telegram.survey;
 
+import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.Subscribable;
+import com.javarush.telegram.eventbus.events.SurveyEvent;
+
 /**
  * Represents survey that gathers information about a user to build the corresponding instance of
  * {@code UserInfo}.
  */
-public final class UserInfoSurvey implements QuestionVisitor {
+public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
 
     private final UserInfo.Builder userInfoBuilder = UserInfo.newBuilder();
     private final SurveyQuestions questions = new SurveyQuestions();
@@ -54,4 +58,10 @@ public final class UserInfoSurvey implements QuestionVisitor {
     public void visit(LastEmptyQuestion question, String previousAnswer) {
         userInfoBuilder.setAge(previousAnswer);
     }
+
+    @Subscribe
+    public void handle(SurveyEvent event) {
+        event.returnToConsumer(this);
+    }
+
 }

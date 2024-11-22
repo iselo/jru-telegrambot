@@ -1,9 +1,8 @@
 package com.javarush.telegram;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.eventbus.EventBus;
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.handlers.EventHandler;
+import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.handlers.OnAskQuestion;
 import com.javarush.telegram.eventbus.handlers.OnBotMenu;
 import com.javarush.telegram.eventbus.handlers.OnChatDialog;
@@ -27,52 +26,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class TelegramBotContext {
 
     private final ChatGPTService chatGPTService;
-    private final EventBus eventBus = new EventBus();
-    private final ChatHistory chatHistory = new ChatHistory();
     private final UserInfoSurvey survey = new UserInfoSurvey();
     private final DialogMode dialogMode = new DialogMode();
-    private final ImmutableList<EventHandler<?>> eventHandlers =
-            ImmutableList.of(
-                    new OnBotMenu(),
-                    new OnGptDialog(),
-                    new OnGptMessage(),
-                    new OnChatDialog(),
-                    new OnChatMessageSend(),
-                    new OnDateDialog(),
-                    new OnDateCelebritySelect(),
-                    new OnDateCelebrityMessage(),
-                    new OnOpenerDialog(),
-                    new OnOpenerQuestion(),
-                    new OnProfileDialog(),
-                    new OnProfileQuestion(),
-                    new OnAskQuestion(),
-                    new OnLastQuestion()
-            );
 
     public TelegramBotContext(ChatGPTService chatGPTService) {
         this.chatGPTService = checkNotNull(chatGPTService);
         configure();
-    }
-
-    /**
-     * Returns ChatGPT service.
-     */
-    public ChatGPTService chatGPTService() {
-        return chatGPTService;
-    }
-
-    /**
-     * Returns event bus.
-     */
-    public EventBus eventBus() {
-        return eventBus;
-    }
-
-    /**
-     * Returns chat history.
-     */
-    public ChatHistory chatHistory() {
-        return chatHistory;
     }
 
     /**
@@ -90,9 +49,29 @@ public final class TelegramBotContext {
     }
 
     private void configure() {
-        eventBus.register(dialogMode);
-        eventBus.register(chatHistory);
-        eventBus.register(survey.questions());
-        eventHandlers.forEach(eventBus::register);
+        var handlers =
+                ImmutableList.of(
+                        dialogMode,
+                        chatGPTService,
+                        survey,
+                        survey.questions(),
+                        new ChatHistory(),
+                        new OnBotMenu(),
+                        new OnGptDialog(),
+                        new OnGptMessage(),
+                        new OnChatDialog(),
+                        new OnChatMessageSend(),
+                        new OnDateDialog(),
+                        new OnDateCelebritySelect(),
+                        new OnDateCelebrityMessage(),
+                        new OnOpenerDialog(),
+                        new OnOpenerQuestion(),
+                        new OnProfileDialog(),
+                        new OnProfileQuestion(),
+                        new OnAskQuestion(),
+                        new OnLastQuestion()
+                );
+
+        handlers.forEach(Subscribable::register);
     }
 }

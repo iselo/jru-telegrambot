@@ -4,31 +4,20 @@ import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.eventbus.events.GptMessageSendEvent;
 import com.javarush.telegram.fsm.Chronology;
-import com.javarush.telegram.fsm.Instruction;
-import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.javarush.telegram.DialogModeState.GPT;
 
 @Immutable
-public final class GptMessageRecognizer extends MessageRecognizer {
+public final class GptMessageRecognizer implements MessageRecognizer {
 
     @Override
-    protected boolean handle(Update update,
-                             TelegramBotContext context,
-                             Chronology chronology,
-                             Responder responder) {
+    public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (context.dialogMode().state() == GPT) {
             var text = contentOf(update);
-            chronology.add(new Instruction() {
-                @Override
-                protected void execute(Responder responder, TelegramBotContext context) {
-                    context.eventBus().post(new GptMessageSendEvent(responder, context, text));
-                }
-            });
+            chronology.add(() -> new GptMessageSendEvent(text).post());
             return true;
         }
-
         return false;
     }
 }

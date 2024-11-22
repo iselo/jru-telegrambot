@@ -1,20 +1,12 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.javarush.telegram.eventbus.Event;
 
 @Immutable
-public final class ChatMessageAddEvent {
+public final class ChatMessageAddEvent extends Event<String> {
 
-    private final String messageText;
-
-    public ChatMessageAddEvent(String messageText) {
-        this.messageText = checkNotNull(messageText);
-    }
-
-    @Override
-    public String toString() {
-        return messageText;
+    public ChatMessageAddEvent(String payload) {
+        super(payload);
     }
 }

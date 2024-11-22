@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
 import com.javarush.telegram.fsm.recognizers.Recognizer;
-import com.javarush.telegram.responder.Responder;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
@@ -41,8 +40,8 @@ public final class FiniteStateMachine<E extends Enum> {
      * @param <E> type of {@code FiniteStateMachine}
      * @return a new instance of the builder
      */
-    public static <E extends Enum> Builder<E> newBuilder() {
-        return new Builder<E>();
+    public static <E extends Enum<?>> Builder<E> newBuilder() {
+        return new Builder<>();
     }
 
     /**
@@ -52,27 +51,26 @@ public final class FiniteStateMachine<E extends Enum> {
      * @param context the Telegram bot context
      * @return result of the finite state machine run
      */
-    public FiniteStateMachineResult run(Update update,
-                                        TelegramBotContext context,
-                                        Chronology fsmOutput,
-                                        Responder responder) {
+    public Result run(Update update,
+                      TelegramBotContext context,
+                      Chronology fsmOutput) {
         E currentFsmState = startState;
 
         while (currentFsmState != finishState) {
             Set<E> transitions = transitions(currentFsmState);
 
-            Optional<E> nextFsmState = moveForward(transitions, update, context, fsmOutput, responder);
+            Optional<E> nextFsmState = moveForward(transitions, update, context, fsmOutput);
 
             if (nextFsmState.isEmpty()) {
 
                 return currentFsmState == startState ?
-                        FiniteStateMachineResult.NOT_STARTED :
-                        FiniteStateMachineResult.DEADLOCK;
+                        Result.NOT_STARTED :
+                        Result.DEADLOCK;
             }
 
             currentFsmState = nextFsmState.get();
         }
-        return FiniteStateMachineResult.FINISHED;
+        return Result.FINISHED;
     }
 
     private Set<E> transitions(E fsmState) {
@@ -86,17 +84,25 @@ public final class FiniteStateMachine<E extends Enum> {
     private Optional<E> moveForward(Iterable<E> transitions,
                                     Update update,
                                     TelegramBotContext context,
-                                    Chronology fsmOutput,
-                                    Responder responder) {
+                                    Chronology fsmOutput) {
         for (E fsmState : transitions) {
 
             var recognizer = recognizer(fsmState);
 
-            if (recognizer.accept(update, context, fsmOutput, responder)) {
+            if (recognizer.accept(update, context, fsmOutput)) {
                 return Optional.of(fsmState);
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Represents a returned result by finite state machine after running.
+     */
+    public enum Result {
+        DEADLOCK,
+        FINISHED,
+        NOT_STARTED
     }
 
     /**

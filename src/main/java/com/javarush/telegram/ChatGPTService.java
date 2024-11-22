@@ -1,5 +1,9 @@
 package com.javarush.telegram;
 
+import com.google.common.eventbus.Subscribe;
+import com.javarush.telegram.eventbus.Subscribable;
+import com.javarush.telegram.eventbus.events.ChatGPTMessageEvent;
+import com.javarush.telegram.eventbus.events.ChatGPTPromptEvent;
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.Message;
@@ -13,7 +17,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.net.Proxy.Type.HTTP;
 
-public final class ChatGPTService {
+public final class ChatGPTService implements Subscribable {
 
     private static final String API_OPENAI_HOST = "https://api.openai.com/";
     private static final String PROXY_HOST = System.getenv("PROXY_HOST");
@@ -52,7 +56,7 @@ public final class ChatGPTService {
      * prompt - контекст питання
      * question - власне запит
      */
-    public String sendMessage(String prompt, String question) {
+    private String sendMessage(String prompt, String question) { // NOSONAR
         checkNotNull(prompt);
         checkNotNull(question);
 
@@ -67,7 +71,7 @@ public final class ChatGPTService {
     /**
      * Sets prompt for the request to ChatGPT.
      */
-    public void setPrompt(String prompt) {
+    private void setPrompt(String prompt) {
         checkNotNull(prompt);
 
         var system = Message.ofSystem(prompt);
@@ -79,7 +83,7 @@ public final class ChatGPTService {
      * Запити до ChatGPT із збереженням історії повідомлень.
      * Метод addMessage() додає нове запитання (повідомлення) у чат.
      */
-    public String addMessage(String question) {
+    private String addMessage(String question) {
         checkNotNull(question);
 
         var message = Message.of(question);
@@ -104,5 +108,20 @@ public final class ChatGPTService {
         messageHistory.add(message);
 
         return message.getContent();
+    }
+
+    @Subscribe
+    void handle(ChatGPTPromptEvent event) {
+        event.payload().ifPresent(this::setPrompt);
+    }
+
+    @Subscribe
+    void handle(ChatGPTMessageEvent event) {
+        event.payload().ifPresent(
+                (message) -> {
+                    var result = addMessage(message);
+                    event.returnToConsumer(result);
+                }
+        );
     }
 }

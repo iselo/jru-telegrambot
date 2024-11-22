@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
-import com.javarush.telegram.eventbus.events.MenuInitializationEvent;
+import com.javarush.telegram.eventbus.Subscribable;
+import com.javarush.telegram.eventbus.events.MenuEvent;
+import com.javarush.telegram.eventbus.events.StartDialogEvent;
+import com.javarush.telegram.eventbus.events.TextMessageEvent;
 import com.javarush.telegram.responder.Menu;
 import com.javarush.telegram.responder.TextMessage;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -17,7 +20,7 @@ import static com.javarush.telegram.DialogModeState.PROFILE;
 import static com.javarush.telegram.DialogModeState.START;
 
 @Immutable
-public final class OnBotMenu implements EventHandler<MenuInitializationEvent> {
+public final class OnBotMenu implements EventHandler<StartDialogEvent>, Subscribable {
 
     private static final String MAIN = "main";
 
@@ -33,11 +36,9 @@ public final class OnBotMenu implements EventHandler<MenuInitializationEvent> {
 
     @Override
     @Subscribe
-    public void handle(MenuInitializationEvent event) {
+    public void handle(StartDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(MAIN);
-        var responder = event.responder();
-        responder.execute(new TextMessage(text));
-        responder.execute(new Menu(menu));
+        new TextMessageEvent(new TextMessage(text)).post();
+        new MenuEvent(new Menu(menu)).post();
     }
-
 }

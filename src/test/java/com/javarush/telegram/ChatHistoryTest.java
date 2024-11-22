@@ -1,48 +1,61 @@
 package com.javarush.telegram;
 
-import com.google.common.eventbus.EventBus;
-import com.javarush.telegram.eventbus.events.ChatHistoryClearEvent;
+import com.google.common.testing.NullPointerTester;
+import com.javarush.telegram.eventbus.events.ChatDialogEvent;
+import com.javarush.telegram.eventbus.events.ChatHistoryEvent;
 import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChatHistoryTest {
 
-    private EventBus eventBus;
     private ChatHistory chatHistory;
 
     @BeforeEach
     void setUp() {
-        eventBus = new EventBus("test");
         chatHistory = new ChatHistory();
-
-        eventBus.register(chatHistory);
+        chatHistory.register();
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("New chat history is empty")
     void emptyIfNew() {
-        assertEquals(chatHistory.toString(), "");
+        assertEquals("", chatHistory.toString());
     }
 
     @Test
-    @DisplayName("Adds message to chat history on ChatMessageAddEvent")
-    void addsMessage() {
-        var event = new ChatMessageAddEvent("Sample Message");
-        eventBus.post(event);
-        eventBus.post(event);
-
-        assertEquals(chatHistory.toString(), "Sample Message\n\nSample Message");
+    @DisplayName("Adds message to chat history")
+    void addsMessageToChatHistory() {
+        new ChatMessageAddEvent("Message sample").post();
+        assertEquals("Message sample", chatHistory.toString());
     }
 
     @Test
-    void clearsContent() {
-        eventBus.post(new ChatMessageAddEvent("Sample Message"));
-        eventBus.post(new ChatHistoryClearEvent());
+    @DisplayName("Clears chat history")
+    void clearsChatHistory() {
+        new ChatMessageAddEvent("Message sample").post();
+        new ChatDialogEvent().post();
+        assertEquals("", chatHistory.toString());
+    }
 
-        assertEquals(chatHistory.toString(), "");
+    @Test
+    void returnsChatHistory() {
+        new ChatMessageAddEvent("Message sample").post();
+        AtomicReference<String> history = new AtomicReference<>();
+        new ChatHistoryEvent(history::set).post();
+        assertEquals("Message sample", history.get());
+    }
+
+    @Test
+    @DisplayName("Public methods refuses null")
+    void refusesNull() {
+        var nullPointerTester = new NullPointerTester();
+        nullPointerTester.testAllPublicConstructors(ChatHistory.class);
+        nullPointerTester.testAllPublicStaticMethods(ChatHistory.class);
     }
 }

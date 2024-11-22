@@ -33,6 +33,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.11.3</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
@@ -50,6 +58,14 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>33.3.1-jre</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava-testlib -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-testlib</artifactId>
+            <version>33.3.1-jre</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin -->

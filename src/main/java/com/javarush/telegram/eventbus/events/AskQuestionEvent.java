@@ -1,13 +1,12 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.TelegramBotContext;
-import com.javarush.telegram.responder.Responder;
+import com.javarush.telegram.eventbus.Event;
 
 @Immutable
-public final class AskQuestionEvent extends PayloadEvent {
+public final class AskQuestionEvent extends Event<String> {
 
-    public AskQuestionEvent(Responder responder, TelegramBotContext context, String payload) {
-        super(responder, context, payload);
+    public AskQuestionEvent(String payload) {
+        super(payload);
     }
 }
