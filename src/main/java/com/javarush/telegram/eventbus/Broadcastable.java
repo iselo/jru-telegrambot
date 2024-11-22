@@ -8,6 +8,9 @@ interface Broadcastable {
 
         private static final EventBus INSTANCE = new EventBus();
 
+        private Bus() {
+        }
+
         public static EventBus instance() {
             return INSTANCE;
         }

@@ -20,13 +20,13 @@ class ChatHistoryTest {
     @BeforeEach
     void setUp() {
         chatHistory = new ChatHistory();
-        Service.INSTANCE.eventBus().register(chatHistory);
+        chatHistory.register();
     }
 
     @Test
     @DisplayName("New chat history is empty")
     void emptyIfNew() {
-        assertEquals(chatHistory.toString(), "");
+        assertEquals("", chatHistory.toString());
     }
 
     @Test
@@ -47,9 +47,9 @@ class ChatHistoryTest {
     @Test
     void returnsChatHistory() {
         new ChatMessageAddEvent(Payload.of("Message sample")).post();
-        AtomicReference<String> chatHistory = new AtomicReference<>();
-        new ChatHistoryEvent(Payload.empty(), chatHistory::set).post();
-        assertEquals("Message sample", chatHistory.get());
+        AtomicReference<String> history = new AtomicReference<>();
+        new ChatHistoryEvent(Payload.empty(), history::set).post();
+        assertEquals("Message sample", history.get());
     }
 
     @Test

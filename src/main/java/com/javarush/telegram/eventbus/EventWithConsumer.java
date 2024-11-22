@@ -7,18 +7,18 @@ import java.util.function.Consumer;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable(containerOf = "P")
-public abstract class EventWithConsumer<P extends Payload<?>, C>
+public abstract class EventWithConsumer<P, C>
         extends Event<P>{
 
     @SuppressWarnings("Immutable")
     private final Consumer<C> consumer;
 
-    public EventWithConsumer(P payload) {
+    protected EventWithConsumer(P payload) {
         super(payload);
         this.consumer = null;
     }
 
-    public EventWithConsumer(P payload, Consumer<C> consumer) {
+    protected EventWithConsumer(P payload, Consumer<C> consumer) {
         super(payload);
         this.consumer = checkNotNull(consumer);
     }

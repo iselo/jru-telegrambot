@@ -5,7 +5,7 @@ import com.google.errorprone.annotations.Immutable;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable(containerOf = "P")
-public abstract class Event<P extends Payload<?>> implements Observable {
+public abstract class Event<P> implements Observable {
 
     private final P payload;
 
