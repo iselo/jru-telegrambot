@@ -20,23 +20,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <E> the type of the Finite State Machine
  */
 @Immutable(containerOf = "E")
-public final class FiniteStateMachine<E extends Enum> {
-
-    /**
-     * Represents a returned result by finite state machine after running.
-     */
-    public enum Result {
-        DEADLOCK,
-        FINISHED,
-        NOT_STARTED
-    }
-
+public final class FiniteStateMachine<E extends Enum<?>> {
 
     private final E startState;
     private final E finishState;
     private final ImmutableMap<E, ImmutableSet<E>> transitionTable;
     private final ImmutableMap<E, Recognizer> recognizers;
-
     private FiniteStateMachine(Builder<E> builder) {
         this.startState = checkNotNull(builder.startState);
         this.finishState = checkNotNull(builder.finishState);
@@ -50,8 +39,8 @@ public final class FiniteStateMachine<E extends Enum> {
      * @param <E> type of {@code FiniteStateMachine}
      * @return a new instance of the builder
      */
-    public static <E extends Enum> Builder<E> newBuilder() {
-        return new Builder<E>();
+    public static <E extends Enum<?>> Builder<E> newBuilder() {
+        return new Builder<>();
     }
 
     /**
@@ -62,8 +51,8 @@ public final class FiniteStateMachine<E extends Enum> {
      * @return result of the finite state machine run
      */
     public Result run(Update update,
-                                        TelegramBotContext context,
-                                        Chronology fsmOutput) {
+                      TelegramBotContext context,
+                      Chronology fsmOutput) {
         E currentFsmState = startState;
 
         while (currentFsmState != finishState) {
@@ -107,12 +96,21 @@ public final class FiniteStateMachine<E extends Enum> {
     }
 
     /**
+     * Represents a returned result by finite state machine after running.
+     */
+    public enum Result {
+        DEADLOCK,
+        FINISHED,
+        NOT_STARTED
+    }
+
+    /**
      * A builder of finite state machine of a given type.
      *
      * @param <E> the builder type
      */
     @SuppressWarnings("Immutable")
-    public static final class Builder<E extends Enum> {
+    public static final class Builder<E extends Enum<?>> {
 
         private final Map<E, ImmutableSet<E>> transitionTable = new HashMap<>();
         private final Map<E, Recognizer> recognizers = new HashMap<>();
