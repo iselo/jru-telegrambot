@@ -56,7 +56,7 @@ public final class ChatGPTService implements Subscribable {
      * prompt - контекст питання
      * question - власне запит
      */
-    private String sendMessage(String prompt, String question) {
+    private String sendMessage(String prompt, String question) { // NOSONAR
         checkNotNull(prompt);
         checkNotNull(question);
 
