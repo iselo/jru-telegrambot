@@ -33,6 +33,6 @@ public abstract class EventWithReturn<P, C> extends Event<P> {
      * The given argument will be passed to the optional consumer to perform operation.
      */
     public void returnToConsumer(C argument) {
-        consumer.ifPresent(consumer -> consumer.accept(argument));
+        consumer.ifPresent(c -> c.accept(argument));
     }
 }
