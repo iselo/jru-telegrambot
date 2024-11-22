@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <E> the type of the Finite State Machine
  */
 @Immutable(containerOf = "E")
-public final class FiniteStateMachine<E extends Enum<?>> {
+public final class FiniteStateMachine<E extends Enum> {
 
     private final E startState;
     private final E finishState;
@@ -110,7 +110,7 @@ public final class FiniteStateMachine<E extends Enum<?>> {
      * @param <E> the builder type
      */
     @SuppressWarnings("Immutable")
-    public static final class Builder<E extends Enum<?>> {
+    public static final class Builder<E extends Enum> {
 
         private final Map<E, ImmutableSet<E>> transitionTable = new HashMap<>();
         private final Map<E, Recognizer> recognizers = new HashMap<>();
