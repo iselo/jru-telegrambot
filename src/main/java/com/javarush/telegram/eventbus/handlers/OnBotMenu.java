@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.MenuEvent;
 import com.javarush.telegram.eventbus.events.StartDialogEvent;
@@ -39,8 +38,7 @@ public final class OnBotMenu implements EventHandler<StartDialogEvent>, Subscrib
     @Subscribe
     public void handle(StartDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(MAIN);
-
-        new TextMessageEvent(Payload.of(new TextMessage(text))).post();
-        new MenuEvent(Payload.of(new Menu(menu))).post();
+        new TextMessageEvent(new TextMessage(text)).post();
+        new MenuEvent(new Menu(menu)).post();
     }
 }

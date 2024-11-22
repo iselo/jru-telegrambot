@@ -3,7 +3,6 @@ package com.javarush.telegram.eventbus.handlers;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.ChatGPTMessageEvent;
 import com.javarush.telegram.eventbus.events.ChatGPTPromptEvent;
@@ -23,27 +22,25 @@ public final class OnChatMessageSend implements EventHandler<ChatMessageSendEven
     @Subscribe
     @SuppressWarnings("FutureReturnValueIgnored")
     public void handle(ChatMessageSendEvent event) {
-        new TextMessageEvent(
-                Payload.of(new TextMessage(PLEASE_WAIT)),
-                (message) -> {
-                    var prompt = TelegramBotFileUtil.loadPrompt(event.payload().value());
-                    new ChatGPTPromptEvent(Payload.of(prompt)).post();
-
-                    new ChatHistoryEvent(
-                            Payload.empty(),
-                            (history) -> {
-                                new ChatGPTMessageEvent(
-                                        Payload.of(history),
-                                        (gptAnswer) -> {
-                                            new UpdatedTextMessageEvent(
-                                                    Payload.of(new UpdatedTextMessage(message, gptAnswer))
-                                            ).post();
-                                        }
-                                ).post();
-                            }
-                    ).post();
-
-
-                }).post();
+        event.payload().ifPresent(
+                (keyword) ->
+                        new TextMessageEvent(
+                                new TextMessage(PLEASE_WAIT),
+                                (message) -> {
+                                    var prompt = TelegramBotFileUtil.loadPrompt(keyword);
+                                    new ChatGPTPromptEvent(prompt).post();
+                                    new ChatHistoryEvent(
+                                            (history) ->
+                                                    new ChatGPTMessageEvent(
+                                                            history,
+                                                            (gptAnswer) ->
+                                                                    new UpdatedTextMessageEvent(
+                                                                            new UpdatedTextMessage(message, gptAnswer)
+                                                                    ).post()
+                                                    ).post()
+                                    ).post();
+                                }
+                        ).post()
+        );
     }
 }

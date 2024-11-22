@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.DateDialogEvent;
 import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
@@ -29,7 +28,7 @@ public final class OnDateDialog implements EventHandler<DateDialogEvent>, Subscr
     @Subscribe
     public void handle(DateDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(DATE);
-        new PhotoMessageEvent(Payload.of(new PhotoMessage(DATE))).post();
-        new TextButtonsMessageEvent(Payload.of(new TextButtonsMessage(text, buttons))).post();
+        new PhotoMessageEvent(new PhotoMessage(DATE)).post();
+        new TextButtonsMessageEvent(new TextButtonsMessage(text, buttons)).post();
     }
 }

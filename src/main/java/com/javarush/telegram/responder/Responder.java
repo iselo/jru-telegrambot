@@ -31,32 +31,33 @@ public final class Responder implements Subscribable {
 
     @Subscribe
     void handle(PhotoMessageEvent event) {
-        this.execute(event.payload().value());
+        event.payload().ifPresent(this::execute);
     }
 
     @Subscribe
     void handle(TextMessageEvent event) {
-        var result = this.execute(event.payload().value());
-        if (event.consumer() != null) {
-            event.consumer().accept(result);
-        }
+        event.payload().ifPresent(
+                (textMessage) -> {
+                    var result = this.execute(textMessage);
+                    event.returnToConsumer(result);
+                }
+        );
     }
 
     @Subscribe
     void handle(UpdatedTextMessageEvent event) {
-        this.execute(event.payload().value());
+        event.payload().ifPresent(this::execute);
     }
 
     @Subscribe
     void handle(TextButtonsMessageEvent event) {
-        this.execute(event.payload().value());
+        event.payload().ifPresent(this::execute);
     }
 
     @Subscribe
     void handle(MenuEvent event) {
-        this.execute(event.payload().value());
+        event.payload().ifPresent(this::execute);
     }
-
 
     @CanIgnoreReturnValue
     private Message execute(TextMessage command) {

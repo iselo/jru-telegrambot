@@ -61,10 +61,7 @@ public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
 
     @Subscribe
     public void handle(SurveyEvent event) {
-        var consumer = event.consumer();
-        if (consumer != null) {
-            consumer.accept(this);
-        }
+        event.returnToConsumer(this);
     }
 
 }

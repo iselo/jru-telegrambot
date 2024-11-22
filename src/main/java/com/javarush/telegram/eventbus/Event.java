@@ -2,19 +2,27 @@ package com.javarush.telegram.eventbus;
 
 import com.google.errorprone.annotations.Immutable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Optional;
 
+/**
+ * An event of a given type that describes its payload. Any event has {@code Observable}
+ * functionality.
+ *
+ * @param <P> the payload type
+ */
 @Immutable(containerOf = "P")
 public abstract class Event<P> implements Observable {
 
-    private final P payload;
+    private final Optional<P> payload;
 
     protected Event(P payload) {
-        this.payload = checkNotNull(payload);
+        this.payload = Optional.ofNullable(payload);
     }
 
-    public final P payload() {
+    /**
+     * Returns event payload.
+     */
+    public final Optional<P> payload() {
         return payload;
     }
-
 }

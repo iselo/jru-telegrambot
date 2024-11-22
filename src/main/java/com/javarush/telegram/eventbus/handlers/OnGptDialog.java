@@ -3,7 +3,6 @@ package com.javarush.telegram.eventbus.handlers;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.GptDialogEvent;
 import com.javarush.telegram.eventbus.events.PhotoMessageEvent;
@@ -20,7 +19,7 @@ public final class OnGptDialog implements EventHandler<GptDialogEvent>, Subscrib
     @Subscribe
     public void handle(GptDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(GPT);
-        new PhotoMessageEvent(Payload.of(new PhotoMessage(GPT))).post();
-        new TextMessageEvent(Payload.of(new TextMessage(text))).post();
+        new PhotoMessageEvent(new PhotoMessage(GPT)).post();
+        new TextMessageEvent(new TextMessage(text)).post();
     }
 }

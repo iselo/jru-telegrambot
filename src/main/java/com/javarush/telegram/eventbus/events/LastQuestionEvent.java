@@ -2,12 +2,11 @@ package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.eventbus.Event;
-import com.javarush.telegram.eventbus.Payload;
 
 @Immutable
-public final class LastQuestionEvent extends Event<Payload<String>> {
+public final class LastQuestionEvent extends Event<String> {
 
-    public LastQuestionEvent(Payload<String> payload) {
+    public LastQuestionEvent(String payload) {
         super(payload);
     }
 }

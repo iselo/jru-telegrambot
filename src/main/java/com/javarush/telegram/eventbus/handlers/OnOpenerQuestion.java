@@ -2,7 +2,6 @@ package com.javarush.telegram.eventbus.handlers;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.AskQuestionEvent;
 import com.javarush.telegram.eventbus.events.LastQuestionEvent;
@@ -17,23 +16,24 @@ public final class OnOpenerQuestion implements EventHandler<OpenerQuestionEvent>
     @Override
     @Subscribe
     public void handle(OpenerQuestionEvent event) {
-        var previousAnswer = event.payload().value();
+        event.payload().ifPresent(
+                (previousAnswer) ->
+                        new SurveyEvent(
+                                null,
+                                (survey) -> {
+                                    var question = survey.questions().nextQuestion();
 
-        new SurveyEvent(
-                Payload.empty(),
-                (survey) -> {
-                    var question = survey.questions().nextQuestion();
+                                    previousAnswer
+                                            .ifPresent(answer -> question.accept(survey, answer));
 
-                    previousAnswer
-                            .ifPresent(answer -> question.accept(survey, answer));
-
-                    var maybeQuestionValue = question.value();
-                    maybeQuestionValue
-                            .ifPresentOrElse(
-                                    questionValue -> new AskQuestionEvent(Payload.of(questionValue)).post(),
-                                    () -> new LastQuestionEvent(Payload.of(OPENER)).post()
-                            );
-                }
-        ).post();
+                                    var maybeQuestionValue = question.value();
+                                    maybeQuestionValue
+                                            .ifPresentOrElse(
+                                                    questionValue -> new AskQuestionEvent(questionValue).post(),
+                                                    () -> new LastQuestionEvent(OPENER).post()
+                                            );
+                                }
+                        ).post()
+        );
     }
 }

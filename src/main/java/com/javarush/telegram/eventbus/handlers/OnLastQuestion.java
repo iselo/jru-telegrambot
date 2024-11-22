@@ -3,7 +3,6 @@ package com.javarush.telegram.eventbus.handlers;
 import com.google.common.eventbus.Subscribe;
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotFileUtil;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.ChatGPTMessageEvent;
 import com.javarush.telegram.eventbus.events.ChatGPTPromptEvent;
@@ -22,28 +21,26 @@ public final class OnLastQuestion implements EventHandler<LastQuestionEvent>, Su
     @Override
     @Subscribe
     public void handle(LastQuestionEvent event) {
-
-        new TextMessageEvent(
-                Payload.of(new TextMessage(PLEASE_WAIT)),
-                (message) -> {
-                    var prompt = TelegramBotFileUtil.loadPrompt(event.payload().value());
-                    new SurveyEvent(
-                            Payload.empty(),
-                            (survey) -> {
-                                var userInfo = survey.newUserInfo();
-
-                                new ChatGPTPromptEvent(Payload.of(prompt)).post();
-                                new ChatGPTMessageEvent(
-                                        Payload.of(userInfo.toString()),
-                                        (gptAnswer) -> {
-                                            new UpdatedTextMessageEvent(
-                                                    Payload.of(new UpdatedTextMessage(message, gptAnswer))
-                                            ).post();
-                                        }
-                                ).post();
-                            }
-                    ).post();
-                }
-        ).post();
+        event.payload().ifPresent(
+                (keyword) ->
+                        new TextMessageEvent(
+                                new TextMessage(PLEASE_WAIT),
+                                (message) ->
+                                        new SurveyEvent(
+                                                null,
+                                                (survey) -> {
+                                                    var userInfo = survey.newUserInfo();
+                                                    var prompt = TelegramBotFileUtil.loadPrompt(keyword);
+                                                    new ChatGPTPromptEvent(prompt).post();
+                                                    new ChatGPTMessageEvent(
+                                                            userInfo.toString(),
+                                                            (gptAnswer) -> new UpdatedTextMessageEvent(
+                                                                    new UpdatedTextMessage(message, gptAnswer)
+                                                            ).post()
+                                                    ).post();
+                                                }
+                                        ).post()
+                        ).post()
+        );
     }
 }

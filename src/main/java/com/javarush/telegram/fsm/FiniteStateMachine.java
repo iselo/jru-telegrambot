@@ -26,6 +26,7 @@ public final class FiniteStateMachine<E extends Enum> {
     private final E finishState;
     private final ImmutableMap<E, ImmutableSet<E>> transitionTable;
     private final ImmutableMap<E, Recognizer> recognizers;
+
     private FiniteStateMachine(Builder<E> builder) {
         this.startState = checkNotNull(builder.startState);
         this.finishState = checkNotNull(builder.finishState);

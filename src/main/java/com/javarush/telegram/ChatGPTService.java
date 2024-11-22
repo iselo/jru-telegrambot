@@ -112,15 +112,16 @@ public final class ChatGPTService implements Subscribable {
 
     @Subscribe
     void handle(ChatGPTPromptEvent event) {
-        setPrompt(event.payload().value());
+        event.payload().ifPresent(this::setPrompt);
     }
 
     @Subscribe
     void handle(ChatGPTMessageEvent event) {
-        var consumer = event.consumer();
-        if (consumer != null) {
-            var result = addMessage(event.payload().value());
-            consumer.accept(result);
-        }
+        event.payload().ifPresent(
+                (message) -> {
+                    var result = addMessage(message);
+                    event.returnToConsumer(result);
+                }
+        );
     }
 }

@@ -1,7 +1,6 @@
 package com.javarush.telegram;
 
 import com.google.common.testing.NullPointerTester;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.ChatDialogEvent;
 import com.javarush.telegram.eventbus.events.ChatHistoryEvent;
 import com.javarush.telegram.eventbus.events.ChatMessageAddEvent;
@@ -32,23 +31,23 @@ class ChatHistoryTest {
     @Test
     @DisplayName("Adds message to chat history")
     void addsMessageToChatHistory() {
-        new ChatMessageAddEvent(Payload.of("Message sample")).post();
+        new ChatMessageAddEvent("Message sample").post();
         assertEquals("Message sample", chatHistory.toString());
     }
 
     @Test
     @DisplayName("Clears chat history")
     void clearsChatHistory() {
-        new ChatMessageAddEvent(Payload.of("Message sample")).post();
-        new ChatDialogEvent(Payload.empty()).post();
+        new ChatMessageAddEvent("Message sample").post();
+        new ChatDialogEvent().post();
         assertEquals("", chatHistory.toString());
     }
 
     @Test
     void returnsChatHistory() {
-        new ChatMessageAddEvent(Payload.of("Message sample")).post();
+        new ChatMessageAddEvent("Message sample").post();
         AtomicReference<String> history = new AtomicReference<>();
-        new ChatHistoryEvent(Payload.empty(), history::set).post();
+        new ChatHistoryEvent(history::set).post();
         assertEquals("Message sample", history.get());
     }
 

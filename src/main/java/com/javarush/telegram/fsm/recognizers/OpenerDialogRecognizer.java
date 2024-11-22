@@ -2,7 +2,6 @@ package com.javarush.telegram.fsm.recognizers;
 
 import com.google.errorprone.annotations.Immutable;
 import com.javarush.telegram.TelegramBotContext;
-import com.javarush.telegram.eventbus.Payload;
 import com.javarush.telegram.eventbus.events.OpenerDialogEvent;
 import com.javarush.telegram.eventbus.events.OpenerQuestionEvent;
 import com.javarush.telegram.fsm.Chronology;
@@ -19,9 +18,8 @@ public final class OpenerDialogRecognizer implements MessageRecognizer {
     public boolean handle(Update update, TelegramBotContext context, Chronology chronology) {
         if (contentOf(update).equalsIgnoreCase(OPENER.toString())) {
             chronology.add(() -> {
-                new OpenerDialogEvent(Payload.empty()).post();
-                var noPreviousAnswer = Optional.<String>empty();
-                new OpenerQuestionEvent(Payload.of(noPreviousAnswer)).post();
+                new OpenerDialogEvent().post();
+                new OpenerQuestionEvent(Optional.empty()).post();
             });
             return true;
         }
