@@ -49,6 +49,7 @@ public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
      * Sets gender value.
      */
     @Override
+    @SuppressWarnings("unused")
     public void visit(AgeQuestion question, String previousAnswer) {
         var ignoreReturnValue = userInfoBuilder.gender(previousAnswer);
     }
@@ -57,6 +58,7 @@ public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
      * Sets age value.
      */
     @Override
+    @SuppressWarnings("unused")
     public void visit(LastEmptyQuestion question, String previousAnswer) {
         var ignoreReturnValue = userInfoBuilder.age(previousAnswer);
     }
