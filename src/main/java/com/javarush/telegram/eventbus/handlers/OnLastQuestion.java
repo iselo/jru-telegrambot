@@ -12,6 +12,9 @@ import com.javarush.telegram.eventbus.events.TextMessageEvent;
 import com.javarush.telegram.eventbus.events.UpdatedTextMessageEvent;
 import com.javarush.telegram.responder.TextMessage;
 import com.javarush.telegram.responder.UpdatedTextMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.function.Consumer;
 
 @Immutable
 public final class OnLastQuestion implements EventHandler<LastQuestionEvent>, Subscribable {
@@ -21,26 +24,27 @@ public final class OnLastQuestion implements EventHandler<LastQuestionEvent>, Su
     @Override
     @Subscribe
     public void handle(LastQuestionEvent event) {
-        event.payload().ifPresent(
-                (keyword) ->
-                        new TextMessageEvent(
-                                new TextMessage(PLEASE_WAIT),
-                                (message) ->
-                                        new SurveyEvent(
-                                                null,
-                                                (survey) -> {
-                                                    var userInfo = survey.newUserInfo();
-                                                    var prompt = TelegramBotFileUtil.loadPrompt(keyword);
-                                                    new ChatGPTPromptEvent(prompt).post();
-                                                    new ChatGPTMessageEvent(
-                                                            userInfo.toString(),
-                                                            (gptAnswer) -> new UpdatedTextMessageEvent(
-                                                                    new UpdatedTextMessage(message, gptAnswer)
-                                                            ).post()
-                                                    ).post();
-                                                }
-                                        ).post()
-                        ).post()
-        );
+        var keyword = event.getPayload();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(PLEASE_WAIT))
+                .consumer(getMessageConsumer(keyword))
+                .build()
+                .post();
+    }
+
+    private Consumer<Message> getMessageConsumer(String keyword) {
+        return (message) -> new SurveyEvent((survey) -> {
+            var userInfo = survey.newUserInfo();
+            var prompt = TelegramBotFileUtil.loadPrompt(keyword);
+            new ChatGPTPromptEvent(prompt).post();
+            ChatGPTMessageEvent.builder()
+                    .payload(userInfo.toString())
+                    .consumer((gptAnswer) -> new UpdatedTextMessageEvent(
+                                    new UpdatedTextMessage(message, gptAnswer)
+                            ).post()
+                    )
+                    .build()
+                    .post();
+        }).post();
     }
 }

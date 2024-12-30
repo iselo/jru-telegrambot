@@ -1,13 +1,15 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Observable;
 import com.javarush.telegram.responder.TextButtonsMessage;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Immutable
-public final class TextButtonsMessageEvent extends Event<TextButtonsMessage> {
+@AllArgsConstructor
+@Getter
+public final class TextButtonsMessageEvent implements Observable {
 
-    public TextButtonsMessageEvent(TextButtonsMessage payload) {
-        super(payload);
-    }
+    private final TextButtonsMessage payload;
 }

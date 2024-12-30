@@ -19,19 +19,23 @@ public final class OnDateCelebrityMessage
     @Override
     @Subscribe
     public void handle(DateCelebrityMessageEvent event) {
-        event.payload().ifPresent(
-                (gptRequest) ->
-                        new TextMessageEvent(
-                                new TextMessage(PLEASE_WAIT),
-                                (message) ->
-                                        new ChatGPTMessageEvent(
-                                                gptRequest,
+        var gptRequest = event.getPayload();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(PLEASE_WAIT))
+                .consumer(
+                        (message) ->
+                                ChatGPTMessageEvent.builder()
+                                        .payload(gptRequest)
+                                        .consumer(
                                                 (gptAnswer) ->
-                                                        new UpdatedTextMessageEvent(
-                                                                new UpdatedTextMessage(message, gptAnswer)
-                                                        ).post()
-                                        ).post()
-                        ).post()
-        );
+                                                new UpdatedTextMessageEvent(
+                                                        new UpdatedTextMessage(message, gptAnswer)
+                                                ).post()
+                                )
+                                        .build()
+                                        .post()
+                )
+                .build()
+                .post();
     }
 }

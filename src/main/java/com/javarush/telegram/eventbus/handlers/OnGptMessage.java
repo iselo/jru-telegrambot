@@ -22,22 +22,23 @@ public final class OnGptMessage implements EventHandler<GptMessageSendEvent>, Su
     @Subscribe
     @SuppressWarnings("FutureReturnValueIgnored")
     public void handle(GptMessageSendEvent event) {
-        event.payload().ifPresent(
-                (gptRequest) ->
-                        new TextMessageEvent(
-                                new TextMessage(PLEASE_WAIT),
-                                (message) -> {
-                                    var prompt = TelegramBotFileUtil.loadPrompt(GPT);
-                                    new ChatGPTPromptEvent(prompt).post();
-                                    new ChatGPTMessageEvent(
-                                            gptRequest,
-                                            (gptAnswer) ->
-                                                    new UpdatedTextMessageEvent(
-                                                            new UpdatedTextMessage(message, gptAnswer)
-                                                    ).post()
-                                    ).post();
-                                }
-                        ).post()
-        );
+        var gptRequest = event.getPayload();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(PLEASE_WAIT))
+                .consumer((message) -> {
+                            var prompt = TelegramBotFileUtil.loadPrompt(GPT);
+                            new ChatGPTPromptEvent(prompt).post();
+                            ChatGPTMessageEvent.builder()
+                                    .payload(gptRequest)
+                                    .consumer((gptAnswer) -> new UpdatedTextMessageEvent(
+                                                    new UpdatedTextMessage(message, gptAnswer)
+                                            ).post()
+                                    )
+                                    .build()
+                                    .post();
+                        }
+                )
+                .build()
+                .post();
     }
 }

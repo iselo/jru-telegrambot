@@ -13,9 +13,10 @@ public final class OnAskQuestion implements EventHandler<AskQuestionEvent>, Subs
     @Override
     @Subscribe
     public void handle(AskQuestionEvent event) {
-        event.payload().ifPresent(
-                (questionValue) -> new TextMessageEvent(new TextMessage(questionValue)).post()
-        );
-
+        var question = event.getPayload();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(question))
+                .build()
+                .post();
     }
 }

@@ -16,24 +16,17 @@ public final class OnProfileQuestion implements EventHandler<ProfileQuestionEven
     @Override
     @Subscribe
     public void handle(ProfileQuestionEvent event) {
-        event.payload().ifPresent(
-                (previousAnswer) ->
+        var previousAnswer = event.getPayload();
+        new SurveyEvent((survey) -> {
+            var question = survey.questions().nextQuestion();
 
-                        new SurveyEvent(
-                                null,
-                                (survey) -> {
-                                    var question = survey.questions().nextQuestion();
+            previousAnswer.ifPresent(answer -> question.accept(survey, answer));
 
-                                    previousAnswer.ifPresent(answer -> question.accept(survey, answer));
-
-                                    var maybeQuestionValue = question.value();
-                                    maybeQuestionValue.ifPresentOrElse(
-                                            questionValue -> new AskQuestionEvent(questionValue).post(),
-                                            () -> new LastQuestionEvent(PROFILE).post()
-                                    );
-                                }
-                        ).post()
-        );
-
+            var maybeQuestionValue = question.value();
+            maybeQuestionValue.ifPresentOrElse(
+                    questionValue -> new AskQuestionEvent(questionValue).post(),
+                    () -> new LastQuestionEvent(PROFILE).post()
+            );
+        }).post();
     }
 }

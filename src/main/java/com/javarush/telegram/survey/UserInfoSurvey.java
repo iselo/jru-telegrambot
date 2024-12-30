@@ -3,6 +3,7 @@ package com.javarush.telegram.survey;
 import com.google.common.eventbus.Subscribe;
 import com.javarush.telegram.eventbus.Subscribable;
 import com.javarush.telegram.eventbus.events.SurveyEvent;
+import com.javarush.telegram.survey.UserInfo.UserInfoBuilder;
 
 /**
  * Represents survey that gathers information about a user to build the corresponding instance of
@@ -10,7 +11,7 @@ import com.javarush.telegram.eventbus.events.SurveyEvent;
  */
 public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
 
-    private final UserInfo.Builder userInfoBuilder = UserInfo.newBuilder();
+    private final UserInfoBuilder userInfoBuilder = UserInfo.builder();
     private final SurveyQuestions questions = new SurveyQuestions();
 
     /**
@@ -39,8 +40,9 @@ public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
      * Sets name value.
      */
     @Override
+    @SuppressWarnings("unused")
     public void visit(GenderQuestion question, String previousAnswer) {
-        userInfoBuilder.setName(previousAnswer);
+        var ignoreReturnValue = userInfoBuilder.name(previousAnswer);
     }
 
     /**
@@ -48,7 +50,7 @@ public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
      */
     @Override
     public void visit(AgeQuestion question, String previousAnswer) {
-        userInfoBuilder.setGender(previousAnswer);
+        var ignoreReturnValue = userInfoBuilder.gender(previousAnswer);
     }
 
     /**
@@ -56,12 +58,11 @@ public final class UserInfoSurvey implements QuestionVisitor, Subscribable {
      */
     @Override
     public void visit(LastEmptyQuestion question, String previousAnswer) {
-        userInfoBuilder.setAge(previousAnswer);
+        var ignoreReturnValue = userInfoBuilder.age(previousAnswer);
     }
 
     @Subscribe
     public void handle(SurveyEvent event) {
-        event.returnToConsumer(this);
+        event.getConsumer().accept(this);
     }
-
 }

@@ -1,15 +1,15 @@
 package com.javarush.telegram.eventbus.events;
 
-import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.EventWithReturn;
+import com.javarush.telegram.eventbus.Observable;
 import com.javarush.telegram.survey.UserInfoSurvey;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
-@Immutable
-public final class SurveyEvent extends EventWithReturn<String, UserInfoSurvey> {
+@AllArgsConstructor
+@Getter
+public final class SurveyEvent implements Observable {
 
-    public SurveyEvent(String payload, Consumer<UserInfoSurvey> consumer) {
-        super(payload, consumer);
-    }
+    private final Consumer<UserInfoSurvey> consumer;
 }
