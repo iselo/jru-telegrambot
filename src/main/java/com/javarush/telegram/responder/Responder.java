@@ -13,6 +13,7 @@ import com.javarush.telegram.eventbus.events.UpdatedTextMessageEvent;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -31,32 +32,30 @@ public final class Responder implements Subscribable {
 
     @Subscribe
     void handle(PhotoMessageEvent event) {
-        event.payload().ifPresent(this::execute);
+        execute(event.getPayload());
     }
 
     @Subscribe
     void handle(TextMessageEvent event) {
-        event.payload().ifPresent(
-                (textMessage) -> {
-                    var result = this.execute(textMessage);
-                    event.returnToConsumer(result);
-                }
-        );
+        var textMessage = event.getPayload();
+        var result = this.execute(textMessage);
+        Optional.ofNullable(event.getConsumer())
+                .ifPresent(consumer -> consumer.accept(result));
     }
 
     @Subscribe
     void handle(UpdatedTextMessageEvent event) {
-        event.payload().ifPresent(this::execute);
+        execute(event.getPayload());
     }
 
     @Subscribe
     void handle(TextButtonsMessageEvent event) {
-        event.payload().ifPresent(this::execute);
+        execute(event.getPayload());
     }
 
     @Subscribe
     void handle(MenuEvent event) {
-        event.payload().ifPresent(this::execute);
+        execute(event.getPayload());
     }
 
     @CanIgnoreReturnValue

@@ -1,12 +1,14 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Observable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Immutable
-public final class DateCelebritySelectEvent extends Event<String> {
+@AllArgsConstructor
+@Getter
+public final class DateCelebritySelectEvent implements Observable {
 
-    public DateCelebritySelectEvent(String payload) {
-        super(payload);
-    }
+    private final String payload;
 }

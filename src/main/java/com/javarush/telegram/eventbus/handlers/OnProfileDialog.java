@@ -20,6 +20,9 @@ public final class OnProfileDialog implements EventHandler<ProfileDialogEvent>, 
     public void handle(ProfileDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(PROFILE);
         new PhotoMessageEvent(new PhotoMessage(PROFILE)).post();
-        new TextMessageEvent(new TextMessage(text)).post();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(text))
+                .build()
+                .post();
     }
 }

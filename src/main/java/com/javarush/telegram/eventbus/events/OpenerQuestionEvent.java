@@ -1,14 +1,16 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Observable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Optional;
 
 @Immutable
-public final class OpenerQuestionEvent extends Event<Optional<String>> {
+@AllArgsConstructor
+@Getter
+public final class OpenerQuestionEvent implements Observable {
 
-    public OpenerQuestionEvent(Optional<String> payload) {
-        super(payload);
-    }
+    private final Optional<String> payload;
 }

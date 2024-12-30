@@ -1,13 +1,15 @@
 package com.javarush.telegram.eventbus.events;
 
-import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.EventWithReturn;
+import com.javarush.telegram.eventbus.Observable;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
-@Immutable
-public final class ChatGPTMessageEvent extends EventWithReturn<String, String> {
-    public ChatGPTMessageEvent(String payload, Consumer<String> consumer) {
-        super(payload, consumer);
-    }
+@Builder
+@Getter
+public final class ChatGPTMessageEvent implements Observable {
+
+    private final String payload;
+    private final Consumer<String> consumer;
 }

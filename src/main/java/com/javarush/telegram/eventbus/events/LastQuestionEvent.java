@@ -1,12 +1,13 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Observable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Immutable
-public final class LastQuestionEvent extends Event<String> {
-
-    public LastQuestionEvent(String payload) {
-        super(payload);
-    }
+@AllArgsConstructor
+@Getter
+public final class LastQuestionEvent implements Observable {
+    private final String payload;
 }

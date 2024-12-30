@@ -21,12 +21,13 @@ public final class ChatHistory implements Subscribable {
 
     @Subscribe
     public void handle(ChatMessageAddEvent event) {
-        event.payload().ifPresent(history::add);
+        history.add(event.getPayload());
     }
 
     @Subscribe
     public void handle(ChatHistoryEvent event) {
-        event.returnToConsumer(this.toString());
+        event.getConsumer()
+                .accept(this.toString());
     }
 
     @Override

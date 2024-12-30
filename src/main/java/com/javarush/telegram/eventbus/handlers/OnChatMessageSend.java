@@ -22,25 +22,26 @@ public final class OnChatMessageSend implements EventHandler<ChatMessageSendEven
     @Subscribe
     @SuppressWarnings("FutureReturnValueIgnored")
     public void handle(ChatMessageSendEvent event) {
-        event.payload().ifPresent(
-                (keyword) ->
-                        new TextMessageEvent(
-                                new TextMessage(PLEASE_WAIT),
-                                (message) -> {
-                                    var prompt = TelegramBotFileUtil.loadPrompt(keyword);
-                                    new ChatGPTPromptEvent(prompt).post();
-                                    new ChatHistoryEvent(
-                                            (history) ->
-                                                    new ChatGPTMessageEvent(
-                                                            history,
-                                                            (gptAnswer) ->
-                                                                    new UpdatedTextMessageEvent(
-                                                                            new UpdatedTextMessage(message, gptAnswer)
-                                                                    ).post()
-                                                    ).post()
-                                    ).post();
-                                }
-                        ).post()
-        );
+        var keyword = event.getPayload();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(PLEASE_WAIT))
+                .consumer((message) -> {
+                            var prompt = TelegramBotFileUtil.loadPrompt(keyword);
+                            new ChatGPTPromptEvent(prompt).post();
+                            new ChatHistoryEvent(
+                                    (history) ->
+                                            ChatGPTMessageEvent.builder()
+                                                    .payload(history)
+                                                    .consumer((gptAnswer) -> new UpdatedTextMessageEvent(
+                                                                    new UpdatedTextMessage(message, gptAnswer)
+                                                            ).post()
+                                                    )
+                                                    .build()
+                                                    .post()
+                            ).post();
+                        }
+                )
+                .build()
+                .post();
     }
 }

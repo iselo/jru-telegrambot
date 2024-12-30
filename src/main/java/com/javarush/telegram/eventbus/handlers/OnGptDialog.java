@@ -20,6 +20,9 @@ public final class OnGptDialog implements EventHandler<GptDialogEvent>, Subscrib
     public void handle(GptDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(GPT);
         new PhotoMessageEvent(new PhotoMessage(GPT)).post();
-        new TextMessageEvent(new TextMessage(text)).post();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(text))
+                .build()
+                .post();
     }
 }

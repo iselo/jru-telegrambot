@@ -38,7 +38,10 @@ public final class OnBotMenu implements EventHandler<StartDialogEvent>, Subscrib
     @Subscribe
     public void handle(StartDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(MAIN);
-        new TextMessageEvent(new TextMessage(text)).post();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(text))
+                .build()
+                .post();
         new MenuEvent(new Menu(menu)).post();
     }
 }

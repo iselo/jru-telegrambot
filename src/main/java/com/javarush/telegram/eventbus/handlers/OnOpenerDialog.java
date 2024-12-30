@@ -20,6 +20,9 @@ public final class OnOpenerDialog implements EventHandler<OpenerDialogEvent>, Su
     public void handle(OpenerDialogEvent event) {
         var text = TelegramBotFileUtil.loadMessage(OPENER);
         new PhotoMessageEvent(new PhotoMessage(OPENER)).post();
-        new TextMessageEvent(new TextMessage(text)).post();
+        TextMessageEvent.builder()
+                .payload(new TextMessage(text))
+                .build()
+                .post();
     }
 }

@@ -1,14 +1,14 @@
 package com.javarush.telegram.eventbus.events;
 
-import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.EventWithReturn;
+import com.javarush.telegram.eventbus.Observable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
-@Immutable
-public final class ChatHistoryEvent extends EventWithReturn<String, String> {
+@AllArgsConstructor
+@Getter
+public final class ChatHistoryEvent implements Observable {
 
-    public ChatHistoryEvent(Consumer<String> consumer) {
-        super(null, consumer);
-    }
+    private final Consumer<String> consumer;
 }

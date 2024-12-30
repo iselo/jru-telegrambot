@@ -1,12 +1,8 @@
 package com.javarush.telegram.eventbus.events;
 
 import com.google.errorprone.annotations.Immutable;
-import com.javarush.telegram.eventbus.Event;
+import com.javarush.telegram.eventbus.Observable;
 
 @Immutable
-public final class StartDialogEvent extends Event<String> {
-
-    public StartDialogEvent() {
-        super(null);
-    }
+public final class StartDialogEvent implements Observable {
 }

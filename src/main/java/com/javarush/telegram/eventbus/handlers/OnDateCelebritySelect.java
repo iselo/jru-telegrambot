@@ -16,12 +16,9 @@ public final class OnDateCelebritySelect
     @Override
     @Subscribe
     public void handle(DateCelebritySelectEvent event) {
-        event.payload().ifPresent(
-                (data) -> {
-                    var prompt = TelegramBotFileUtil.loadPrompt(data);
-                    new ChatGPTPromptEvent(prompt).post();
-                    new PhotoMessageEvent(new PhotoMessage(data)).post();
-                }
-        );
+        var data = event.getPayload();
+        var prompt = TelegramBotFileUtil.loadPrompt(data);
+        new ChatGPTPromptEvent(prompt).post();
+        new PhotoMessageEvent(new PhotoMessage(data)).post();
     }
 }

@@ -16,24 +16,18 @@ public final class OnOpenerQuestion implements EventHandler<OpenerQuestionEvent>
     @Override
     @Subscribe
     public void handle(OpenerQuestionEvent event) {
-        event.payload().ifPresent(
-                (previousAnswer) ->
-                        new SurveyEvent(
-                                null,
-                                (survey) -> {
-                                    var question = survey.questions().nextQuestion();
+        var previousAnswer = event.getPayload();
+        new SurveyEvent((survey) -> {
+            var question = survey.questions().nextQuestion();
 
-                                    previousAnswer
-                                            .ifPresent(answer -> question.accept(survey, answer));
+            previousAnswer.ifPresent(answer -> question.accept(survey, answer));
 
-                                    var maybeQuestionValue = question.value();
-                                    maybeQuestionValue
-                                            .ifPresentOrElse(
-                                                    questionValue -> new AskQuestionEvent(questionValue).post(),
-                                                    () -> new LastQuestionEvent(OPENER).post()
-                                            );
-                                }
-                        ).post()
-        );
+            var maybeQuestionValue = question.value();
+            maybeQuestionValue
+                    .ifPresentOrElse(
+                            questionValue -> new AskQuestionEvent(questionValue).post(),
+                            () -> new LastQuestionEvent(OPENER).post()
+                    );
+        }).post();
     }
 }
